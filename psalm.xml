@@ -15,7 +15,7 @@
     </projectFiles>
     <plugins>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-            <containerXml>tests/Application/var/cache/test/Tests_Acme_SyliusExamplePlugin_Application_KernelTestDebugContainer.xml</containerXml>
+            <containerXml>tests/Application/var/cache/test/Tests_Setono_SyliusAlgoliaPlugin_Application_KernelTestDebugContainer.xml</containerXml>
         </pluginClass>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>

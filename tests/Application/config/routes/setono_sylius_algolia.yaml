@@ -1,0 +1,2 @@
+setono_sylius_algolia:
+    resource: "@SetonoSyliusAlgoliaPlugin/Resources/config/routes.yaml"

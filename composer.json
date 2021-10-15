@@ -1,7 +1,7 @@
 {
-    "name": "setono/sylius-plugin-skeleton",
+    "name": "setono/sylius-algolia-plugin",
     "type": "sylius-plugin",
-    "description": "Acme example plugin for Sylius.",
+    "description": "Setono example plugin for Sylius.",
     "keywords": [
         "sylius",
         "sylius-plugin"
@@ -45,12 +45,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Acme\\SyliusExamplePlugin\\": "src/"
+            "Setono\\SyliusAlgoliaPlugin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\Acme\\SyliusExamplePlugin\\": "tests/"
+            "Tests\\Setono\\SyliusAlgoliaPlugin\\": "tests/"
         },
         "classmap": [
             "tests/Application/Kernel.php"
@@ -63,7 +63,7 @@
             "psalm"
         ],
         "check-style": "ecs check",
-        "ensure-test-container-exists": "[[ -f tests/Application/var/cache/test/Tests_Acme_SyliusExamplePlugin_Application_KernelTestDebugContainer.xml ]] || tests/Application/bin/console cache:warmup --env=test",
+        "ensure-test-container-exists": "[[ -f tests/Application/var/cache/test/Tests_Setono_SyliusAlgoliaPlugin_Application_KernelTestDebugContainer.xml ]] || tests/Application/bin/console cache:warmup --env=test",
         "fix-style": "ecs check --fix",
         "phpunit": "phpunit"
     }
