@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "chart.js": "^2.9.3",
+    "jquery": "^3.4.0",
+    "jquery.dirtyforms": "^2.0.0",
+    "lightbox2": "^2.9.0",
+    "semantic-ui-css": "^2.2.0",
+    "slick-carousel": "^1.8.1"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^1.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-import-resolver-babel-module": "^4.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^11.0.0"
+  },
+  "scripts": {
+    "dev": "encore dev",
+    "build": "encore production",
+    "watch": "encore dev --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sylius/Sylius.git"
+  },
+  "author": "Paweł Jędrzejewski",
+  "license": "MIT"
+}
