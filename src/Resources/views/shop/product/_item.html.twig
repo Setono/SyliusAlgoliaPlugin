@@ -1,0 +1,22 @@
+{#
+Notice this is the javascript template included as a template
+(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in the 'hits' widget
+#}
+{% verbatim %}
+<div class="ui fluid card">
+    <a href="#" class="blurring dimmable image">
+        <div class="ui dimmer">
+            <div class="content">
+                <div class="center">
+                    <div class="ui inverted button">{{ 'sylius.ui.view_more'|trans }}</div>
+                </div>
+            </div>
+        </div>
+        <img src="{{ image }}" alt="{{ name }}" class="ui bordered image">
+    </a>
+    <div class="content">
+        <a href="#" class="header sylius-product-name">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</a>
+        <div class="sylius-product-price">{{ baseCurrency }} {{ basePrice }}</div>
+    </div>
+</div>
+{% endverbatim %}

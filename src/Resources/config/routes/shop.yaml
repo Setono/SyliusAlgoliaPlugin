@@ -1,1 +1,3 @@
-# TODO Add your shop routes here
+setono_sylius_algolia_shop_product_index:
+    path: /test
+    controller: setono_sylius_algolia.controller.action.product_index

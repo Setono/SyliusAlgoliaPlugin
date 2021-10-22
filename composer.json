@@ -9,12 +9,15 @@
     "license": "MIT",
     "require": {
         "php": ">=7.4",
+        "algolia/search-bundle": "^5.2",
+        "azjezz/psl": "^1.6",
         "symfony/config": "^4.4 || ^5.0",
         "symfony/dependency-injection": "^4.4 || ^5.0",
         "symfony/http-kernel": "^4.4 || ^5.1.5"
     },
     "require-dev": {
         "api-platform/core": "^2.6",
+        "doctrine/dbal": "^2.0",
         "friendsofsymfony/oauth-server-bundle": ">2.0.0-alpha.0 ^2.0@dev",
         "lexik/jwt-authentication-bundle": "^2.13",
         "matthiasnoback/symfony-config-test": "^4.3",
