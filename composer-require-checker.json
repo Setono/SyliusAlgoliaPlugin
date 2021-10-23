@@ -17,8 +17,12 @@
         "void",
         "Psl\\invariant",
         "Sylius\\Bundle\\CoreBundle\\Application\\SyliusPluginTrait",
+        "Sylius\\Component\\Channel\\Context\\ChannelContextInterface",
+        "Sylius\\Component\\Channel\\Model\\ChannelInterface",
         "Sylius\\Component\\Core\\Model\\ChannelInterface",
         "Sylius\\Component\\Core\\Model\\ProductInterface",
+        "Sylius\\Component\\Locale\\Context\\LocaleContextInterface",
+        "Sylius\\Component\\Locale\\Model\\LocaleInterface",
         "Sylius\\Component\\Product\\Repository\\ProductRepositoryInterface",
         "Sylius\\Component\\Product\\Resolver\\ProductVariantResolverInterface"
     ]
