@@ -9,7 +9,7 @@
         const searchClient = algoliasearch('2O6CZAU8ZC', '1e84639c29f5871b4e5caab86b20d0ca');
 
         const search = instantsearch({
-            indexName: 'products',
+            indexName: '{{ index }}',
             searchClient,
         });
 
