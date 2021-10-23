@@ -8,6 +8,7 @@ use Algolia\AlgoliaSearch\SearchClient;
 use Algolia\AlgoliaSearch\SearchIndex;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
+use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolverInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Product\Repository\ProductRepositoryInterface;
@@ -30,11 +31,14 @@ final class PopulateCommand extends Command
 
     private DataMapperInterface $dataMapper;
 
+    private ProductIndexResolverInterface $productIndexResolver;
+
     public function __construct(
         ProductRepositoryInterface $productRepository,
         SearchClient $searchClient,
         NormalizerInterface $normalizer,
-        DataMapperInterface $dataMapper
+        DataMapperInterface $dataMapper,
+        ProductIndexResolverInterface $productIndexResolver
     ) {
         parent::__construct();
 
@@ -42,6 +46,7 @@ final class PopulateCommand extends Command
         $this->searchClient = $searchClient;
         $this->normalizer = $normalizer;
         $this->dataMapper = $dataMapper;
+        $this->productIndexResolver = $productIndexResolver;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,11 +57,7 @@ final class PopulateCommand extends Command
             foreach ($product->getChannels() as $channel) {
                 foreach ($channel->getLocales() as $locale) {
                     /** @var SearchIndex $index */
-                    $index = $this->searchClient->initIndex(sprintf(
-                        'products__%s__%s',
-                        (string) $channel->getCode(),
-                        (string) $locale->getCode()
-                    ));
+                    $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale));
 
                     $doc = new Product();
                     $this->dataMapper->map($product, $doc, [
