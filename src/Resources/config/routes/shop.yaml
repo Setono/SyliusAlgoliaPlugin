@@ -1,3 +1,6 @@
 setono_sylius_algolia_shop_product_index:
-    path: /test
+    path: /test/{slug}
+    methods: [GET]
     controller: setono_sylius_algolia.controller.action.product_index
+    requirements:
+        slug: .+

@@ -24,6 +24,8 @@
         "Sylius\\Component\\Locale\\Context\\LocaleContextInterface",
         "Sylius\\Component\\Locale\\Model\\LocaleInterface",
         "Sylius\\Component\\Product\\Repository\\ProductRepositoryInterface",
-        "Sylius\\Component\\Product\\Resolver\\ProductVariantResolverInterface"
+        "Sylius\\Component\\Product\\Resolver\\ProductVariantResolverInterface",
+        "Sylius\\Component\\Taxonomy\\Model\\TaxonInterface",
+        "Sylius\\Component\\Taxonomy\\Repository\\TaxonRepositoryInterface"
     ]
 }
