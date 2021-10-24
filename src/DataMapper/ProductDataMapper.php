@@ -65,7 +65,7 @@ final class ProductDataMapper implements DataMapperInterface
             break;
         }
 
-        // todo Sylius has the descendent configuration option. Should we use that to include all products in taxons below this products' taxons?
+        // todo Sylius has the descendent configuration option. Should we use that to include all parent taxons here?
         $mainTaxon = $source->getMainTaxon();
         if (null !== $mainTaxon) {
             $target->taxonCodes[] = (string) $mainTaxon->getCode();
