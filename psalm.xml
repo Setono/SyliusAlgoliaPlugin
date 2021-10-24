@@ -19,4 +19,7 @@
         </pluginClass>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
     </plugins>
+    <issueHandlers>
+        <UnnecessaryVarAnnotation errorLevel="suppress"/> <!-- We only use 'unnecessary' var annotations when we want to help PhpStorm :) -->
+    </issueHandlers>
 </psalm>

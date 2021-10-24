@@ -8,7 +8,15 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
-        <attribute name="image">
+        <attribute name="url">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
+        <attribute name="imageUrl">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
+        <attribute name="taxonCodes">
             <group>setono:sylius-algolia:document</group>
         </attribute>
 

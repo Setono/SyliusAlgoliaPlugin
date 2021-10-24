@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Setono\SyliusAlgoliaPlugin\Document;
+
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+/**
+ * Implement this interface in your document to easily generate a corresponding URL for your document
+ */
+interface PopulateUrlInterface
+{
+    /**
+     * Should populate the url property of your document
+     */
+    public function populateUrl(UrlGeneratorInterface $urlGenerator, ResourceInterface $source, string $locale): void;
+}

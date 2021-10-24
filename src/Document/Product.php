@@ -4,21 +4,32 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Document;
 
+use Sylius\Component\Core\Model\ProductInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Webmozart\Assert\Assert;
+
 /**
  * Should not be final, so it's easier for plugin users to extend it and add more properties
- *
- * todo the properties should be nullable and then the whole object should be validated before sent to Algolia
- * todo if any validation errors occur these errors should be saved so they can be handled by the shop admins
  */
-class Product implements DocumentInterface
+class Product implements DocumentInterface, PopulateUrlInterface
 {
     public ?int $id = null;
 
     public ?string $name = null;
 
-    public ?string $image = null;
+    public ?string $url = null;
+
+    public ?string $imageUrl = null;
 
     /** @var array<array-key, string> */
+    public array $taxonCodes = [];
+
+    /**
+     * todo should be built into: https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#hierarchical-facets
+     *
+     * @var array<array-key, string>
+     */
     public array $taxons = [];
 
     public ?string $baseCurrency = null;
@@ -43,5 +54,18 @@ class Product implements DocumentInterface
     public function getId(): int
     {
         return (int) $this->id;
+    }
+
+    /**
+     * @param ProductInterface|ResourceInterface $source
+     */
+    public function populateUrl(UrlGeneratorInterface $urlGenerator, ResourceInterface $source, string $locale): void
+    {
+        Assert::isInstanceOf($source, ProductInterface::class);
+
+        $this->url = $urlGenerator->generate('sylius_shop_product_show', [
+            'slug' => $source->getTranslation($locale)->getSlug(),
+            '_locale' => $locale,
+        ]);
     }
 }
