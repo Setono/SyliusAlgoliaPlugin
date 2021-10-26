@@ -41,6 +41,6 @@ final class ProductIndexResolver implements ProductIndexResolverInterface
         }
         Assert::string($locale);
 
-        return sprintf('products__%s__%s', $channel, $locale);
+        return sprintf('products__%s__%s', strtolower($channel), strtolower($locale));
     }
 }
