@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Psl;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
@@ -15,7 +14,6 @@ use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Webmozart\Assert\Assert;
 
 final class ProductDataMapper implements DataMapperInterface
@@ -24,14 +22,9 @@ final class ProductDataMapper implements DataMapperInterface
 
     private ProductVariantResolverInterface $productVariantResolver;
 
-    private CacheManager $cacheManager;
-
-    public function __construct(
-        ProductVariantResolverInterface $productVariantResolver,
-        CacheManager $cacheManager
-    ) {
+    public function __construct(ProductVariantResolverInterface $productVariantResolver)
+    {
         $this->productVariantResolver = $productVariantResolver;
-        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -57,20 +50,6 @@ final class ProductDataMapper implements DataMapperInterface
 
         $target->id = (int) $source->getId();
         $target->name = (string) $sourceTranslation->getName();
-
-        // todo would probably make more sense to let the actual document generate their own image url by
-        // todo implementing a method that takes the $source and the CacheManager as input
-        foreach ($source->getImages() as $image) {
-            $target->imageUrl = $this->cacheManager->getBrowserPath(
-                (string) $image->getPath(),
-                'sylius_shop_product_large_thumbnail',
-                [],
-                null,
-                UrlGeneratorInterface::ABSOLUTE_PATH
-            ); // todo the filter should be configurable
-
-            break;
-        }
 
         // todo Sylius has the descendent configuration option. Should we use that to include all parent taxons here?
         $mainTaxon = $source->getMainTaxon();

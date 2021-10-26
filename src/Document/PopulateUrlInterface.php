@@ -8,7 +8,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Implement this interface in your document to easily generate a corresponding URL for your document
+ * Implement this interface in your document to easily populate a corresponding URL for your document
  */
 interface PopulateUrlInterface
 {
