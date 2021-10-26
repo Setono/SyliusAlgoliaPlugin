@@ -37,6 +37,8 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
 
     public ?float $basePrice = null;
 
+    public ?float $originalBasePrice = null;
+
     /**
      * Example:
      *
@@ -47,10 +49,19 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
      *
      * @var array<string, float>
      */
-    public array $prices = [
-        'EUR' => 98.32,
-        'USD' => 103.92,
-    ];
+    public array $prices = [];
+
+    /**
+     * Example:
+     *
+     * [
+     *     'EUR' => 109.95,
+     *     'USD' => 114.95
+     * ]
+     *
+     * @var array<string, float>
+     */
+    public array $originalPrices = [];
 
     public function getId(): int
     {

@@ -11,6 +11,7 @@ use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
+use Sylius\Component\Currency\Converter\CurrencyConverterInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -22,9 +23,12 @@ final class ProductDataMapper implements DataMapperInterface
 
     private ProductVariantResolverInterface $productVariantResolver;
 
-    public function __construct(ProductVariantResolverInterface $productVariantResolver)
+    private CurrencyConverterInterface $currencyConverter;
+
+    public function __construct(ProductVariantResolverInterface $productVariantResolver, CurrencyConverterInterface $currencyConverter)
     {
         $this->productVariantResolver = $productVariantResolver;
+        $this->currencyConverter = $currencyConverter;
     }
 
     /**
@@ -66,14 +70,53 @@ final class ProductDataMapper implements DataMapperInterface
         $target->taxonCodes = array_unique($target->taxonCodes);
         $target->taxons = array_unique($target->taxons);
 
+        if (null !== $variant) {
+            $this->mapPrices($target, $variant, $channel);
+        }
+    }
+
+    private function mapPrices(Product $target, ProductVariantInterface $variant, ChannelInterface $channel): void
+    {
         $baseCurrency = $channel->getBaseCurrency();
         Assert::notNull($baseCurrency);
 
-        if (null !== $variant) {
-            $channelPricing = $variant->getChannelPricingForChannel($channel);
-            if (null !== $channelPricing) {
-                $target->baseCurrency = $baseCurrency->getCode();
-                $target->basePrice = self::formatAmount($channelPricing->getPrice());
+        $baseCurrencyCode = $baseCurrency->getCode();
+        Assert::notNull($baseCurrencyCode);
+
+        $channelPricing = $variant->getChannelPricingForChannel($channel);
+        if (null === $channelPricing) {
+            return;
+        }
+
+        $price = $channelPricing->getPrice();
+        if (null === $price) {
+            return;
+        }
+
+        $target->baseCurrency = $baseCurrencyCode;
+        $target->basePrice = self::formatAmount($price);
+
+        $originalPrice = $channelPricing->getOriginalPrice();
+        if (null !== $originalPrice) {
+            $target->originalBasePrice = self::formatAmount($originalPrice);
+        }
+
+        foreach ($channel->getCurrencies() as $currency) {
+            $currencyCode = $currency->getCode();
+            Assert::notNull($currencyCode);
+
+            $target->prices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
+                $price,
+                $baseCurrencyCode,
+                $currencyCode
+            ));
+
+            if (null !== $originalPrice) {
+                $target->originalPrices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
+                    $originalPrice,
+                    $baseCurrencyCode,
+                    $currencyCode
+                ));
             }
         }
     }
