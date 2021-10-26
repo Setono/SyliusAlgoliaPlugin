@@ -1,6 +1,6 @@
 # todo we need to find a good way to either overwrite the Sylius route or do something else?
 setono_sylius_algolia_shop_product_index:
-    path: /test/{slug}
+    path: /taxons/{slug}
     methods: [GET]
     controller: setono_sylius_algolia.controller.action.product_index
     requirements:
