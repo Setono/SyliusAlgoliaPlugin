@@ -8,6 +8,7 @@
         <service id="setono_sylius_algolia.data_mapper.product"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ProductDataMapper">
             <argument type="service" id="sylius.product_variant_resolver.default"/>
+            <argument type="service" id="sylius.currency_converter"/>
 
             <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
         </service>
