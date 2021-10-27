@@ -1,5 +1,14 @@
 {% extends "@SyliusShop/layout.html.twig" %}
 
+{% block content %}
+    {{ sylius_template_event('sylius.shop.taxon.header', {'taxon': taxon}) }}
+
+    <div id="searchbox"></div>
+    <div id="range-slider"></div>
+    <div id="refinement-list"></div>
+    <div id="hits"></div>
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 
@@ -11,6 +20,7 @@
         const search = instantsearch({
             indexName: '{{ index }}',
             searchClient,
+            routing: true,
         });
 
         search.addWidgets([
@@ -23,6 +33,14 @@
                 templates: {
                     item: `{% include "@SetonoSyliusAlgoliaPlugin/shop/product/_item.html.twig" %}`,
                 }
+            }),
+            instantsearch.widgets.rangeSlider({
+                container: '#range-slider',
+                attribute: 'basePrice',
+            }),
+            instantsearch.widgets.refinementList({
+                container: '#refinement-list',
+                attribute: 'taxons',
             }),
             instantsearch.widgets.configure({
                 filters: "taxonCodes:{{ taxon.code }}"
@@ -62,10 +80,4 @@
             }
         }
     </style>
-{% endblock %}
-
-{% block content %}
-    <h1>HEJSA</h1>
-    <div id="searchbox"></div>
-    <div id="hits"></div>
 {% endblock %}
