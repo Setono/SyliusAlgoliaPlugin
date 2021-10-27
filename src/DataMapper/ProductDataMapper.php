@@ -17,6 +17,9 @@ use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * todo should probably be split into multiple services to make it easier to read and extend
+ */
 final class ProductDataMapper implements DataMapperInterface
 {
     use FormatAmountTrait;
