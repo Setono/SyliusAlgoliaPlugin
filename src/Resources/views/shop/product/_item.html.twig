@@ -4,7 +4,7 @@ Notice this is the javascript template included as a template
 #}
 {% verbatim %}
 <div class="ui fluid card">
-    <a href="#" class="blurring dimmable image">
+    <a href="{{ url }}" class="blurring dimmable image">
         <div class="ui dimmer">
             <div class="content">
                 <div class="center">
@@ -15,7 +15,7 @@ Notice this is the javascript template included as a template
         <img src="{{ imageUrl }}" alt="{{ name }}" class="ui bordered image">
     </a>
     <div class="content">
-        <a href="#" class="header sylius-product-name">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</a>
+        <a href="{{ url }}" class="header sylius-product-name">{{#helpers.highlight}}{ "attribute": "name" }{{/helpers.highlight}}</a>
         <div class="sylius-product-price">{{ baseCurrency }} {{ basePrice }}</div>
     </div>
 </div>
