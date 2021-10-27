@@ -35,5 +35,9 @@
         <attribute name="prices">
             <group>setono:sylius-algolia:document</group>
         </attribute>
+
+        <attribute name="options">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
     </class>
 </serializer>

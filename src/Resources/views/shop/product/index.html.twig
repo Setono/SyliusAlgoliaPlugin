@@ -6,6 +6,8 @@
     <div id="searchbox"></div>
     <div id="range-slider"></div>
     <div id="refinement-list"></div>
+    <div id="jeans-size"></div>
+    <div id="t-shirt-size"></div>
     <div id="hits"></div>
 {% endblock %}
 
@@ -41,6 +43,14 @@
             instantsearch.widgets.refinementList({
                 container: '#refinement-list',
                 attribute: 'taxons',
+            }),
+            instantsearch.widgets.refinementList({
+                container: '#jeans-size',
+                attribute: 'options.Jeans size',
+            }),
+            instantsearch.widgets.refinementList({
+                container: '#t-shirt-size',
+                attribute: 'options.T-shirt size',
             }),
             instantsearch.widgets.configure({
                 filters: "taxonCodes:{{ taxon.code }}"

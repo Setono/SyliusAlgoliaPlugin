@@ -76,6 +76,23 @@ final class ProductDataMapper implements DataMapperInterface
         if (null !== $variant) {
             $this->mapPrices($target, $variant, $channel);
         }
+
+        $this->mapOptions($source, $target, $localeCode);
+    }
+
+    private function mapOptions(ProductInterface $source, Product $target, string $locale): void
+    {
+        foreach ($source->getEnabledVariants() as $variant) {
+            foreach ($variant->getOptionValues() as $optionValue) {
+                $option = $optionValue->getOption();
+                Assert::notNull($option);
+
+                $optionName = $option->getTranslation($locale)->getName();
+                Assert::notNull($optionName);
+
+                $target->options[$optionName][] = (string) $optionValue->getTranslation($locale)->getValue();
+            }
+        }
     }
 
     private function mapPrices(Product $target, ProductVariantInterface $variant, ChannelInterface $channel): void

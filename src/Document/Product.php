@@ -63,6 +63,9 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
      */
     public array $originalPrices = [];
 
+    /** @var array<string, array<array-key, string>> */
+    public array $options = [];
+
     public function getId(): int
     {
         return (int) $this->id;
