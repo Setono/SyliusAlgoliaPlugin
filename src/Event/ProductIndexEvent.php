@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class ProductIndexEvent
 {
-    public ?Response $response = null;
+    public Response $response;
 
     /** @psalm-readonly */
     public TaxonInterface $taxon;
@@ -20,8 +20,9 @@ final class ProductIndexEvent
     /** @psalm-readonly */
     public string $locale;
 
-    public function __construct(TaxonInterface $taxon, string $slug, string $locale)
+    public function __construct(Response $response, TaxonInterface $taxon, string $slug, string $locale)
     {
+        $this->response = $response;
         $this->taxon = $taxon;
         $this->slug = $slug;
         $this->locale = $locale;

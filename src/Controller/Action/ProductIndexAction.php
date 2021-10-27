@@ -52,12 +52,14 @@ final class ProductIndexAction
             ));
         }
 
-        $event = new ProductIndexEvent($taxon, $slug, $locale);
-        $this->eventDispatcher->dispatch($event);
-
-        return $event->response ?? new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
+        $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
             'index' => $this->productIndexResolver->resolve(),
             'taxon' => $taxon,
         ]));
+
+        $event = new ProductIndexEvent($response, $taxon, $slug, $locale);
+        $this->eventDispatcher->dispatch($event);
+
+        return $event->response;
     }
 }
