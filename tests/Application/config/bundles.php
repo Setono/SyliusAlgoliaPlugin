@@ -59,4 +59,5 @@ return [
     SyliusLabs\Polyfill\Symfony\Security\Bundle\SyliusLabsPolyfillSymfonySecurityBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Algolia\SearchBundle\AlgoliaSearchBundle::class => ['all' => true],
+    Setono\PrerenderBundle\SetonoPrerenderBundle::class => ['all' => true],
 ];
