@@ -73,6 +73,11 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
         return (int) $this->id;
     }
 
+    public function isOnSale(): bool
+    {
+        return null !== $this->originalPrice && null !== $this->price && $this->price < $this->originalPrice;
+    }
+
     /**
      * @param ProductInterface|ResourceInterface $source
      */

@@ -44,6 +44,10 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
+        <attribute name="isOnSale">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
         <attribute name="options">
             <group>setono:sylius-algolia:document</group>
         </attribute>
