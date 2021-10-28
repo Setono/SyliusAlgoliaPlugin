@@ -13,7 +13,6 @@ use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Currency\Converter\CurrencyConverterInterface;
-use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -24,13 +23,10 @@ final class PriceDataMapper implements DataMapperInterface
 {
     use FormatAmountTrait;
 
-    private ProductVariantResolverInterface $productVariantResolver;
-
     private CurrencyConverterInterface $currencyConverter;
 
-    public function __construct(ProductVariantResolverInterface $productVariantResolver, CurrencyConverterInterface $currencyConverter)
+    public function __construct(CurrencyConverterInterface $currencyConverter)
     {
-        $this->productVariantResolver = $productVariantResolver;
         $this->currencyConverter = $currencyConverter;
     }
 
@@ -52,18 +48,27 @@ final class PriceDataMapper implements DataMapperInterface
         $baseCurrencyCode = $baseCurrency->getCode();
         Assert::notNull($baseCurrencyCode);
 
-        /** @var ProductVariantInterface|null $variant */
-        $variant = $this->productVariantResolver->getVariant($source);
-        if (null === $variant) {
-            return;
+        $price = null;
+        $originalPrice = null;
+
+        /**
+         * Let's get the lowest price of any enabled variant and use that as our product price reference
+         *
+         * @var ProductVariantInterface $variant
+         */
+        foreach ($source->getEnabledVariants() as $variant) {
+            $channelPricing = $variant->getChannelPricingForChannel($channel);
+            if (null === $channelPricing) {
+                continue;
+            }
+
+            if (null === $price || $channelPricing->getPrice() < $price) {
+                $price = $channelPricing->getPrice();
+                $originalPrice = $channelPricing->getOriginalPrice();
+            }
         }
 
-        $channelPricing = $variant->getChannelPricingForChannel($channel);
-        if (null === $channelPricing) {
-            return;
-        }
-
-        $price = $channelPricing->getPrice();
+        // no variants have prices
         if (null === $price) {
             return;
         }
@@ -71,7 +76,6 @@ final class PriceDataMapper implements DataMapperInterface
         $target->currency = $baseCurrencyCode;
         $target->price = self::formatAmount($price);
 
-        $originalPrice = $channelPricing->getOriginalPrice();
         if (null !== $originalPrice) {
             $target->originalPrice = self::formatAmount($originalPrice);
         }

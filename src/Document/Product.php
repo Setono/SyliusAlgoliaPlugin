@@ -21,6 +21,11 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
 
     public ?string $name = null;
 
+    /**
+     * UNIX timestamp for creation date
+     */
+    public ?int $createdAt = null;
+
     public ?string $url = null;
 
     public ?string $imageUrl = null;

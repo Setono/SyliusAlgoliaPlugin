@@ -26,7 +26,6 @@
 
         <service id="setono_sylius_algolia.data_mapper.product.price"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\PriceDataMapper">
-            <argument type="service" id="sylius.product_variant_resolver.default"/>
             <argument type="service" id="sylius.currency_converter"/>
 
             <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>

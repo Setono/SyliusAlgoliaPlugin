@@ -12,6 +12,10 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
+        <attribute name="createdAt">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
         <attribute name="url">
             <group>setono:sylius-algolia:document</group>
         </attribute>
@@ -44,7 +48,7 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
-        <attribute name="isOnSale">
+        <attribute name="isOnSale" serialized-name="onSale">
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
