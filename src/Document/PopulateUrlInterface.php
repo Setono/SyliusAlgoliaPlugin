@@ -9,6 +9,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Implement this interface in your document to easily populate a corresponding URL for your document
+ *
+ * todo I don't like the name of this interface and the PopulateImageUrlInterface
  */
 interface PopulateUrlInterface
 {
