@@ -8,12 +8,8 @@ use Psl;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
-use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Core\Model\ProductVariantInterface;
-use Sylius\Component\Currency\Converter\CurrencyConverterInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
-use Sylius\Component\Product\Resolver\ProductVariantResolverInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -24,16 +20,6 @@ final class ProductDataMapper implements DataMapperInterface
 {
     use FormatAmountTrait;
 
-    private ProductVariantResolverInterface $productVariantResolver;
-
-    private CurrencyConverterInterface $currencyConverter;
-
-    public function __construct(ProductVariantResolverInterface $productVariantResolver, CurrencyConverterInterface $currencyConverter)
-    {
-        $this->productVariantResolver = $productVariantResolver;
-        $this->currencyConverter = $currencyConverter;
-    }
-
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param Product|DocumentInterface $target
@@ -43,17 +29,11 @@ final class ProductDataMapper implements DataMapperInterface
     {
         Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
-        /** @var ChannelInterface $channel */
-        $channel = $context['channel'];
-
         /** @var LocaleInterface $locale */
         $locale = $context['locale'];
         $localeCode = (string) $locale->getCode();
 
         $sourceTranslation = $source->getTranslation($localeCode);
-
-        /** @var ProductVariantInterface|null $variant */
-        $variant = $this->productVariantResolver->getVariant($source);
 
         $target->id = (int) $source->getId();
         $target->code = $source->getCode();
@@ -74,10 +54,6 @@ final class ProductDataMapper implements DataMapperInterface
         $target->taxonCodes = array_unique($target->taxonCodes);
         $target->taxons = array_unique($target->taxons);
 
-        if (null !== $variant) {
-            $this->mapPrices($target, $variant, $channel);
-        }
-
         $this->mapOptions($source, $target, $localeCode);
     }
 
@@ -96,64 +72,16 @@ final class ProductDataMapper implements DataMapperInterface
         }
     }
 
-    private function mapPrices(Product $target, ProductVariantInterface $variant, ChannelInterface $channel): void
-    {
-        $baseCurrency = $channel->getBaseCurrency();
-        Assert::notNull($baseCurrency);
-
-        $baseCurrencyCode = $baseCurrency->getCode();
-        Assert::notNull($baseCurrencyCode);
-
-        $channelPricing = $variant->getChannelPricingForChannel($channel);
-        if (null === $channelPricing) {
-            return;
-        }
-
-        $price = $channelPricing->getPrice();
-        if (null === $price) {
-            return;
-        }
-
-        $target->currency = $baseCurrencyCode;
-        $target->price = self::formatAmount($price);
-
-        $originalPrice = $channelPricing->getOriginalPrice();
-        if (null !== $originalPrice) {
-            $target->originalPrice = self::formatAmount($originalPrice);
-        }
-
-        foreach ($channel->getCurrencies() as $currency) {
-            $currencyCode = $currency->getCode();
-            Assert::notNull($currencyCode);
-
-            $target->prices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
-                $price,
-                $baseCurrencyCode,
-                $currencyCode
-            ));
-
-            if (null !== $originalPrice) {
-                $target->originalPrices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
-                    $originalPrice,
-                    $baseCurrencyCode,
-                    $currencyCode
-                ));
-            }
-        }
-    }
-
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true Product $target
-     * @psalm-assert-if-true ChannelInterface $context['channel']
      * @psalm-assert-if-true LocaleInterface $context['locale']
      */
     public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof Product
-            && isset($context['channel'], $context['locale'])
-            && $context['channel'] instanceof ChannelInterface
+            && isset($context['locale'])
             && $context['locale'] instanceof LocaleInterface
         ;
     }

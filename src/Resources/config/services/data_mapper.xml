@@ -7,9 +7,6 @@
 
         <service id="setono_sylius_algolia.data_mapper.product"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ProductDataMapper">
-            <argument type="service" id="sylius.product_variant_resolver.default"/>
-            <argument type="service" id="sylius.currency_converter"/>
-
             <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
         </service>
 
@@ -17,14 +14,22 @@
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\UrlDataMapper">
             <argument type="service" id="router"/>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-90"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.image_url"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ImageUrlDataMapper">
             <argument type="service" id="liip_imagine.cache.manager"/>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-80"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+        </service>
+
+        <service id="setono_sylius_algolia.data_mapper.product.price"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\PriceDataMapper">
+            <argument type="service" id="sylius.product_variant_resolver.default"/>
+            <argument type="service" id="sylius.currency_converter"/>
+
+            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
         </service>
     </services>
 </container>
