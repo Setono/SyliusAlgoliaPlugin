@@ -17,6 +17,8 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
 {
     public ?int $id = null;
 
+    public ?string $code = null;
+
     public ?string $name = null;
 
     public ?string $url = null;
@@ -33,11 +35,11 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
      */
     public array $taxons = [];
 
-    public ?string $baseCurrency = null;
+    public ?string $currency = null;
 
-    public ?float $basePrice = null;
+    public ?float $price = null;
 
-    public ?float $originalBasePrice = null;
+    public ?float $originalPrice = null;
 
     /**
      * Example:

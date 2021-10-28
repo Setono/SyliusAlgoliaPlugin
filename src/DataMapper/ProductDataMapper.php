@@ -56,6 +56,7 @@ final class ProductDataMapper implements DataMapperInterface
         $variant = $this->productVariantResolver->getVariant($source);
 
         $target->id = (int) $source->getId();
+        $target->code = $source->getCode();
         $target->name = (string) $sourceTranslation->getName();
 
         // todo Sylius has the descendent configuration option. Should we use that to include all parent taxons here?
@@ -113,12 +114,12 @@ final class ProductDataMapper implements DataMapperInterface
             return;
         }
 
-        $target->baseCurrency = $baseCurrencyCode;
-        $target->basePrice = self::formatAmount($price);
+        $target->currency = $baseCurrencyCode;
+        $target->price = self::formatAmount($price);
 
         $originalPrice = $channelPricing->getOriginalPrice();
         if (null !== $originalPrice) {
-            $target->originalBasePrice = self::formatAmount($originalPrice);
+            $target->originalPrice = self::formatAmount($originalPrice);
         }
 
         foreach ($channel->getCurrencies() as $currency) {
