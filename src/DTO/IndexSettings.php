@@ -14,46 +14,59 @@ namespace Setono\SyliusAlgoliaPlugin\DTO;
  */
 class IndexSettings extends Settings
 {
-    public $searchableAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $searchableAttributes = null;
 
     /** @var array<array-key, string>|null */
     public ?array $attributesForFaceting = null;
 
-    public $unretrievableAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $unretrievableAttributes = null;
 
-    public $ranking;
+    /** @var array<array-key, string>|null */
+    public ?array $ranking = null;
 
-    public $customRanking;
+    /** @var array<array-key, string>|null */
+    public ?array $customRanking = null;
 
-    public $replicas;
+    /** @var array<array-key, string>|null */
+    public ?array $replicas = null;
 
-    public $paginationLimitedTo;
+    public ?int $paginationLimitedTo = null;
 
-    public $disableTypoToleranceOnWords;
+    /** @var array<array-key, string>|null */
+    public ?array $disableTypoToleranceOnWords = null;
 
-    public $separatorsToIndex;
+    public ?string $separatorsToIndex = null;
 
-    public $attributesToTransliterate;
+    /** @var array<array-key, string>|null */
+    public ?array $attributesToTransliterate = null;
 
-    public $camelCaseAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $camelCaseAttributes = null;
 
-    public $decompoundedAttributes;
+    /** @var array<string, array<array-key, string>>|null */
+    public ?array $decompoundedAttributes = null;
 
-    public $keepDiacriticsOnCharacters;
+    public ?string $keepDiacriticsOnCharacters = null;
 
-    public $customNormalization;
+    /** @var array<string, array<string, string>>|null */
+    public ?array $customNormalization = null;
 
-    public $indexLanguages;
+    /** @var array<array-key, string>|null */
+    public ?array $indexLanguages = null;
 
-    public $disablePrefixOnAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $disablePrefixOnAttributes = null;
 
-    public $numericAttributesForFiltering;
+    /** @var array<array-key, string>|null */
+    public ?array $numericAttributesForFiltering = null;
 
-    public $allowCompressionOfIntegerArray;
+    public ?bool $allowCompressionOfIntegerArray = null;
 
-    public $attributeForDistinct;
+    public ?string $attributeForDistinct = null;
 
-    public $userData;
+    public ?array $userData = null;
 
-    public $renderingContent;
+    public ?array $renderingContent = null;
 }
