@@ -29,7 +29,7 @@ final class ConfigurationTest extends TestCase
             [
                 [], // no values at all
             ],
-            '/The child (config|node) "option" (under|at path) "setono_sylius_algolia" must be configured/',
+            '/The child (config|node) "app_id" (under|at path) "setono_sylius_algolia" must be configured/',
             true
         );
     }
@@ -40,10 +40,12 @@ final class ConfigurationTest extends TestCase
     public function processed_value_contains_required_value(): void
     {
         $this->assertProcessedConfigurationEquals([
-            ['option' => 'first value'],
-            ['option' => 'last value'],
+            ['app_id' => 'first_app_id', 'search_only_api_key' => 'first_search_only_api_key', 'admin_api_key' => 'first_admin_api_key'],
+            ['app_id' => 'last_app_id', 'search_only_api_key' => 'last_search_only_api_key', 'admin_api_key' => 'last_admin_api_key'],
         ], [
-            'option' => 'last value',
+            'app_id' => 'last_app_id',
+            'search_only_api_key' => 'last_search_only_api_key',
+            'admin_api_key' => 'last_admin_api_key',
         ]);
     }
 }
