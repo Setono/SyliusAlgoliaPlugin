@@ -14,9 +14,11 @@ final class DefaultSettingsProvider implements SettingsProviderInterface
     public function getSettings(): IndexSettings
     {
         $settings = new IndexSettings();
+        $settings->searchableAttributes = ['code', 'name'];
         $settings->attributesForFaceting = [
             'filterOnly(taxonCodes)',
         ];
+        $settings->disablePrefixOnAttributes = ['code'];
 
         return $settings;
     }
