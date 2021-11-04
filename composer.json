@@ -10,7 +10,6 @@
     "require": {
         "php": ">=7.4",
         "algolia/algoliasearch-client-php": "^3.1",
-        "algolia/search-bundle": "^5.2",
         "azjezz/psl": "^1.6",
         "matomo/device-detector": "^4.3",
         "psr/event-dispatcher": "^1.0",

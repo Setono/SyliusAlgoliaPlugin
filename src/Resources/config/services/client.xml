@@ -2,10 +2,10 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.index_resolver.product"
-                 class="Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolver">
-            <argument type="service" id="sylius.context.channel"/>
-            <argument type="service" id="sylius.context.locale"/>
+        <service id="setono_sylius_algolia.client" class="Algolia\AlgoliaSearch\SearchClient">
+            <factory class="Algolia\AlgoliaSearch\SearchClient" method="create"/>
+            <argument>%setono_sylius_algolia.app_id%</argument>
+            <argument>%setono_sylius_algolia.admin_api_key%</argument>
         </service>
     </services>
 </container>

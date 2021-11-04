@@ -1,2 +1,4 @@
 setono_sylius_algolia:
-    option: Option value
+    app_id: '%env(ALGOLIA_APP_ID)%'
+    search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
+    admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
