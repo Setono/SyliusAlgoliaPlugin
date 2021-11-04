@@ -1,3 +1,6 @@
+imports:
+    - '@SetonoSyliusAlgoliaPlugin/Resources/config/app/config.yaml'
+
 setono_sylius_algolia:
     app_id: '%env(ALGOLIA_APP_ID)%'
     search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
