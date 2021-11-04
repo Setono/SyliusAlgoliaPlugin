@@ -8,6 +8,7 @@
             <argument type="service" id="serializer"/>
             <argument type="service" id="setono_sylius_algolia.data_mapper.composite"/>
             <argument type="service" id="setono_sylius_algolia.index_resolver.product"/>
+            <argument type="service" id="setono_sylius_algolia.settings_provider.default"/>
 
             <tag name="console.command"/>
         </service>

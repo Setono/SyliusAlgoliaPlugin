@@ -9,8 +9,10 @@ use Algolia\AlgoliaSearch\SearchIndex;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolverInterface;
+use Setono\SyliusAlgoliaPlugin\SettingsProvider\SettingsProviderInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
+use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Repository\ProductRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,12 +35,15 @@ final class PopulateCommand extends Command
 
     private ProductIndexResolverInterface $productIndexResolver;
 
+    private SettingsProviderInterface $defaultSettingsProvider;
+
     public function __construct(
         ProductRepositoryInterface $productRepository,
         SearchClient $searchClient,
         NormalizerInterface $normalizer,
         DataMapperInterface $dataMapper,
-        ProductIndexResolverInterface $productIndexResolver
+        ProductIndexResolverInterface $productIndexResolver,
+        SettingsProviderInterface $defaultSettingsProvider
     ) {
         parent::__construct();
 
@@ -47,6 +52,7 @@ final class PopulateCommand extends Command
         $this->normalizer = $normalizer;
         $this->dataMapper = $dataMapper;
         $this->productIndexResolver = $productIndexResolver;
+        $this->defaultSettingsProvider = $defaultSettingsProvider;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -56,8 +62,7 @@ final class PopulateCommand extends Command
             /** @var ChannelInterface $channel */
             foreach ($product->getChannels() as $channel) {
                 foreach ($channel->getLocales() as $locale) {
-                    /** @var SearchIndex $index */
-                    $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale));
+                    $index = $this->prepareIndex($channel, $locale);
 
                     $doc = new Product();
                     $this->dataMapper->map($product, $doc, [
@@ -75,5 +80,20 @@ final class PopulateCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function prepareIndex(ChannelInterface $channel, LocaleInterface $locale): SearchIndex
+    {
+        /** @var SearchIndex $index */
+        $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale));
+
+        // if the index already exists we don't want to override any settings
+        if ($index->exists()) {
+            return $index;
+        }
+
+        $index->setSettings($this->defaultSettingsProvider->getSettings()->toArray());
+
+        return $index;
     }
 }
