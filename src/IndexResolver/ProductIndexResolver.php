@@ -7,7 +7,6 @@ namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 use Webmozart\Assert\Assert;
 
 final class ProductIndexResolver implements ProductIndexResolverInterface
@@ -29,12 +28,11 @@ final class ProductIndexResolver implements ProductIndexResolverInterface
         }
 
         $channelCode = $channel->getCode();
-        Assert::string($channel);
+        Assert::string($channelCode);
 
         if (null === $localeCode) {
             $localeCode = $this->localeContext->getLocaleCode();
         }
-        Assert::string($localeCode);
 
         return sprintf('products__%s__%s', strtolower($channelCode), strtolower($localeCode));
     }

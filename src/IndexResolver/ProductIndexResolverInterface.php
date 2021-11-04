@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
 use Sylius\Component\Channel\Model\ChannelInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 
 interface ProductIndexResolverInterface
 {
