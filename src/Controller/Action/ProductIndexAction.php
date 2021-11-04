@@ -25,18 +25,26 @@ final class ProductIndexAction
 
     private EventDispatcherInterface $eventDispatcher;
 
+    private string $algoliaAppId;
+
+    private string $algoliaSearchApiKey;
+
     public function __construct(
         Environment $twig,
         ProductIndexResolverInterface $productIndexResolver,
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        string $algoliaAppId,
+        string $algoliaSearchApiKey
     ) {
         $this->twig = $twig;
         $this->productIndexResolver = $productIndexResolver;
         $this->taxonRepository = $taxonRepository;
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
+        $this->algoliaAppId = $algoliaAppId;
+        $this->algoliaSearchApiKey = $algoliaSearchApiKey;
     }
 
     public function __invoke(string $slug): Response
@@ -55,6 +63,8 @@ final class ProductIndexAction
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
             'index' => $this->productIndexResolver->resolve(),
             'taxon' => $taxon,
+            'algolia_app_id' => $this->algoliaAppId,
+            'algolia_search_api_key' => $this->algoliaSearchApiKey,
         ]));
 
         $event = new ProductIndexEvent($response, $taxon, $slug, $locale);

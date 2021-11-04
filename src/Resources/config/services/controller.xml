@@ -9,6 +9,8 @@
             <argument type="service" id="sylius.repository.taxon"/>
             <argument type="service" id="sylius.context.locale"/>
             <argument type="service" id="event_dispatcher"/>
+            <argument>%env(ALGOLIA_APP_ID)%</argument>
+            <argument>%env(ALGOLIA_SEARCH_API_KEY)%</argument>
         </service>
     </services>
 </container>

@@ -1,4 +1,0 @@
-twig:
-    globals:
-        algolia_app_id: '%env(ALGOLIA_APP_ID)%'
-        algolia_search_api_key: '%env(ALGOLIA_SEARCH_API_KEY)%'
