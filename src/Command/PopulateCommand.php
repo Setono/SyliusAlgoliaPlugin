@@ -8,6 +8,7 @@ use Algolia\AlgoliaSearch\SearchClient;
 use Algolia\AlgoliaSearch\SearchIndex;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
+use Setono\SyliusAlgoliaPlugin\DTO\IndexSettings;
 use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolverInterface;
 use Setono\SyliusAlgoliaPlugin\SettingsProvider\SettingsProviderInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -90,6 +91,13 @@ final class PopulateCommand extends Command
         // if the index already exists we don't want to override any settings
         if ($index->exists()) {
             return $index;
+        }
+
+        $settings = $this->defaultSettingsProvider->getSettings();
+        if ($settings instanceof IndexSettings) {
+            $language = substr((string) $locale->getCode(), 0, 2);
+            $settings->queryLanguages = [$language];
+            $settings->indexLanguages = [$language];
         }
 
         $index->setSettings($this->defaultSettingsProvider->getSettings()->toArray());
