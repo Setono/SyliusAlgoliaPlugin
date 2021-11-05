@@ -28,7 +28,7 @@ final class ProductIndexResolver implements ProductIndexResolverInterface
         }
 
         $channelCode = $channel->getCode();
-        Assert::string($channelCode);
+        Assert::notNull($channelCode);
 
         if (null === $localeCode) {
             $localeCode = $this->localeContext->getLocaleCode();
