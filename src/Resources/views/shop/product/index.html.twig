@@ -5,9 +5,7 @@
 
     <div id="searchbox"></div>
     <div id="range-slider"></div>
-    <div id="refinement-list"></div>
-    <div id="jeans-size"></div>
-    <div id="t-shirt-size"></div>
+    <div id="hierarchical-menu"></div>
     <div id="hits"></div>
 {% endblock %}
 
@@ -17,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
     <script>
-        const searchClient = algoliasearch('2O6CZAU8ZC', '1e84639c29f5871b4e5caab86b20d0ca');
+        const searchClient = algoliasearch('2O6CZAU8ZC', 'ee78f9d4e5d6589895e953f74666d4d1');
 
         const search = instantsearch({
             indexName: '{{ index }}',
@@ -38,19 +36,17 @@
             }),
             instantsearch.widgets.rangeSlider({
                 container: '#range-slider',
-                attribute: 'basePrice',
+                attribute: 'price',
             }),
-            instantsearch.widgets.refinementList({
-                container: '#refinement-list',
-                attribute: 'taxons',
-            }),
-            instantsearch.widgets.refinementList({
-                container: '#jeans-size',
-                attribute: 'options.Jeans size',
-            }),
-            instantsearch.widgets.refinementList({
-                container: '#t-shirt-size',
-                attribute: 'options.T-shirt size',
+            instantsearch.widgets.hierarchicalMenu({
+                container: '#hierarchical-menu',
+                attributes: [
+                    'taxons.lvl0',
+                    'taxons.lvl1',
+                    'taxons.lvl2',
+                    'taxons.lvl3',
+                ],
+                showParentLevel: false,
             }),
             instantsearch.widgets.configure({
                 filters: "taxonCodes:{{ taxon.code }}"

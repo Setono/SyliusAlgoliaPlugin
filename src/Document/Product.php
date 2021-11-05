@@ -33,11 +33,7 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
     /** @var array<array-key, string> */
     public array $taxonCodes = [];
 
-    /**
-     * todo should be built into: https://www.algolia.com/doc/guides/managing-results/refine-results/faceting/#hierarchical-facets
-     *
-     * @var array<array-key, string>
-     */
+    /** @var array<string, array<array-key, string>> */
     public array $taxons = [];
 
     public ?string $currency = null;

@@ -44,21 +44,6 @@ final class ProductDataMapper implements DataMapperInterface
             $target->createdAt = $createdAt->getTimestamp();
         }
 
-        // todo Sylius has the descendent configuration option. Should we use that to include all parent taxons here?
-        $mainTaxon = $source->getMainTaxon();
-        if (null !== $mainTaxon) {
-            $target->taxonCodes[] = (string) $mainTaxon->getCode();
-            $target->taxons[] = (string) $mainTaxon->getTranslation($localeCode)->getName();
-        }
-
-        foreach ($source->getTaxons() as $taxon) {
-            $target->taxonCodes[] = (string) $taxon->getCode();
-            $target->taxons[] = (string) $taxon->getTranslation($localeCode)->getName();
-        }
-
-        $target->taxonCodes = array_unique($target->taxonCodes);
-        $target->taxons = array_unique($target->taxons);
-
         $this->mapOptions($source, $target, $localeCode);
     }
 
