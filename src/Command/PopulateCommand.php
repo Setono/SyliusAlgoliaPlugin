@@ -100,7 +100,7 @@ final class PopulateCommand extends Command
             $settings->indexLanguages = [$language];
         }
 
-        $index->setSettings($this->defaultSettingsProvider->getSettings()->toArray());
+        $index->setSettings($settings->toArray());
 
         return $index;
     }
