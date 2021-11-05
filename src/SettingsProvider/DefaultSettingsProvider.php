@@ -18,6 +18,7 @@ final class DefaultSettingsProvider implements SettingsProviderInterface
         $settings->attributesForFaceting = [
             'filterOnly(taxonCodes)',
         ];
+        $settings->customRanking = ['desc(createdAt)'];
         $settings->disablePrefixOnAttributes = ['code'];
         $settings->ignorePlurals = true; // remember to set query languages
         $settings->allowTyposOnNumericTokens = false;
