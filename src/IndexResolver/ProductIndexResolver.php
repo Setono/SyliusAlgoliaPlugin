@@ -21,7 +21,7 @@ final class ProductIndexResolver implements ProductIndexResolverInterface
         $this->localeContext = $localeContext;
     }
 
-    public function resolve(?ChannelInterface $channel = null, ?string $localeCode = null): string
+    public function resolve(ChannelInterface $channel = null, string $localeCode = null): string
     {
         if (null === $channel) {
             $channel = $this->channelContext->getChannel();
