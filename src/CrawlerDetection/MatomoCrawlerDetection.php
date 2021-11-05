@@ -24,7 +24,11 @@ final class MatomoCrawlerDetection implements CrawlerDetectionInterface
     public function isCrawler(string $userAgent = null): bool
     {
         if (null === $userAgent) {
-            $request = $this->requestStack->getMasterRequest();
+            if (method_exists($this->requestStack, 'getMainRequest')) {
+                $request = $this->requestStack->getMainRequest();
+            } else {
+                $request = $this->requestStack->getMasterRequest();
+            }
             if (null === $request) {
                 return false;
             }

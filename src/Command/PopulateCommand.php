@@ -86,7 +86,7 @@ final class PopulateCommand extends Command
     private function prepareIndex(ChannelInterface $channel, LocaleInterface $locale): SearchIndex
     {
         /** @var SearchIndex $index */
-        $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale));
+        $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale->getCode()));
 
         // if the index already exists we don't want to override any settings
         if ($index->exists()) {
