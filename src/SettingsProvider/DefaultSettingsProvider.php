@@ -16,7 +16,7 @@ final class DefaultSettingsProvider implements SettingsProviderInterface
         $settings = new IndexSettings();
         $settings->searchableAttributes = ['code', 'name'];
         $settings->attributesForFaceting = [
-            'filterOnly(taxonCodes)',
+            'filterOnly(taxonCodes)', 'onSale',
         ];
         $settings->customRanking = ['desc(createdAt)'];
         $settings->disablePrefixOnAttributes = ['code'];
