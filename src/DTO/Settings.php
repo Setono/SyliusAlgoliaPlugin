@@ -12,79 +12,96 @@ namespace Setono\SyliusAlgoliaPlugin\DTO;
  *
  * See https://www.algolia.com/doc/api-reference/settings-api-parameters/
  */
-class Settings
+class Settings implements SettingsInterface
 {
-    public $attributesToRetrieve;
+    /** @var array<array-key, string>|null */
+    public ?array $attributesToRetrieve = null;
 
-    public $relevancyStrictness;
+    public ?int $relevancyStrictness = null;
 
-    public $maxValuesPerFacet;
+    public ?int $maxValuesPerFacet = null;
 
-    public $sortFacetValuesBy;
+    public ?string $sortFacetValuesBy = null;
 
-    public $attributesToHighlight;
+    /** @var array<array-key, string>|null */
+    public ?array $attributesToHighlight = null;
 
-    public $attributesToSnippet;
+    /** @var array<array-key, string>|null */
+    public ?array $attributesToSnippet = null;
 
-    public $highlightPreTag;
+    public ?string $highlightPreTag = null;
 
-    public $highlightPostTag;
+    public ?string $highlightPostTag = null;
 
-    public $snippetEllipsisText;
+    public ?string $snippetEllipsisText = null;
 
-    public $restrictHighlightAndSnippetArrays;
+    public ?bool $restrictHighlightAndSnippetArrays = null;
 
-    public $hitsPerPage;
+    public ?int $hitsPerPage = null;
 
-    public $minWordSizefor1Typo;
+    public ?int $minWordSizefor1Typo = null;
 
-    public $minWordSizefor2Typos;
+    public ?int $minWordSizefor2Typos = null;
 
+    /** @psalm-var 'min'|'strict'|bool|null */
     public $typoTolerance;
 
-    public $allowTyposOnNumericTokens;
+    public ?bool $allowTyposOnNumericTokens = null;
 
-    public $disableTypoToleranceOnAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $disableTypoToleranceOnAttributes = null;
 
+    /** @var bool|array<array-key, string>|null */
     public $ignorePlurals;
 
+    /** @var bool|array<array-key, string>|null */
     public $removeStopWords;
 
-    public $queryLanguages;
+    /** @var array<array-key, string>|null */
+    public ?array $queryLanguages = null;
 
-    public $decompoundQuery;
+    public ?bool $decompoundQuery = null;
 
-    public $enableRules;
+    public ?bool $enableRules = null;
 
-    public $enablePersonalization;
+    public ?bool $enablePersonalization = null;
 
-    public $queryType;
+    /** @psalm-var 'prefixLast'|'prefixAll'|'prefixNone'|null */
+    public ?string $queryType = null;
 
-    public $removeWordsIfNoResults;
+    /** @psalm-var 'none'|'lastWords'|'firstWords'|'allOptional'|null */
+    public ?string $removeWordsIfNoResults = null;
 
-    public $advancedSyntax;
+    public ?bool $advancedSyntax = null;
 
-    public $optionalWords;
+    /** @var array<array-key, string>|null */
+    public ?array $optionalWords = null;
 
-    public $disableExactOnAttributes;
+    /** @var array<array-key, string>|null */
+    public ?array $disableExactOnAttributes = null;
 
-    public $exactOnSingleWordQuery;
+    /** @psalm-var 'attribute'|'none'|'word'|null */
+    public ?string $exactOnSingleWordQuery = null;
 
-    public $alternativesAsExact;
+    /** @var array<array-key, string>|null */
+    public ?array $alternativesAsExact = null;
 
-    public $advancedSyntaxFeatures;
+    /** @var array<array-key, string>|null */
+    public ?array $advancedSyntaxFeatures = null;
 
-    public $distinct;
+    /** @psalm-var 0|1|2|3|null */
+    public ?int $distinct = null;
 
-    public $replaceSynonymsInHighlight;
+    public ?bool $replaceSynonymsInHighlight = null;
 
-    public $minProximity;
+    public ?int $minProximity = null;
 
-    public $responseFields;
+    /** @var array<array-key, string>|null */
+    public ?array $responseFields = null;
 
-    public $maxFacetHits;
+    public ?int $maxFacetHits = null;
 
-    public $attributeCriteriaComputedByMinProximity;
+    public ?bool $attributeCriteriaComputedByMinProximity = null;
 
     public function toArray(): array
     {
