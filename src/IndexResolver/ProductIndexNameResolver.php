@@ -27,8 +27,11 @@ final class ProductIndexNameResolver implements ProductIndexNameResolverInterfac
         $this->currencyContext = $currencyContext;
     }
 
-    public function resolve(string $channelCode = null, string $localeCode = null, string $currencyCode = null): string
-    {
+    public function resolve(
+        string $channelCode = null,
+        string $localeCode = null,
+        string $currencyCode = null
+    ): string {
         if (null === $channelCode) {
             $channel = $this->channelContext->getChannel();
             $channelCode = $channel->getCode();
