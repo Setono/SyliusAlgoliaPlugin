@@ -9,10 +9,11 @@ use Algolia\AlgoliaSearch\SearchIndex;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\DTO\IndexSettings;
-use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolverInterface;
+use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\SettingsProvider\SettingsProviderInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
+use Sylius\Component\Currency\Model\CurrencyInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Product\Repository\ProductRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -34,7 +35,7 @@ final class PopulateCommand extends Command
 
     private DataMapperInterface $dataMapper;
 
-    private ProductIndexResolverInterface $productIndexResolver;
+    private ProductIndexNameResolverInterface $productIndexNameResolver;
 
     private SettingsProviderInterface $defaultSettingsProvider;
 
@@ -43,7 +44,7 @@ final class PopulateCommand extends Command
         SearchClient $searchClient,
         NormalizerInterface $normalizer,
         DataMapperInterface $dataMapper,
-        ProductIndexResolverInterface $productIndexResolver,
+        ProductIndexNameResolverInterface $productIndexNameResolver,
         SettingsProviderInterface $defaultSettingsProvider
     ) {
         parent::__construct();
@@ -52,30 +53,59 @@ final class PopulateCommand extends Command
         $this->searchClient = $searchClient;
         $this->normalizer = $normalizer;
         $this->dataMapper = $dataMapper;
-        $this->productIndexResolver = $productIndexResolver;
+        $this->productIndexNameResolver = $productIndexNameResolver;
         $this->defaultSettingsProvider = $defaultSettingsProvider;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $productIndexResolver = new class() {
+            public function resolve(): iterable
+            {
+                $channels = $channelRepository->findAll();
+                foreach ($channels as $channel) {
+                    foreach ($channel->getLocales() as $locale) {
+                        foreach ($channel->getCurrencies() as $currency) {
+                            return new ResolvedProductIndex($channel, $locale, $currency);
+                        }
+                    }
+                }
+            }
+        };
+
+
+        /** @var ResolvedProductIndex $productIndex */
+        foreach ($productIndexResolver->resolve() as $productIndex) {
+            $channel = $productIndex->getChannel();
+            $locale = $productIndex->getLocale();
+            $currency = $productIndex->getCurrency();
+
+            $qb = $productRepository->createQueryBuilder($channel, $locale, $currency);
+
+            $messageBus->dispatch(new IndexProducts($qb->getDql(), $qb->getParameters()));
+        }
+
         /** @var ProductInterface $product */
         foreach ($this->productRepository->findAll() as $product) {
             /** @var ChannelInterface $channel */
             foreach ($product->getChannels() as $channel) {
                 foreach ($channel->getLocales() as $locale) {
-                    $index = $this->prepareIndex($channel, $locale);
+                    foreach ($channel->getCurrencies() as $currency) {
+                        $index = $this->prepareIndex($channel, $locale, $currency);
 
-                    $doc = new Product();
-                    $this->dataMapper->map($product, $doc, [
-                        'channel' => $channel,
-                        'locale' => $locale,
-                    ]);
+                        $doc = new Product();
+                        $this->dataMapper->map($product, $doc, [
+                            'channel' => $channel,
+                            'locale' => $locale,
+                            'currency' => $currency,
+                        ]);
 
-                    $data = $this->normalizer->normalize($doc, null, [
-                        'groups' => 'setono:sylius-algolia:document',
-                    ]);
+                        $data = $this->normalizer->normalize($doc, null, [
+                            'groups' => 'setono:sylius-algolia:document',
+                        ]);
 
-                    $index->saveObject($data);
+                        $index->saveObject($data);
+                    }
                 }
             }
         }
@@ -83,10 +113,12 @@ final class PopulateCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function prepareIndex(ChannelInterface $channel, LocaleInterface $locale): SearchIndex
+    private function prepareIndex(ChannelInterface $channel, LocaleInterface $locale, CurrencyInterface $currency): SearchIndex
     {
         /** @var SearchIndex $index */
-        $index = $this->searchClient->initIndex($this->productIndexResolver->resolve($channel, $locale->getCode()));
+        $index = $this->searchClient->initIndex(
+            $this->productIndexNameResolver->resolve($channel->getCode(), $locale->getCode(), $currency->getCode())
+        );
 
         // if the index already exists we don't want to override any settings
         if ($index->exists()) {
