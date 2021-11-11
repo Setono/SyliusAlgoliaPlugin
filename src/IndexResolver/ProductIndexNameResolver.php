@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
+use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Currency\Context\CurrencyContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
@@ -53,5 +54,10 @@ final class ProductIndexNameResolver implements ProductIndexNameResolverInterfac
             strtolower($localeCode),
             strtolower($currencyCode)
         );
+    }
+
+    public function resolveFromScope(ProductIndexScope $productIndexScope): string
+    {
+        return $this->resolve($productIndexScope->channel, $productIndexScope->locale, $productIndexScope->currency);
     }
 }

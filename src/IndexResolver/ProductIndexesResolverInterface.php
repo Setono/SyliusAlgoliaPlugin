@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
-use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndexInterface;
+use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 
 interface ProductIndexesResolverInterface
 {
     /**
-     * @return iterable|ResolvedProductIndexInterface[]
+     * @return iterable<ProductIndexScope>
      */
     public function resolve(): iterable;
 }

@@ -6,26 +6,24 @@ namespace Setono\SyliusAlgoliaPlugin\Repository;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndexInterface;
+use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
+/**
+ * @mixin EntityRepository
+ */
 trait ProductRepositoryTrait
 {
-    public function createQueryBuilderForResolvedIndex(ResolvedProductIndexInterface $resolvedProductIndex): QueryBuilder
+    public function createQueryBuilderFromProductIndexScope(ProductIndexScope $productIndexScope): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('product');
-
-        if (null !== $resolvedProductIndex->getChannel()) {
-            $qb->andWhere(':channel MEMBER OF product.channels');
-            $qb->setParameter('channel', $resolvedProductIndex->getChannel());
-        }
-
-        // I'm not sure what to do with currency, as channel pricing is defined in baseChannelCurrency
-        // All products should have the price existing in that currency anyway
-
-        if (null !== $resolvedProductIndex->getLocale()) {
-            $qb->innerJoin('product.translations', 'translations', Join::WITH, 'translations.locale = :localeCode');
-            $qb->setParameter('localeCode', $resolvedProductIndex->getLocale()->getCode());
-        }
+        // todo recheck this query
+        $qb = $this
+            ->createQueryBuilder('product')
+            ->innerJoin('product.channels', 'channels', Join::WITH, 'channels.code = :channelCode')
+            ->innerJoin('product.translations', 'translations', Join::WITH, 'translations.locale = :localeCode')
+            ->setParameter('channelCode', $productIndexScope->channel)
+            ->setParameter('localeCode', $productIndexScope->locale)
+        ;
 
         return $qb;
     }

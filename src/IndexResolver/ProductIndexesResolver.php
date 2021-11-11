@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
-use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndex;
+use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 
@@ -22,15 +22,12 @@ final class ProductIndexesResolver implements ProductIndexesResolverInterface
         /** @var ChannelInterface[] $channels */
         $channels = $this->channelRepository->findAll();
 
-        $indices = [];
         foreach ($channels as $channel) {
             foreach ($channel->getLocales() as $locale) {
                 foreach ($channel->getCurrencies() as $currency) {
-                    $indices[] = new ResolvedProductIndex($channel, $locale, $currency);
+                    yield ProductIndexScope::createFromObjects($channel, $locale, $currency);
                 }
             }
         }
-
-        return $indices;
     }
 }

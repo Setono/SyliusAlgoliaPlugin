@@ -7,40 +7,40 @@
 
         <service id="setono_sylius_algolia.data_mapper.product"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ProductDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.url"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\UrlDataMapper">
             <argument type="service" id="router"/>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.image_url"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ImageUrlDataMapper">
             <argument type="service" id="liip_imagine.cache.manager"/>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.product.price"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\PriceDataMapper">
-            <argument type="service" id="sylius.currency_converter"/>
+            <argument type="service" id="sylius.repository.channel"/>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.product.taxons"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonsDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
         <service id="setono_sylius_algolia.data_mapper.product.taxon_codes"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonCodesDataMapper">
             <argument>%sylius_shop.product_grid.include_all_descendants%</argument>
 
-            <tag name="setono_sylius_algolia.data_mapper" priority="-100"/>
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
     </services>
 </container>

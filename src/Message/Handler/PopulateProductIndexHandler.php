@@ -2,22 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\MessageHandler;
+namespace Setono\SyliusAlgoliaPlugin\Message\Handler;
 
 use Algolia\AlgoliaSearch\SearchClient;
 use Algolia\AlgoliaSearch\SearchIndex;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\DTO\IndexSettings;
-use Setono\SyliusAlgoliaPlugin\Message\IndexProducts;
+use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Message\Command\PopulateProductIndex;
+use Setono\SyliusAlgoliaPlugin\Repository\ProductRepositoryInterface;
 use Setono\SyliusAlgoliaPlugin\SettingsProvider\SettingsProviderInterface;
+use Sylius\Component\Core\Model\ProductInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-final class IndexProductsHandler
+final class PopulateProductIndexHandler implements MessageHandlerInterface
 {
-    private EntityManagerInterface $productManager;
+    private ProductRepositoryInterface $productRepository;
+
+    private ProductIndexNameResolverInterface $productIndexNameResolver;
 
     private SearchClient $searchClient;
 
@@ -28,40 +32,38 @@ final class IndexProductsHandler
     private SettingsProviderInterface $defaultSettingsProvider;
 
     public function __construct(
-        EntityManagerInterface $productManager,
+        ProductRepositoryInterface $productRepository,
+        ProductIndexNameResolverInterface $productIndexNameResolver,
         SearchClient $searchClient,
         NormalizerInterface $normalizer,
         DataMapperInterface $dataMapper,
         SettingsProviderInterface $defaultSettingsProvider
     ) {
-        $this->productManager = $productManager;
+        $this->productRepository = $productRepository;
+        $this->productIndexNameResolver = $productIndexNameResolver;
         $this->searchClient = $searchClient;
         $this->normalizer = $normalizer;
         $this->dataMapper = $dataMapper;
         $this->defaultSettingsProvider = $defaultSettingsProvider;
     }
 
-    public function __invoke(IndexProducts $indexProducts): void
+    public function __invoke(PopulateProductIndex $message): void
     {
-        $query = $this->productManager->createQuery($indexProducts->getProductsDql());
-        /** @var ArrayCollection $parameters */
-        $parameters = $indexProducts->getProductsQueryParameters();
-        $query->setParameters($parameters);
+        $scope = $message->getProductIndexScope();
 
-        $products = $query->getResult();
+        $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
 
-        $localeCode = null;
-        if (null !== $locale = $indexProducts->getLocale()) {
-            $localeCode = $locale->getCode();
-        }
-        $index = $this->prepareIndex($indexProducts->getIndexName(), $localeCode);
+        $indexName = $this->productIndexNameResolver->resolveFromScope($scope);
 
-        foreach ($products as $product) {
+        $index = $this->prepareIndex($indexName, $scope->locale);
+
+        /** @var ProductInterface $product */
+        foreach ($qb->getQuery()->getResult() as $product) {
             $doc = new Product();
             $this->dataMapper->map($product, $doc, [
-                'channel' => $indexProducts->getChannel(),
-                'locale' => $indexProducts->getLocale(),
-                'currency' => $indexProducts->getCurrency(),
+                'channel' => $scope->channel,
+                'locale' => $scope->locale,
+                'currency' => $scope->currency,
             ]);
 
             $data = $this->normalizer->normalize($doc, null, [
@@ -72,8 +74,9 @@ final class IndexProductsHandler
         }
     }
 
-    private function prepareIndex(string $indexName, ?string $localeCode): SearchIndex
+    private function prepareIndex(string $indexName, string $localeCode): SearchIndex
     {
+        /** @var SearchIndex $index */
         $index = $this->searchClient->initIndex($indexName);
 
         // if the index already exists we don't want to override any settings
@@ -83,7 +86,7 @@ final class IndexProductsHandler
 
         $settings = $this->defaultSettingsProvider->getSettings();
         if ($settings instanceof IndexSettings) {
-            $language = substr((string) $localeCode, 0, 2);
+            $language = substr($localeCode, 0, 2);
             $settings->queryLanguages = [$language];
             $settings->indexLanguages = [$language];
         }

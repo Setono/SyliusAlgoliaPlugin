@@ -9,7 +9,6 @@ use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Taxonomy\Model\TaxonInterface;
 use Webmozart\Assert\Assert;
@@ -30,10 +29,6 @@ final class TaxonsDataMapper implements DataMapperInterface
     {
         Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
-        /** @var LocaleInterface $locale */
-        $locale = $context['locale'];
-        $localeCode = (string) $locale->getCode();
-
         $taxons = self::extractTaxons($source);
 
         if (count($taxons) === 0) {
@@ -43,7 +38,7 @@ final class TaxonsDataMapper implements DataMapperInterface
         /** @var array<array-key, string> $hierarchies */
         $hierarchies = [];
         foreach ($taxons as $taxon) {
-            $hierarchies[] = self::buildHierarchy($taxon, $localeCode);
+            $hierarchies[] = self::buildHierarchy($taxon, $context['locale']);
         }
 
         $levels = [];
@@ -117,14 +112,14 @@ final class TaxonsDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true ProductDocument $target
-     * @psalm-assert-if-true LocaleInterface $context['locale']
+     * @psalm-assert-if-true string $context['locale']
      */
     public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof ProductDocument
             && isset($context['locale'])
-            && $context['locale'] instanceof LocaleInterface
+            && is_string($context['locale'])
         ;
     }
 }
