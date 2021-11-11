@@ -8,6 +8,10 @@ use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Currency\Model\CurrencyInterface;
 use Sylius\Component\Locale\Model\LocaleInterface;
 
+// TODO: rename to ProductIndexSettings (or ProductIndexConfiguration)
+// TODO: see how it would work with not nullable properties
+// TODO: have an array of other options that would just be passed through
+// TODO: remove the interface
 class ResolvedProductIndex implements ResolvedProductIndexInterface
 {
     public ?ChannelInterface $channel;

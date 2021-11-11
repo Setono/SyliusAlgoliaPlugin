@@ -4,19 +4,16 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
-use Setono\SyliusAlgoliaPlugin\Model\Factory\ResolvedProductIndexFactoryInterface;
+use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndex;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 
 final class ProductsIndicesResolver implements ProductsIndicesResolverInterface
 {
-    private ResolvedProductIndexFactoryInterface $resolvedProductIndexFactory;
-
     private ChannelRepositoryInterface $channelRepository;
 
-    public function __construct(ResolvedProductIndexFactoryInterface $resolvedProductIndexFactory, ChannelRepositoryInterface $channelRepository)
+    public function __construct(ChannelRepositoryInterface $channelRepository)
     {
-        $this->resolvedProductIndexFactory = $resolvedProductIndexFactory;
         $this->channelRepository = $channelRepository;
     }
 
@@ -29,7 +26,7 @@ final class ProductsIndicesResolver implements ProductsIndicesResolverInterface
         foreach ($channels as $channel) {
             foreach ($channel->getLocales() as $locale) {
                 foreach ($channel->getCurrencies() as $currency) {
-                    $indices[] = $this->resolvedProductIndexFactory->createNew($channel, $locale, $currency);
+                    $indices[] = new ResolvedProductIndex($channel, $locale, $currency);
                 }
             }
         }

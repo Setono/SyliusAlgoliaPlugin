@@ -10,7 +10,6 @@
         <import resource="services/event_subscriber.xml"/>
         <import resource="services/index_resolver.xml"/>
         <import resource="services/message_handler.xml"/>
-        <import resource="services/model.xml"/>
         <import resource="services/settings_provider.xml"/>
     </imports>
 </container>
