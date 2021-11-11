@@ -8,7 +8,7 @@ use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndex;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 
-final class ProductsIndicesResolver implements ProductsIndicesResolverInterface
+final class ProductIndexesResolver implements ProductIndexesResolverInterface
 {
     private ChannelRepositoryInterface $channelRepository;
 

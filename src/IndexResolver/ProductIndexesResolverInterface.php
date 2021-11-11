@@ -6,7 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
 
 use Setono\SyliusAlgoliaPlugin\Model\ResolvedProductIndexInterface;
 
-interface ProductsIndicesResolverInterface
+interface ProductIndexesResolverInterface
 {
     /**
      * @return iterable|ResolvedProductIndexInterface[]

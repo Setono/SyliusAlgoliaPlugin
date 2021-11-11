@@ -5,8 +5,8 @@
         <service id="setono_sylius_algolia.command.populate" class="Setono\SyliusAlgoliaPlugin\Command\PopulateCommand">
             <argument type="service" id="sylius.repository.product"/>
             <argument type="service" id="setono_sylius_algolia.index_resolver.product_index_name"/>
-            <argument type="service" id="setono_sylius_algolia.index_resolver.products_indices"/>
-            <argument type="service" id="sylius.command_bus"/>
+            <argument type="service" id="setono_sylius_algolia.index_resolver.product_indexes"/>
+            <argument type="service" id="sylius.command_bus"/><!-- todo create our own bus -->
 
             <tag name="console.command"/>
         </service>

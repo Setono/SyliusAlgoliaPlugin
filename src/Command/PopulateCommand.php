@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Command;
 
 use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
-use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductsIndicesResolverInterface;
+use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexesResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Message\IndexProducts;
 use Setono\SyliusAlgoliaPlugin\Repository\ProductRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -23,14 +23,14 @@ final class PopulateCommand extends Command
 
     private ProductIndexNameResolverInterface $productIndexNameResolver;
 
-    private ProductsIndicesResolverInterface $productsIndicesResolver;
+    private ProductIndexesResolverInterface $productsIndicesResolver;
 
     private MessageBusInterface $messageBus;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ProductIndexNameResolverInterface $productIndexNameResolver,
-        ProductsIndicesResolverInterface $productsIndicesResolver,
+        ProductIndexesResolverInterface $productsIndicesResolver,
         MessageBusInterface $messageBus
     ) {
         parent::__construct();
