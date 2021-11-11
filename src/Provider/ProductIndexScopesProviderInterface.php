@@ -6,10 +6,10 @@ namespace Setono\SyliusAlgoliaPlugin\Provider;
 
 use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 
-interface ProductIndexScopeProviderInterface
+interface ProductIndexScopesProviderInterface
 {
     /**
      * @return iterable<ProductIndexScope>
      */
-    public function resolve(): iterable;
+    public function getProductIndexScopes(): iterable;
 }

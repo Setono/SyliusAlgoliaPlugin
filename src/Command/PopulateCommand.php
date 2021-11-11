@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Command;
 
 use Setono\SyliusAlgoliaPlugin\Message\Command\PopulateProductIndex;
-use Setono\SyliusAlgoliaPlugin\Provider\ProductIndexScopeProviderInterface;
+use Setono\SyliusAlgoliaPlugin\Provider\ProductIndexScopesProviderInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,13 +17,13 @@ final class PopulateCommand extends Command
 
     protected static $defaultDescription = 'Populate indexes';
 
-    private ProductIndexScopeProviderInterface $productIndexScopeProvider;
+    private ProductIndexScopesProviderInterface $productIndexScopeProvider;
 
     private MessageBusInterface $commandBus;
 
     public function __construct(
-        ProductIndexScopeProviderInterface $productIndexScopeProvider,
-        MessageBusInterface $messageBus
+        ProductIndexScopesProviderInterface $productIndexScopeProvider,
+        MessageBusInterface                 $messageBus
     ) {
         parent::__construct();
 
@@ -33,7 +33,7 @@ final class PopulateCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $productIndexScopes = $this->productIndexScopeProvider->resolve();
+        $productIndexScopes = $this->productIndexScopeProvider->getProductIndexScopes();
 
         foreach ($productIndexScopes as $productIndexScope) {
             $this->commandBus->dispatch(new PopulateProductIndex($productIndexScope));

@@ -8,7 +8,7 @@ use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 
-final class ProductIndexScopeProvider implements ProductIndexScopeProviderInterface
+final class ProductIndexScopesProvider implements ProductIndexScopesProviderInterface
 {
     private ChannelRepositoryInterface $channelRepository;
 
@@ -17,7 +17,7 @@ final class ProductIndexScopeProvider implements ProductIndexScopeProviderInterf
         $this->channelRepository = $channelRepository;
     }
 
-    public function resolve(): iterable
+    public function getProductIndexScopes(): iterable
     {
         /** @var ChannelInterface[] $channels */
         $channels = $this->channelRepository->findAll();
