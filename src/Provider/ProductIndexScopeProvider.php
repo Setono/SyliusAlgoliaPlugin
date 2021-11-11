@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
+namespace Setono\SyliusAlgoliaPlugin\Provider;
 
 use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 
-final class ProductIndexesResolver implements ProductIndexesResolverInterface
+final class ProductIndexScopeProvider implements ProductIndexScopeProviderInterface
 {
     private ChannelRepositoryInterface $channelRepository;
 

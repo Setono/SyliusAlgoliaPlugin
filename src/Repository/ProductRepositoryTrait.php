@@ -17,13 +17,11 @@ trait ProductRepositoryTrait
     public function createQueryBuilderFromProductIndexScope(ProductIndexScope $productIndexScope): QueryBuilder
     {
         // todo recheck this query
-        $qb = $this
-            ->createQueryBuilder('product')
-            ->innerJoin('product.channels', 'channels', Join::WITH, 'channels.code = :channelCode')
-            ->innerJoin('product.translations', 'translations', Join::WITH, 'translations.locale = :localeCode')
-            ->setParameter('channelCode', $productIndexScope->channel)
-            ->setParameter('localeCode', $productIndexScope->locale)
-        ;
+        $qb = $this->createQueryBuilder('product');
+        $qb->innerJoin('product.channels', 'channels', Join::WITH, 'channels.code = :channelCode');
+        $qb->innerJoin('product.translations', 'translations', Join::WITH, 'translations.locale = :localeCode');
+        $qb->setParameter('channelCode', $productIndexScope->channelCode);
+        $qb->setParameter('localeCode', $productIndexScope->localeCode);
 
         return $qb;
     }

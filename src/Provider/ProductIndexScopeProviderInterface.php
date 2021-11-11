@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
+namespace Setono\SyliusAlgoliaPlugin\Provider;
 
 use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 
-interface ProductIndexesResolverInterface
+interface ProductIndexScopeProviderInterface
 {
     /**
      * @return iterable<ProductIndexScope>

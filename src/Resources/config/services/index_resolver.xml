@@ -10,12 +10,5 @@
         </service>
         <service id="Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface"
                  alias="setono_sylius_algolia.index_resolver.product_index_name"/>
-
-        <service id="setono_sylius_algolia.index_resolver.product_indexes"
-                 class="Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexesResolver">
-            <argument type="service" id="sylius.repository.channel"/>
-        </service>
-        <service id="Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexesResolverInterface"
-                 alias="setono_sylius_algolia.index_resolver.products_indices"/>
     </services>
 </container>
