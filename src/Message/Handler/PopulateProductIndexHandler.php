@@ -55,15 +55,15 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
 
         $indexName = $this->productIndexNameResolver->resolveFromScope($scope);
 
-        $index = $this->prepareIndex($indexName, $scope->locale);
+        $index = $this->prepareIndex($indexName, $scope->localeCode);
 
         /** @var ProductInterface $product */
         foreach ($qb->getQuery()->getResult() as $product) {
             $doc = new Product();
             $this->dataMapper->map($product, $doc, [
-                'channel' => $scope->channel,
-                'locale' => $scope->locale,
-                'currency' => $scope->currency,
+                'channel' => $scope->channelCode,
+                'locale' => $scope->localeCode,
+                'currency' => $scope->currencyCode,
             ]);
 
             $data = $this->normalizer->normalize($doc, null, [

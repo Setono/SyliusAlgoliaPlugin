@@ -58,6 +58,6 @@ final class ProductIndexNameResolver implements ProductIndexNameResolverInterfac
 
     public function resolveFromScope(ProductIndexScope $productIndexScope): string
     {
-        return $this->resolve($productIndexScope->channel, $productIndexScope->locale, $productIndexScope->currency);
+        return $this->resolve($productIndexScope->channelCode, $productIndexScope->localeCode, $productIndexScope->currencyCode);
     }
 }
