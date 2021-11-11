@@ -11,10 +11,13 @@ use Sylius\Component\Locale\Model\LocaleInterface;
 
 final class ProductIndexScope
 {
+    /** @psalm-readonly */
     public string $channel;
 
+    /** @psalm-readonly */
     public string $locale;
 
+    /** @psalm-readonly */
     public string $currency;
 
     /** @var array<string, mixed> */
