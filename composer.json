@@ -19,7 +19,7 @@
         "psr/event-dispatcher": "^1.0",
         "psr/link": "^1.0",
         "setono/prerender-bundle": "dev-master",
-        "sylius/resource-bundle": "^1.6",
+        "sylius/resource-bundle": "^1.8",
         "symfony/config": "^4.4 || ^5.0",
         "symfony/console": "^4.4 || ^5.0",
         "symfony/dependency-injection": "^4.4 || ^5.0",
