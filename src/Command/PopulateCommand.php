@@ -39,6 +39,6 @@ final class PopulateCommand extends Command
             $this->commandBus->dispatch(new PopulateProductIndex($productIndexScope));
         }
 
-        return Command::SUCCESS;
+        return 0;
     }
 }
