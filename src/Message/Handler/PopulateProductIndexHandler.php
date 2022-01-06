@@ -17,6 +17,7 @@ use Setono\SyliusAlgoliaPlugin\SettingsProvider\SettingsProviderInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Webmozart\Assert\Assert;
 
 final class PopulateProductIndexHandler implements MessageHandlerInterface
 {
@@ -51,13 +52,9 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
     public function __invoke(PopulateProductIndex $message): void
     {
         $scope = $message->getProductIndexScope();
-
-        $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
-
         $index = $this->prepareIndex($scope);
 
-        /** @var ProductInterface $product */
-        foreach ($qb->getQuery()->getResult() as $product) {
+        foreach ($this->getProducts($scope) as $product) {
             $doc = new Product();
             $this->dataMapper->map($product, $doc, [
                 'channel' => $scope->channelCode,
@@ -95,5 +92,18 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
         $index->setSettings($settings->toArray());
 
         return $index;
+    }
+
+    /**
+     * @return iterable<ProductInterface>
+     */
+    private function getProducts(ProductIndexScope $scope): iterable
+    {
+        $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
+        foreach ($qb->getQuery()->getResult() as $product) {
+            Assert::isInstanceOf($product, ProductInterface::class);
+
+            yield $product;
+        }
     }
 }
