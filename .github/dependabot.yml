@@ -3,14 +3,15 @@
 version: 2
 
 updates:
-    -   allow:
-            -   dependency-type: "production"
-        commit-message:
+    -   commit-message:
             include: "scope"
             prefix: "composer"
         directory: "/"
+        ignore:
+            -   dependency-name: "symfony*"
+            -   dependency-name: "sylius/sylius"
         open-pull-requests-limit: 10
         package-ecosystem: "composer"
         schedule:
             interval: "weekly"
-        versioning-strategy: "widen"
+        versioning-strategy: "increase"
