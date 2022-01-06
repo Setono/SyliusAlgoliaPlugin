@@ -9,6 +9,7 @@ use Algolia\AlgoliaSearch\SearchIndex;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\DTO\IndexSettings;
+use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
 use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Message\Command\PopulateProductIndex;
 use Setono\SyliusAlgoliaPlugin\Repository\ProductRepositoryInterface;
@@ -53,9 +54,7 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
 
         $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
 
-        $indexName = $this->productIndexNameResolver->resolveFromScope($scope);
-
-        $index = $this->prepareIndex($indexName, $scope->localeCode);
+        $index = $this->prepareIndex($scope);
 
         /** @var ProductInterface $product */
         foreach ($qb->getQuery()->getResult() as $product) {
@@ -74,8 +73,10 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
         }
     }
 
-    private function prepareIndex(string $indexName, string $localeCode): SearchIndex
+    private function prepareIndex(ProductIndexScope $scope): SearchIndex
     {
+        $indexName = $this->productIndexNameResolver->resolveFromScope($scope);
+
         /** @var SearchIndex $index */
         $index = $this->searchClient->initIndex($indexName);
 
@@ -86,7 +87,7 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
 
         $settings = $this->defaultSettingsProvider->getSettings();
         if ($settings instanceof IndexSettings) {
-            $language = substr($localeCode, 0, 2);
+            $language = substr($scope->localeCode, 0, 2);
             $settings->queryLanguages = [$language];
             $settings->indexLanguages = [$language];
         }
