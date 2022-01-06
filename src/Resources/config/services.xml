@@ -9,6 +9,8 @@
         <import resource="services/data_mapper.xml"/>
         <import resource="services/event_subscriber.xml"/>
         <import resource="services/index_resolver.xml"/>
+        <import resource="services/message.xml"/>
+        <import resource="services/provider.xml"/>
         <import resource="services/settings_provider.xml"/>
     </imports>
 </container>

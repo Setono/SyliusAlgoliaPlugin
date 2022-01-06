@@ -10,7 +10,6 @@ use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductTaxon;
 use Sylius\Component\Core\Model\Taxon;
-use Sylius\Component\Locale\Model\Locale;
 use Sylius\Component\Taxonomy\Model\TaxonTranslation;
 
 /**
@@ -36,12 +35,10 @@ final class TaxonsDataMapperTest extends TestCase
         $product->addProductTaxon($earlyWorkTaxon);
 
         $productDocument = new ProductDocument();
-        $locale = new Locale();
-        $locale->setCode('en_US');
 
         $dataMapper = new TaxonsDataMapper();
         $dataMapper->map($product, $productDocument, [
-            'locale' => $locale,
+            'locale' => 'en_US',
         ]);
 
         self::assertEquals([

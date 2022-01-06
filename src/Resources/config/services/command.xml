@@ -3,12 +3,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="setono_sylius_algolia.command.populate" class="Setono\SyliusAlgoliaPlugin\Command\PopulateCommand">
-            <argument type="service" id="sylius.repository.product"/>
-            <argument type="service" id="setono_sylius_algolia.client"/>
-            <argument type="service" id="serializer"/>
-            <argument type="service" id="setono_sylius_algolia.data_mapper.composite"/>
-            <argument type="service" id="setono_sylius_algolia.index_resolver.product"/>
-            <argument type="service" id="setono_sylius_algolia.settings_provider.default"/>
+            <argument type="service" id="setono_sylius_algolia.provider.product_index_scope"/>
+            <argument type="service" id="sylius.command_bus"/><!-- todo create our own bus -->
 
             <tag name="console.command"/>
         </service>

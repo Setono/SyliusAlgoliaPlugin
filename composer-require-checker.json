@@ -19,14 +19,18 @@
         "Sylius\\Bundle\\CoreBundle\\Application\\SyliusPluginTrait",
         "Sylius\\Component\\Channel\\Context\\ChannelContextInterface",
         "Sylius\\Component\\Channel\\Model\\ChannelInterface",
+        "Sylius\\Component\\Channel\\Repository\\ChannelRepositoryInterface",
         "Sylius\\Component\\Core\\Model\\ChannelInterface",
         "Sylius\\Component\\Core\\Model\\ProductInterface",
+        "Sylius\\Component\\Core\\Repository\\ProductRepositoryInterface",
+        "Sylius\\Component\\Currency\\Context\\CurrencyContextInterface",
+        "Sylius\\Component\\Currency\\Converter\\CurrencyConverterInterface",
+        "Sylius\\Component\\Currency\\Model\\CurrencyInterface",
         "Sylius\\Component\\Locale\\Context\\LocaleContextInterface",
         "Sylius\\Component\\Locale\\Model\\LocaleInterface",
         "Sylius\\Component\\Product\\Repository\\ProductRepositoryInterface",
         "Sylius\\Component\\Product\\Resolver\\ProductVariantResolverInterface",
         "Sylius\\Component\\Taxonomy\\Model\\TaxonInterface",
-        "Sylius\\Component\\Taxonomy\\Repository\\TaxonRepositoryInterface",
-        "Sylius\\Component\\Currency\\Converter\\CurrencyConverterInterface"
+        "Sylius\\Component\\Taxonomy\\Repository\\TaxonRepositoryInterface"
     ]
 }

@@ -6,7 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Controller\Action;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
-use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexResolverInterface;
+use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ final class ProductIndexAction
 {
     private Environment $twig;
 
-    private ProductIndexResolverInterface $productIndexResolver;
+    private ProductIndexNameResolverInterface $productIndexNameResolver;
 
     private TaxonRepositoryInterface $taxonRepository;
 
@@ -31,7 +31,7 @@ final class ProductIndexAction
 
     public function __construct(
         Environment $twig,
-        ProductIndexResolverInterface $productIndexResolver,
+        ProductIndexNameResolverInterface $productIndexNameResolver,
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
         EventDispatcherInterface $eventDispatcher,
@@ -39,7 +39,7 @@ final class ProductIndexAction
         string $algoliaSearchApiKey
     ) {
         $this->twig = $twig;
-        $this->productIndexResolver = $productIndexResolver;
+        $this->productIndexNameResolver = $productIndexNameResolver;
         $this->taxonRepository = $taxonRepository;
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
@@ -61,7 +61,7 @@ final class ProductIndexAction
         }
 
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
-            'index' => $this->productIndexResolver->resolve(),
+            'index' => $this->productIndexNameResolver->resolve(),
             'taxon' => $taxon,
             'algolia_app_id' => $this->algoliaAppId,
             'algolia_search_api_key' => $this->algoliaSearchApiKey,

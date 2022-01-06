@@ -42,30 +42,6 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
 
     public ?float $originalPrice = null;
 
-    /**
-     * Example:
-     *
-     * [
-     *     'EUR' => 98.32,
-     *     'USD' => 103.92
-     * ]
-     *
-     * @var array<string, float>
-     */
-    public array $prices = [];
-
-    /**
-     * Example:
-     *
-     * [
-     *     'EUR' => 109.95,
-     *     'USD' => 114.95
-     * ]
-     *
-     * @var array<string, float>
-     */
-    public array $originalPrices = [];
-
     /** @var array<string, array<array-key, string>> */
     public array $options = [];
 

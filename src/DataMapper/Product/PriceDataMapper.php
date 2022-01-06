@@ -9,10 +9,10 @@ use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
+use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
-use Sylius\Component\Currency\Converter\CurrencyConverterInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -23,11 +23,11 @@ final class PriceDataMapper implements DataMapperInterface
 {
     use FormatAmountTrait;
 
-    private CurrencyConverterInterface $currencyConverter;
+    private ChannelRepositoryInterface $channelRepository;
 
-    public function __construct(CurrencyConverterInterface $currencyConverter)
+    public function __construct(ChannelRepositoryInterface $channelRepository)
     {
-        $this->currencyConverter = $currencyConverter;
+        $this->channelRepository = $channelRepository;
     }
 
     /**
@@ -39,8 +39,10 @@ final class PriceDataMapper implements DataMapperInterface
     {
         Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
-        /** @var ChannelInterface $channel */
-        $channel = $context['channel'];
+        $channel = $this->channelRepository->findOneByCode($context['channel']);
+        if (!$channel instanceof ChannelInterface) {
+            return; // todo should this throw? Or log it?
+        }
 
         $baseCurrency = $channel->getBaseCurrency();
         Assert::notNull($baseCurrency);
@@ -79,38 +81,19 @@ final class PriceDataMapper implements DataMapperInterface
         if (null !== $originalPrice) {
             $target->originalPrice = self::formatAmount($originalPrice);
         }
-
-        foreach ($channel->getCurrencies() as $currency) {
-            $currencyCode = $currency->getCode();
-            Assert::notNull($currencyCode);
-
-            $target->prices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
-                $price,
-                $baseCurrencyCode,
-                $currencyCode
-            ));
-
-            if (null !== $originalPrice) {
-                $target->originalPrices[$currencyCode] = self::formatAmount($this->currencyConverter->convert(
-                    $originalPrice,
-                    $baseCurrencyCode,
-                    $currencyCode
-                ));
-            }
-        }
     }
 
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true ProductDocument $target
-     * @psalm-assert-if-true ChannelInterface $context['channel']
+     * @psalm-assert-if-true string $context['channel']
      */
     public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof ProductDocument
             && isset($context['channel'])
-            && $context['channel'] instanceof ChannelInterface
+            && is_string($context['channel'])
         ;
     }
 }

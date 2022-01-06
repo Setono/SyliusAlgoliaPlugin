@@ -9,7 +9,6 @@ use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Locale\Model\LocaleInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -29,11 +28,7 @@ final class ProductDataMapper implements DataMapperInterface
     {
         Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
-        /** @var LocaleInterface $locale */
-        $locale = $context['locale'];
-        $localeCode = (string) $locale->getCode();
-
-        $sourceTranslation = $source->getTranslation($localeCode);
+        $sourceTranslation = $source->getTranslation($context['locale']);
 
         $target->id = (int) $source->getId();
         $target->code = $source->getCode();
@@ -44,7 +39,7 @@ final class ProductDataMapper implements DataMapperInterface
             $target->createdAt = $createdAt->getTimestamp();
         }
 
-        $this->mapOptions($source, $target, $localeCode);
+        $this->mapOptions($source, $target, $context['locale']);
     }
 
     private function mapOptions(ProductInterface $source, Product $target, string $locale): void
@@ -65,14 +60,14 @@ final class ProductDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true Product $target
-     * @psalm-assert-if-true LocaleInterface $context['locale']
+     * @psalm-assert-if-true string $context['locale']
      */
     public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof Product
             && isset($context['locale'])
-            && $context['locale'] instanceof LocaleInterface
+            && is_string($context['locale'])
         ;
     }
 }
