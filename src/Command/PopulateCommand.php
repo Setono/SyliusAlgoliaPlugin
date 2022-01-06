@@ -23,7 +23,7 @@ final class PopulateCommand extends Command
 
     public function __construct(
         ProductIndexScopesProviderInterface $productIndexScopeProvider,
-        MessageBusInterface                 $messageBus
+        MessageBusInterface $messageBus
     ) {
         parent::__construct();
 
