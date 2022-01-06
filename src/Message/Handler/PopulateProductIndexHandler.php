@@ -99,11 +99,25 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
      */
     private function getProducts(ProductIndexScope $scope): iterable
     {
-        $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
-        foreach ($qb->getQuery()->getResult() as $product) {
-            Assert::isInstanceOf($product, ProductInterface::class);
+        $firstResult = 0;
+        $maxResults = 100;
 
-            yield $product;
-        }
+        $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
+        $qb->setMaxResults($maxResults);
+
+        do {
+            $qb->setFirstResult($firstResult);
+
+            $products = $qb->getQuery()->getResult();
+            Assert::isArray($products);
+
+            /** @var ProductInterface $product */
+            foreach ($products as $product) {
+                yield $product;
+            }
+
+            $firstResult += $maxResults;
+            // todo clear entity manager
+        } while ([] !== $products);
     }
 }
