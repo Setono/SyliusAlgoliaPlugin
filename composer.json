@@ -1,12 +1,12 @@
 {
     "name": "setono/sylius-algolia-plugin",
-    "type": "sylius-plugin",
     "description": "Setono example plugin for Sylius.",
+    "license": "MIT",
+    "type": "sylius-plugin",
     "keywords": [
         "sylius",
         "sylius-plugin"
     ],
-    "license": "MIT",
     "require": {
         "php": ">=7.4",
         "algolia/algoliasearch-client-php": "^3.1",
@@ -56,17 +56,7 @@
         "symfony/web-profiler-bundle": "^5.2",
         "symfony/webpack-encore-bundle": "^1.12"
     },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        },
-        "unused": [
-            "azjezz/psl"
-        ]
-    },
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Setono\\SyliusAlgoliaPlugin\\": "src/"
@@ -80,7 +70,17 @@
             "tests/Application/Kernel.php"
         ]
     },
-    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        },
+        "unused": [
+            "azjezz/psl"
+        ]
+    },
     "scripts": {
         "analyse": [
             "@ensure-test-container-exists",
