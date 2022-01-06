@@ -5,7 +5,7 @@
         <service id="setono_sylius_algolia.event_subscriber.prerender_product_index"
                  class="Setono\SyliusAlgoliaPlugin\EventSubscriber\PrerenderProductIndexSubscriber">
             <argument type="service" id="setono_prerender.prerenderer"/>
-            <argument type="service" id="setono_sylius_algolia.crawler_detection.default"/>
+            <argument type="service" id="setono_bot_detection.bot_detector.default"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>
