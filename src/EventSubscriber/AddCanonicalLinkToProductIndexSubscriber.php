@@ -9,6 +9,7 @@ use Fig\Link\Link;
 use Psr\Link\EvolvableLinkProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Webmozart\Assert\Assert;
@@ -34,11 +35,7 @@ final class AddCanonicalLinkToProductIndexSubscriber implements EventSubscriberI
 
     public function addLink(ProductIndexEvent $event): void
     {
-        if (method_exists($this->requestStack, 'getMainRequest')) {
-            $request = $this->requestStack->getMainRequest();
-        } else {
-            $request = $this->requestStack->getMasterRequest();
-        }
+        $request = $this->getRequest();
         if (null === $request) {
             return;
         }
@@ -56,5 +53,16 @@ final class AddCanonicalLinkToProductIndexSubscriber implements EventSubscriberI
         Assert::isInstanceOf($linkProvider, EvolvableLinkProviderInterface::class);
 
         $request->attributes->set('_links', $linkProvider->withLink($link));
+    }
+
+    private function getRequest(): ?Request
+    {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            $request = $this->requestStack->getMasterRequest();
+        }
+
+        return $request;
     }
 }

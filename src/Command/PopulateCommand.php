@@ -15,6 +15,7 @@ final class PopulateCommand extends Command
 {
     protected static $defaultName = 'setono:sylius-algolia:populate';
 
+    /** @var string */
     protected static $defaultDescription = 'Populate indexes';
 
     private ProductIndexScopesProviderInterface $productIndexScopeProvider;
