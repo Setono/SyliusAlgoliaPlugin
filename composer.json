@@ -1,11 +1,13 @@
 {
     "name": "setono/sylius-algolia-plugin",
-    "description": "Setono example plugin for Sylius.",
+    "description": "Algolia integration for your Sylius store",
     "license": "MIT",
     "type": "sylius-plugin",
     "keywords": [
         "sylius",
-        "sylius-plugin"
+        "sylius-plugin",
+        "algolia",
+        "setono"
     ],
     "require": {
         "php": ">=7.4",
@@ -14,10 +16,10 @@
         "doctrine/orm": "^2.7",
         "fig/link-util": "^1.1",
         "liip/imagine-bundle": "^2.6",
-        "matomo/device-detector": "^4.3",
         "psr/cache": "^1.0",
         "psr/event-dispatcher": "^1.0",
         "psr/link": "^1.0",
+        "setono/bot-detection-bundle": "^1.2",
         "setono/prerender-bundle": "dev-master",
         "sylius/resource-bundle": "^1.6",
         "symfony/config": "^4.4 || ^5.0",
