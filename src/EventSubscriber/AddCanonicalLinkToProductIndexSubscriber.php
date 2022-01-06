@@ -58,6 +58,7 @@ final class AddCanonicalLinkToProductIndexSubscriber implements EventSubscriberI
     private function getRequest(): ?Request
     {
         if (method_exists($this->requestStack, 'getMainRequest')) {
+            /** @var Request|null $request */
             $request = $this->requestStack->getMainRequest();
         } else {
             $request = $this->requestStack->getMasterRequest();
