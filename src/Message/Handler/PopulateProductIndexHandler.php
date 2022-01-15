@@ -107,6 +107,8 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
         $qb = $this->productRepository->createQueryBuilderFromProductIndexScope($scope);
         $qb->setMaxResults($maxResults);
 
+        $manager = $qb->getEntityManager();
+
         do {
             $qb->setFirstResult($firstResult);
 
@@ -119,7 +121,8 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
             }
 
             $firstResult += $maxResults;
-            // todo clear entity manager
+
+            $manager->clear();
         } while ([] !== $products);
     }
 }
