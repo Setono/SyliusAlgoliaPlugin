@@ -6,7 +6,6 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Psl;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
-use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -17,8 +16,6 @@ use Webmozart\Assert\Assert;
  */
 final class ProductDataMapper implements DataMapperInterface
 {
-    use FormatAmountTrait;
-
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param Product|DocumentInterface $target
