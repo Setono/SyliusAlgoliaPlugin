@@ -12,7 +12,6 @@
     "require": {
         "php": ">=7.4",
         "algolia/algoliasearch-client-php": "^3.1",
-        "azjezz/psl": "^1.6",
         "doctrine/orm": "^2.7",
         "fig/link-util": "^1.1",
         "liip/imagine-bundle": "^2.6",

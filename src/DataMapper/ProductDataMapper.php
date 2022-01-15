@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
-use Psl;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -23,7 +22,7 @@ final class ProductDataMapper implements DataMapperInterface
      */
     public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
     {
-        Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
         $sourceTranslation = $source->getTranslation($context['locale']);
 

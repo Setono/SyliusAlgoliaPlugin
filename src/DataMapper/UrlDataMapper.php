@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
-use Psl;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\PopulateUrlInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Webmozart\Assert\Assert;
 
 final class UrlDataMapper implements DataMapperInterface
 {
@@ -24,7 +24,7 @@ final class UrlDataMapper implements DataMapperInterface
      */
     public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
     {
-        Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
         $target->populateUrl($this->urlGenerator, $source, $context['locale']);
     }

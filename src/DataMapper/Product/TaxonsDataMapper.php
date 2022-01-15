@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 
-use Psl;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
@@ -27,7 +26,7 @@ final class TaxonsDataMapper implements DataMapperInterface
      */
     public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
     {
-        Psl\invariant($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
 
         $taxons = self::extractTaxons($source);
 
