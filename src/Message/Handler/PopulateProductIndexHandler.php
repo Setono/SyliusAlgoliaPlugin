@@ -62,6 +62,8 @@ final class PopulateProductIndexHandler implements MessageHandlerInterface
                 'currency' => $scope->currencyCode,
             ]);
 
+            // todo validate the Product document
+
             $data = $this->normalizer->normalize($doc, null, [
                 'groups' => 'setono:sylius-algolia:document',
             ]);
