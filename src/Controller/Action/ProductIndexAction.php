@@ -60,14 +60,16 @@ final class ProductIndexAction
             ));
         }
 
+        $index = $this->productIndexNameResolver->resolve();
+
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
-            'index' => $this->productIndexNameResolver->resolve(),
+            'index' => $index,
             'taxon' => $taxon,
             'algolia_app_id' => $this->algoliaAppId,
             'algolia_search_api_key' => $this->algoliaSearchApiKey,
         ]));
 
-        $event = new ProductIndexEvent($response, $taxon, $slug, $locale);
+        $event = new ProductIndexEvent($response, $index, $taxon, $slug, $locale);
         $this->eventDispatcher->dispatch($event);
 
         return $event->response;

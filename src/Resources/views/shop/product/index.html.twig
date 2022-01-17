@@ -3,57 +3,9 @@
 {% block content %}
     {{ sylius_template_event('sylius.shop.taxon.header', {'taxon': taxon}) }}
 
-    <div id="searchbox"></div>
     <div id="range-slider"></div>
     <div id="hierarchical-menu"></div>
     <div id="hits"></div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
-    <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js" integrity="sha256-EXPXz4W6pQgfYY3yTpnDa3OH8/EPn16ciVsPQ/ypsjk=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.8.3/dist/instantsearch.production.min.js" integrity="sha256-LAGhRRdtVoD6RLo2qDQsU2mp+XVSciKRC8XPOBWmofM=" crossorigin="anonymous"></script>
-    <script>
-        const searchClient = algoliasearch('{{ algolia_app_id }}', '{{ algolia_search_api_key }}');
-
-        const search = instantsearch({
-            indexName: '{{ index }}',
-            searchClient,
-            routing: true,
-        });
-
-        search.addWidgets([
-            instantsearch.widgets.searchBox({
-                container: '#searchbox',
-            }),
-
-            instantsearch.widgets.hits({
-                container: '#hits',
-                templates: {
-                    item: `{% include "@SetonoSyliusAlgoliaPlugin/shop/product/_item.html.twig" %}`,
-                }
-            }),
-            instantsearch.widgets.rangeSlider({
-                container: '#range-slider',
-                attribute: 'price',
-            }),
-            instantsearch.widgets.hierarchicalMenu({
-                container: '#hierarchical-menu',
-                attributes: [
-                    'taxons.lvl0',
-                    'taxons.lvl1',
-                    'taxons.lvl2',
-                ],
-                showParentLevel: false,
-            }),
-            instantsearch.widgets.configure({
-                filters: "taxonCodes:{{ taxon.code }}"
-            })
-        ]);
-
-        search.start();
-    </script>
 {% endblock %}
 
 {% block stylesheets %}
