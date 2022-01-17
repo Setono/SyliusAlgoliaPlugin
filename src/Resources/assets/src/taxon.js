@@ -1,6 +1,6 @@
 import algoliasearch from 'algoliasearch/lite';
 import instantsearch from 'instantsearch.js';
-import { searchBox, hits, rangeSlider, hierarchicalMenu, configure } from 'instantsearch.js/es/widgets';
+import { hits, rangeSlider, hierarchicalMenu, configure } from 'instantsearch.js/es/widgets';
 
 export default function() {
     const algoliaCredentials = document.getElementById('algolia-credentials');
@@ -17,10 +17,6 @@ export default function() {
     });
 
     search.addWidgets([
-        searchBox({
-            container: '#searchbox',
-        }),
-
         hits({
             container: '#hits',
             templates: {

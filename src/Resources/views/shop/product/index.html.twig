@@ -3,18 +3,9 @@
 {% block content %}
     {{ sylius_template_event('sylius.shop.taxon.header', {'taxon': taxon}) }}
 
-    <div id="searchbox"></div>
     <div id="range-slider"></div>
     <div id="hierarchical-menu"></div>
     <div id="hits"></div>
-
-    {# todo should probably be moved to a response listener and injected on all pages #}
-    <div id="algolia-credentials" data-app-id="{{ algolia_app_id }}" data-search-api-key="{{ algolia_search_api_key }}" style="display: none"></div>
-    <div id="algolia-index" data-value="{{ index }}" style="display: none"></div>
-    <div id="algolia-taxon" data-value="{{ taxon.code }}" style="display: none"></div>
-    <script id="algolia-hit-template" type="text/plain">
-        {% include "@SetonoSyliusAlgoliaPlugin/shop/product/_item.html.twig" %}
-    </script>
 {% endblock %}
 
 {% block stylesheets %}

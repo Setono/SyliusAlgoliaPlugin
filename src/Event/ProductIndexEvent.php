@@ -11,6 +11,13 @@ final class ProductIndexEvent
 {
     public Response $response;
 
+    /**
+     * This is the name of the Algolia search index
+     *
+     * @psalm-readonly
+     */
+    public string $index;
+
     /** @psalm-readonly */
     public TaxonInterface $taxon;
 
@@ -20,9 +27,10 @@ final class ProductIndexEvent
     /** @psalm-readonly */
     public string $locale;
 
-    public function __construct(Response $response, TaxonInterface $taxon, string $slug, string $locale)
+    public function __construct(Response $response, string $index, TaxonInterface $taxon, string $slug, string $locale)
     {
         $this->response = $response;
+        $this->index = $index;
         $this->taxon = $taxon;
         $this->slug = $slug;
         $this->locale = $locale;

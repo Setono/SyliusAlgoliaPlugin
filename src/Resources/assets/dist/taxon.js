@@ -24,9 +24,7 @@ function _default() {
     searchClient: searchClient,
     routing: true
   });
-  search.addWidgets([(0, _widgets.searchBox)({
-    container: '#searchbox'
-  }), (0, _widgets.hits)({
+  search.addWidgets([(0, _widgets.hits)({
     container: '#hits',
     templates: {
       item: algoliaHitTemplate
@@ -41,10 +39,5 @@ function _default() {
   }), (0, _widgets.configure)({
     filters: "taxonCodes:".concat(algoliaTaxon)
   })]);
-
-  try {
-    search.start();
-  } catch (e) {
-    console.log(e);
-  }
+  search.start();
 }
