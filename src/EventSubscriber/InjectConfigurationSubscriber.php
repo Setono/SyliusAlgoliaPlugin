@@ -71,7 +71,7 @@ final class InjectConfigurationSubscriber implements EventSubscriberInterface
         if ($response->isRedirection()
             || 'html' !== $request->getRequestFormat()
             || false !== stripos($response->headers->get('Content-Disposition', ''), 'attachment;')
-            || ($response->headers->has('Content-Type') && !str_contains($response->headers->get('Content-Type'), 'html'))
+            || ($response->headers->has('Content-Type') && strpos($response->headers->get('Content-Type', ''), 'html') === false)
         ) {
             return;
         }
@@ -85,7 +85,7 @@ final class InjectConfigurationSubscriber implements EventSubscriberInterface
 
         // this injection part has been copied from \Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener::injectToolbar()
         $content = $response->getContent();
-        if(false === $content) {
+        if (false === $content) {
             return;
         }
 
