@@ -35,7 +35,7 @@
     },
     "require-dev": {
         "api-platform/core": "^2.6",
-        "doctrine/dbal": "^2.0",
+        "doctrine/dbal": "^3.3",
         "friendsofsymfony/oauth-server-bundle": ">2.0.0-alpha.0 ^2.0@dev",
         "lexik/jwt-authentication-bundle": "^2.13",
         "matthiasnoback/symfony-config-test": "^4.3",
