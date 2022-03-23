@@ -7,6 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Taxonomy\Model\TaxonInterface;
@@ -22,11 +23,10 @@ final class TaxonsDataMapper implements DataMapperInterface
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param ProductDocument|DocumentInterface $target
-     * @param array<string, mixed> $context
      */
-    public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
+    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {
-        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
         $taxons = self::extractTaxons($source);
 
@@ -37,7 +37,7 @@ final class TaxonsDataMapper implements DataMapperInterface
         /** @var array<array-key, string> $hierarchies */
         $hierarchies = [];
         foreach ($taxons as $taxon) {
-            $hierarchies[] = self::buildHierarchy($taxon, $context['locale']);
+            $hierarchies[] = self::buildHierarchy($taxon, $indexScope->localeCode);
         }
 
         $levels = [];
@@ -111,14 +111,10 @@ final class TaxonsDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true ProductDocument $target
-     * @psalm-assert-if-true string $context['locale']
+     * @psalm-assert-if-true !null $indexScope->localeCode
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
+    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
     {
-        return $source instanceof ProductInterface
-            && $target instanceof ProductDocument
-            && isset($context['locale'])
-            && is_string($context['locale'])
-        ;
+        return $source instanceof ProductInterface && $target instanceof ProductDocument && null !== $indexScope->localeCode;
     }
 }

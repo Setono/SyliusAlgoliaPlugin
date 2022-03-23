@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\DTO;
+namespace Setono\SyliusAlgoliaPlugin\Settings;
 
 interface SettingsInterface
 {

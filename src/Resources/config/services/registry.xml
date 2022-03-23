@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="setono_sylius_algolia.registry.indexer"
+                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
+            <argument>\Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.registry.index_name_resolver"
+                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
+            <argument>\Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.registry.index_scope_provider"
+                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
+            <argument>\Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.registry.index_settings_provider"
+                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
+            <argument>\Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface</argument>
+        </service>
+    </services>
+</container>

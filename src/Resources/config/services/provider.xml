@@ -2,11 +2,23 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.provider.product_index_scope"
-                 class="Setono\SyliusAlgoliaPlugin\Provider\ProductIndexScopesProvider">
-            <argument type="service" id="sylius.repository.channel"/>
+        <!-- Index scope providers -->
+        <service id="setono_sylius_algolia.provider.index_scope.default"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\DefaultIndexScopeProvider">
+            <tag name="setono_sylius_algolia.index_scope_provider" priority="-64"/>
         </service>
-        <service id="Setono\SyliusAlgoliaPlugin\Provider\ProductIndexScopesProviderInterface"
-                 alias="setono_sylius_algolia.provider.product_index_scope"/>
+
+        <service id="setono_sylius_algolia.provider.index_scope.product"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\ProductIndexScopeProvider">
+            <argument type="service" id="sylius.repository.channel"/>
+
+            <tag name="setono_sylius_algolia.index_scope_provider"/>
+        </service>
+
+        <!-- Index settings providers -->
+        <service id="setono_sylius_algolia.provider.index_settings.product"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\ProductIndexSettingsProvider">
+            <tag name="setono_sylius_algolia.index_settings_provider"/>
+        </service>
     </services>
 </container>

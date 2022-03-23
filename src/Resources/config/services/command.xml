@@ -2,9 +2,9 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.command.populate" class="Setono\SyliusAlgoliaPlugin\Command\PopulateCommand">
-            <argument type="service" id="setono_sylius_algolia.provider.product_index_scope"/>
+        <service id="setono_sylius_algolia.command.index" class="Setono\SyliusAlgoliaPlugin\Command\IndexCommand">
             <argument type="service" id="sylius.command_bus"/><!-- todo create our own bus -->
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
 
             <tag name="console.command"/>
         </service>

@@ -6,6 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\PopulateUrlInterface;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Webmozart\Assert\Assert;
@@ -19,25 +20,19 @@ final class UrlDataMapper implements DataMapperInterface
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param array<string, mixed> $context
-     */
-    public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
+    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {
-        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
-        $target->populateUrl($this->urlGenerator, $source, $context['locale']);
+        $target->populateUrl($this->urlGenerator, $source, $indexScope->localeCode);
     }
 
     /**
      * @psalm-assert-if-true PopulateUrlInterface $target
-     * @psalm-assert-if-true string $context['locale']
+     * @psalm-assert-if-true !null $indexScope->localeCode
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
+    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
     {
-        return $target instanceof PopulateUrlInterface
-            && isset($context['locale'])
-            && is_string($context['locale'])
-        ;
+        return $target instanceof PopulateUrlInterface && null !== $indexScope->localeCode;
     }
 }

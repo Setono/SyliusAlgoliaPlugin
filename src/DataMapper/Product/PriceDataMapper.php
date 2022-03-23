@@ -8,6 +8,7 @@ use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -34,11 +35,11 @@ final class PriceDataMapper implements DataMapperInterface
      * @param ProductDocument|DocumentInterface $target
      * @param array<string, mixed> $context
      */
-    public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
+    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {
-        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
-        $channel = $this->channelRepository->findOneByCode($context['channel']);
+        $channel = $this->channelRepository->findOneByCode($indexScope->channelCode);
         if (!$channel instanceof ChannelInterface) {
             return; // todo should this throw? Or log it?
         }
@@ -85,14 +86,13 @@ final class PriceDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true ProductDocument $target
-     * @psalm-assert-if-true string $context['channel']
+     * @psalm-assert-if-true !null $indexScope->channelCode
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
+    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof ProductDocument
-            && isset($context['channel'])
-            && is_string($context['channel'])
+            && $indexScope->channelCode !== null
         ;
     }
 }

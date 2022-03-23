@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Controller\Action;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
-use Setono\SyliusAlgoliaPlugin\IndexResolver\ProductIndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +20,8 @@ final class ProductIndexAction
 {
     private Environment $twig;
 
-    private ProductIndexNameResolverInterface $productIndexNameResolver;
+    /** @var ResourceBasedRegistryInterface<IndexNameResolverInterface> */
+    private ResourceBasedRegistryInterface $indexNameResolverRegistry;
 
     private TaxonRepositoryInterface $taxonRepository;
 
@@ -25,24 +29,28 @@ final class ProductIndexAction
 
     private EventDispatcherInterface $eventDispatcher;
 
+    private IndexableResourceCollection $indexableResourceCollection;
+
     private string $algoliaAppId;
 
     private string $algoliaSearchApiKey;
 
     public function __construct(
         Environment $twig,
-        ProductIndexNameResolverInterface $productIndexNameResolver,
+        ResourceBasedRegistryInterface $indexNameResolverRegistry,
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
         EventDispatcherInterface $eventDispatcher,
+        IndexableResourceCollection $indexableResourceCollection,
         string $algoliaAppId,
         string $algoliaSearchApiKey
     ) {
         $this->twig = $twig;
-        $this->productIndexNameResolver = $productIndexNameResolver;
+        $this->indexNameResolverRegistry = $indexNameResolverRegistry;
         $this->taxonRepository = $taxonRepository;
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
+        $this->indexableResourceCollection = $indexableResourceCollection;
         $this->algoliaAppId = $algoliaAppId;
         $this->algoliaSearchApiKey = $algoliaSearchApiKey;
     }
@@ -60,7 +68,16 @@ final class ProductIndexAction
             ));
         }
 
-        $index = $this->productIndexNameResolver->resolve();
+        try {
+            $indexableResource = $this->indexableResourceCollection->getByClass(ProductInterface::class);
+        } catch (\InvalidArgumentException $e) {
+            throw new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+        /** @var IndexNameResolverInterface $indexNameResolver */
+        $indexNameResolver = $this->indexNameResolverRegistry->get($indexableResource);
+
+        $index = $indexNameResolver->resolve($indexableResource);
 
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
             'index' => $index,

@@ -7,6 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\PopulateImageUrlInterface;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -22,9 +23,9 @@ final class ImageUrlDataMapper implements DataMapperInterface
     /**
      * @param array<string, mixed> $context
      */
-    public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
+    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {
-        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
         $target->populateImageUrl($this->cacheManager, $source);
     }
@@ -32,7 +33,7 @@ final class ImageUrlDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true PopulateImageUrlInterface $target
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
+    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
     {
         return $target instanceof PopulateImageUrlInterface;
     }
