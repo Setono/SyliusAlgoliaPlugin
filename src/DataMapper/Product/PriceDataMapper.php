@@ -9,6 +9,7 @@ use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\FormatAmountTrait;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
+use Sylius\Component\Channel\Model\ChannelInterface as BaseChannelInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -39,10 +40,9 @@ final class PriceDataMapper implements DataMapperInterface
     {
         Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
+        /** @var BaseChannelInterface|ChannelInterface $channel */
         $channel = $this->channelRepository->findOneByCode($indexScope->channelCode);
-        if (!$channel instanceof ChannelInterface) {
-            return; // todo should this throw? Or log it?
-        }
+        Assert::isInstanceOf($channel, ChannelInterface::class);
 
         $baseCurrency = $channel->getBaseCurrency();
         Assert::notNull($baseCurrency);

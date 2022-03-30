@@ -12,9 +12,6 @@ use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
-/**
- * todo should probably be split into multiple services to make it easier to read and extend
- */
 final class ProductDataMapper implements DataMapperInterface
 {
     /**
@@ -27,12 +24,14 @@ final class ProductDataMapper implements DataMapperInterface
         IndexScope $indexScope,
         array $context = []
     ): void {
-        Assert::true($this->supports($source, $target, $indexScope, $context),
-            'The given $source and $target is not supported');
+        Assert::true(
+            $this->supports($source, $target, $indexScope, $context),
+            'The given $source and $target is not supported'
+        );
 
         $sourceTranslation = $source->getTranslation($indexScope->localeCode);
 
-        $target->id = (int)$source->getId();
+        $target->id = (int) $source->getId();
         $target->code = $source->getCode();
         $target->name = $sourceTranslation->getName();
 
@@ -54,7 +53,7 @@ final class ProductDataMapper implements DataMapperInterface
                 $optionName = $option->getTranslation($locale)->getName();
                 Assert::notNull($optionName);
 
-                $target->options[$optionName][] = (string)$optionValue->getTranslation($locale)->getValue();
+                $target->options[$optionName][] = (string) $optionValue->getTranslation($locale)->getValue();
             }
         }
     }
