@@ -13,6 +13,7 @@
         "php": ">=7.4",
         "algolia/algoliasearch-client-php": "^3.2",
         "doctrine/orm": "^2.7",
+        "doctrine/persistence": "^2.2",
         "fig/link-util": "^1.1",
         "liip/imagine-bundle": "^2.6",
         "psr/cache": "^1.0",
@@ -31,7 +32,8 @@
         "symfony/messenger": "^4.4 || ^5.0",
         "symfony/routing": "^4.4 || ^5.0",
         "symfony/serializer": "^4.4 || ^5.0",
-        "symfony/string": "^5.4",
+        "symfony/string": "^5.0",
+        "symfony/validator": "^4.4 || ^5.0",
         "twig/twig": "^2.14",
         "webmozart/assert": "^1.10"
     },
