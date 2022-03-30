@@ -30,7 +30,6 @@ final class ProductIndexNameResolver implements IndexNameResolverInterface
         $this->channelContext = $channelContext;
         $this->localeContext = $localeContext;
         $this->currencyContext = $currencyContext;
-        $this->supports = ProductInterface::class;
     }
 
     /**
@@ -56,5 +55,10 @@ final class ProductIndexNameResolver implements IndexNameResolverInterface
     public function resolveFromIndexScope(IndexScope $indexScope, $resource): string
     {
         return rtrim(sprintf('products__%s', (string) $indexScope), '_');
+    }
+
+    protected function getSupportingType(): string
+    {
+        return ProductInterface::class;
     }
 }

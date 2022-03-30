@@ -55,6 +55,9 @@ class GenericIndexer implements IndexerInterface
 
     private IndexableResourceCollection $indexableResourceCollection;
 
+    /** @var class-string<ResourceInterface> */
+    private string $supports;
+
     /** @var class-string<DocumentInterface> */
     private string $documentClass;
 
@@ -273,5 +276,10 @@ class GenericIndexer implements IndexerInterface
         Assert::isInstanceOf($obj, DocumentInterface::class);
 
         return $obj;
+    }
+
+    protected function getSupportingType(): string
+    {
+        return $this->supports;
     }
 }

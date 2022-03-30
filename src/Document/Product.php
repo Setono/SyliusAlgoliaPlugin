@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 /**
  * Should not be final, so it's easier for plugin users to extend it and add more properties
  */
-class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageUrlInterface
+class Product implements DocumentInterface, UrlAwareInterface, PopulateImageUrlInterface
 {
     public ?int $id = null;
 
@@ -58,19 +58,6 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
     /**
      * @param ProductInterface|ResourceInterface $source
      */
-    public function populateUrl(UrlGeneratorInterface $urlGenerator, ResourceInterface $source, string $locale): void
-    {
-        Assert::isInstanceOf($source, ProductInterface::class);
-
-        $this->url = $urlGenerator->generate('sylius_shop_product_show', [
-            'slug' => $source->getTranslation($locale)->getSlug(),
-            '_locale' => $locale,
-        ]);
-    }
-
-    /**
-     * @param ProductInterface|ResourceInterface $source
-     */
     public function populateImageUrl(CacheManager $cacheManager, ResourceInterface $source): void
     {
         Assert::isInstanceOf($source, ProductInterface::class);
@@ -86,5 +73,10 @@ class Product implements DocumentInterface, PopulateUrlInterface, PopulateImageU
 
             break;
         }
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 }

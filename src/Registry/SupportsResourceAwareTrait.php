@@ -9,9 +9,6 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 trait SupportsResourceAwareTrait
 {
-    /** @var class-string<ResourceInterface> */
-    protected string $supports;
-
     /**
      * @param ResourceInterface|IndexableResource $resource
      */
@@ -19,6 +16,13 @@ trait SupportsResourceAwareTrait
     {
         $class = $resource instanceof IndexableResource ? $resource->className : get_class($resource);
 
-        return is_a($class, $this->supports, true);
+        return is_a($class, $this->getSupportingType(), true);
     }
+
+    /**
+     * Returns the class string that this service supports
+     *
+     * @return class-string<ResourceInterface>
+     */
+    abstract protected function getSupportingType(): string;
 }

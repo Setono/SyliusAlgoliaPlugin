@@ -7,6 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterDataMappersPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourceCollectionPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterResourceBasedServicesPass;
+use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterUrlGeneratorsPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -20,6 +21,7 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterDataMappersPass());
+        $container->addCompilerPass(new RegisterUrlGeneratorsPass());
         $container->addCompilerPass(new RegisterIndexableResourceCollectionPass());
 
         // Register services in registries

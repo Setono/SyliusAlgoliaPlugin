@@ -12,7 +12,7 @@
 
         <service id="setono_sylius_algolia.data_mapper.url"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\UrlDataMapper">
-            <argument type="service" id="router"/>
+            <argument type="service" id="setono_sylius_algolia.url_generator.composite"/>
 
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
