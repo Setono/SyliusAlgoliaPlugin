@@ -4,16 +4,10 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Document;
 
-use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Webmozart\Assert\Assert;
-
 /**
  * Should not be final, so it's easier for plugin users to extend it and add more properties
  */
-class Product implements DocumentInterface, UrlAwareInterface, PopulateImageUrlInterface
+class Product implements DocumentInterface, UrlAwareInterface, ImageUrlsAwareInterface
 {
     public ?int $id = null;
 
@@ -28,7 +22,12 @@ class Product implements DocumentInterface, UrlAwareInterface, PopulateImageUrlI
 
     public ?string $url = null;
 
-    public ?string $imageUrl = null;
+    public ?string $primaryImageUrl = null;
+
+    /**
+     * All images (excluding the primary)
+     */
+    public array $imageUrls = [];
 
     /** @var array<array-key, string> */
     public array $taxonCodes = [];
@@ -55,28 +54,27 @@ class Product implements DocumentInterface, UrlAwareInterface, PopulateImageUrlI
         return null !== $this->originalPrice && null !== $this->price && $this->price < $this->originalPrice;
     }
 
-    /**
-     * @param ProductInterface|ResourceInterface $source
-     */
-    public function populateImageUrl(CacheManager $cacheManager, ResourceInterface $source): void
-    {
-        Assert::isInstanceOf($source, ProductInterface::class);
-
-        foreach ($source->getImages() as $image) {
-            $this->imageUrl = $cacheManager->getBrowserPath(
-                (string) $image->getPath(),
-                'sylius_shop_product_large_thumbnail',
-                [],
-                null,
-                UrlGeneratorInterface::ABSOLUTE_PATH
-            );
-
-            break;
-        }
-    }
-
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    public function getFilterSet(): string
+    {
+        return 'sylius_shop_product_thumbnail';
+    }
+
+    public function setImageUrls(array $imageUrls): void
+    {
+        $primaryImageUrl = [] === $imageUrls ? null : array_shift($imageUrls);
+
+        $this->imageUrls = $imageUrls;
+        $this->primaryImageUrl = $primaryImageUrl;
+    }
+
+    public function addImageUrl(string $imageUrl): void
+    {
+        $this->imageUrls[] = $imageUrl;
+        $this->primaryImageUrl = $this->imageUrls[0];
     }
 }

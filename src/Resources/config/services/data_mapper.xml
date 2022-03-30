@@ -17,8 +17,8 @@
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
-        <service id="setono_sylius_algolia.data_mapper.image_url"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ImageUrlDataMapper">
+        <service id="setono_sylius_algolia.data_mapper.image_urls"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ImageUrlsDataMapper">
             <argument type="service" id="liip_imagine.cache.manager"/>
 
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
