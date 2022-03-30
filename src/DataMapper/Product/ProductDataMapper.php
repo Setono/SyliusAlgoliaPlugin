@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\DataMapper;
+namespace Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 
+use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
@@ -20,13 +21,18 @@ final class ProductDataMapper implements DataMapperInterface
      * @param ProductInterface|ResourceInterface $source
      * @param Product|DocumentInterface $target
      */
-    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
-    {
-        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
+    public function map(
+        ResourceInterface $source,
+        DocumentInterface $target,
+        IndexScope $indexScope,
+        array $context = []
+    ): void {
+        Assert::true($this->supports($source, $target, $indexScope, $context),
+            'The given $source and $target is not supported');
 
         $sourceTranslation = $source->getTranslation($indexScope->localeCode);
 
-        $target->id = (int) $source->getId();
+        $target->id = (int)$source->getId();
         $target->code = $source->getCode();
         $target->name = $sourceTranslation->getName();
 
@@ -48,7 +54,7 @@ final class ProductDataMapper implements DataMapperInterface
                 $optionName = $option->getTranslation($locale)->getName();
                 Assert::notNull($optionName);
 
-                $target->options[$optionName][] = (string) $optionValue->getTranslation($locale)->getValue();
+                $target->options[$optionName][] = (string)$optionValue->getTranslation($locale)->getValue();
             }
         }
     }
@@ -58,11 +64,14 @@ final class ProductDataMapper implements DataMapperInterface
      * @psalm-assert-if-true Product $target
      * @psalm-assert-if-true !null $indexScope->localeCode
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
-    {
+    public function supports(
+        ResourceInterface $source,
+        DocumentInterface $target,
+        IndexScope $indexScope,
+        array $context = []
+    ): bool {
         return $source instanceof ProductInterface
             && $target instanceof Product
-            && null !== $indexScope->localeCode
-        ;
+            && null !== $indexScope->localeCode;
     }
 }

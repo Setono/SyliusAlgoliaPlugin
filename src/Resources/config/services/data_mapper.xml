@@ -6,7 +6,7 @@
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\CompositeDataMapper"/>
 
         <service id="setono_sylius_algolia.data_mapper.product"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ProductDataMapper">
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\ProductDataMapper">
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
