@@ -6,6 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
@@ -18,24 +19,23 @@ final class ProductDataMapper implements DataMapperInterface
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param Product|DocumentInterface $target
-     * @param array<string, mixed> $context
      */
-    public function map(ResourceInterface $source, DocumentInterface $target, array $context = []): void
+    public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {
-        Assert::true($this->supports($source, $target, $context), 'The given $source and $target is not supported');
+        Assert::true($this->supports($source, $target, $indexScope, $context), 'The given $source and $target is not supported');
 
-        $sourceTranslation = $source->getTranslation($context['locale']);
+        $sourceTranslation = $source->getTranslation($indexScope->localeCode);
 
         $target->id = (int) $source->getId();
         $target->code = $source->getCode();
-        $target->name = (string) $sourceTranslation->getName();
+        $target->name = $sourceTranslation->getName();
 
         $createdAt = $source->getCreatedAt();
         if (null !== $createdAt) {
             $target->createdAt = $createdAt->getTimestamp();
         }
 
-        $this->mapOptions($source, $target, $context['locale']);
+        $this->mapOptions($source, $target, $indexScope->localeCode);
     }
 
     private function mapOptions(ProductInterface $source, Product $target, string $locale): void
@@ -56,14 +56,13 @@ final class ProductDataMapper implements DataMapperInterface
     /**
      * @psalm-assert-if-true ProductInterface $source
      * @psalm-assert-if-true Product $target
-     * @psalm-assert-if-true string $context['locale']
+     * @psalm-assert-if-true !null $indexScope->localeCode
      */
-    public function supports(ResourceInterface $source, DocumentInterface $target, array $context = []): bool
+    public function supports(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): bool
     {
         return $source instanceof ProductInterface
             && $target instanceof Product
-            && isset($context['locale'])
-            && is_string($context['locale'])
+            && null !== $indexScope->localeCode
         ;
     }
 }

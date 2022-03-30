@@ -2,16 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\IndexResolver;
+namespace Setono\SyliusAlgoliaPlugin\IndexNameResolver;
 
-use Setono\SyliusAlgoliaPlugin\DTO\ProductIndexScope;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
+use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareTrait;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Currency\Context\CurrencyContextInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Webmozart\Assert\Assert;
 
-final class ProductIndexNameResolver implements ProductIndexNameResolverInterface
+final class ProductIndexNameResolver implements IndexNameResolverInterface
 {
+    use SupportsResourceAwareTrait;
+
     private ChannelContextInterface $channelContext;
 
     private LocaleContextInterface $localeContext;
@@ -26,27 +30,20 @@ final class ProductIndexNameResolver implements ProductIndexNameResolverInterfac
         $this->channelContext = $channelContext;
         $this->localeContext = $localeContext;
         $this->currencyContext = $currencyContext;
+        $this->supports = ProductInterface::class;
     }
 
-    public function resolve(
-        string $channelCode = null,
-        string $localeCode = null,
-        string $currencyCode = null
-    ): string {
-        if (null === $channelCode) {
-            $channel = $this->channelContext->getChannel();
-            $channelCode = $channel->getCode();
-        }
-
+    /**
+     * Will resolve an index name from the current application context, i.e. channel context, locale context etc
+     */
+    public function resolve($resource): string
+    {
+        $channel = $this->channelContext->getChannel();
+        $channelCode = $channel->getCode();
         Assert::notNull($channelCode);
 
-        if (null === $localeCode) {
-            $localeCode = $this->localeContext->getLocaleCode();
-        }
-
-        if (null === $currencyCode) {
-            $currencyCode = $this->currencyContext->getCurrencyCode();
-        }
+        $localeCode = $this->localeContext->getLocaleCode();
+        $currencyCode = $this->currencyContext->getCurrencyCode();
 
         return sprintf(
             'products__%s__%s___%s',
@@ -56,8 +53,8 @@ final class ProductIndexNameResolver implements ProductIndexNameResolverInterfac
         );
     }
 
-    public function resolveFromScope(ProductIndexScope $productIndexScope): string
+    public function resolveFromIndexScope(IndexScope $indexScope, $resource): string
     {
-        return $this->resolve($productIndexScope->channelCode, $productIndexScope->localeCode, $productIndexScope->currencyCode);
+        return rtrim(sprintf('products__%s', (string) $indexScope), '_');
     }
 }

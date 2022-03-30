@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\DTO;
+namespace Setono\SyliusAlgoliaPlugin\Settings;
 
 /**
  * This class holds all the shared settings between the scope 'settings' and 'search'

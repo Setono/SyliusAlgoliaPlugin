@@ -16,7 +16,12 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         /**
          * @psalm-suppress PossiblyNullArgument
          *
-         * @var array{app_id: string, search_only_api_key: string, admin_api_key: string} $config
+         * @var array{
+         *      indexable_resources: list<string>,
+         *      app_id: string,
+         *      search_only_api_key: string,
+         *      admin_api_key: string
+         * } $config
          */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -24,6 +29,7 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         $container->setParameter('setono_sylius_algolia.app_id', $config['app_id']);
         $container->setParameter('setono_sylius_algolia.search_only_api_key', $config['search_only_api_key']);
         $container->setParameter('setono_sylius_algolia.admin_api_key', $config['admin_api_key']);
+        $container->setParameter('setono_sylius_algolia.indexable_resources', $config['indexable_resources']);
 
         $loader->load('services.xml');
     }

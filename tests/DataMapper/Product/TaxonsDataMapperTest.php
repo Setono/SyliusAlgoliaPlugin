@@ -7,6 +7,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonsDataMapper;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductTaxon;
 use Sylius\Component\Core\Model\Taxon;
@@ -36,10 +37,11 @@ final class TaxonsDataMapperTest extends TestCase
 
         $productDocument = new ProductDocument();
 
+        $indexScope = new IndexScope();
+        $indexScope->localeCode = self::LOCALE;
+
         $dataMapper = new TaxonsDataMapper();
-        $dataMapper->map($product, $productDocument, [
-            'locale' => 'en_US',
-        ]);
+        $dataMapper->map($product, $productDocument, $indexScope);
 
         self::assertEquals([
             'lvl0' => ['Books'],
