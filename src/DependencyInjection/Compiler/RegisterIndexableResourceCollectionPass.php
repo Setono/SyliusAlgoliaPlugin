@@ -28,7 +28,7 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
 
         $definition = new Definition(IndexableResourceCollection::class);
 
-        foreach ($indexableResources as $indexableResourceName => $indexableResourceConfig) {
+        foreach (array_keys($indexableResources) as $indexableResourceName) {
             Assert::keyExists($resources, $indexableResourceName, sprintf('The resource "%s" is not a valid Sylius resource', $indexableResourceName));
 
             $indexableResourceDefinitionId = sprintf('setono_sylius_algolia.indexable_resource.%s', $indexableResourceName);

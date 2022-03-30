@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
+/**
+ * @implements \IteratorAggregate<string, IndexableResource>
+ */
 final class IndexableResourceCollection implements \IteratorAggregate
 {
     /** @var array<string, IndexableResource> */

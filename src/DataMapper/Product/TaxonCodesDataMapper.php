@@ -25,6 +25,7 @@ final class TaxonCodesDataMapper implements DataMapperInterface
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param ProductDocument|DocumentInterface $target
+     * @param array<string, mixed> $context
      */
     public function map(ResourceInterface $source, DocumentInterface $target, IndexScope $indexScope, array $context = []): void
     {

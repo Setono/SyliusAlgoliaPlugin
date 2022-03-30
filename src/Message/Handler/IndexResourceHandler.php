@@ -15,6 +15,9 @@ final class IndexResourceHandler implements MessageHandlerInterface
     /** @var ResourceBasedRegistryInterface<IndexerInterface> */
     private ResourceBasedRegistryInterface $indexerRegistry;
 
+    /**
+     * @param ResourceBasedRegistryInterface<IndexerInterface> $indexerRegistry
+     */
     public function __construct(ResourceBasedRegistryInterface $indexerRegistry)
     {
         $this->indexerRegistry = $indexerRegistry;

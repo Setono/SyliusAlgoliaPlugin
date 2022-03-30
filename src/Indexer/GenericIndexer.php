@@ -68,6 +68,9 @@ class GenericIndexer implements IndexerInterface
     private array $normalizationGroups;
 
     /**
+     * @param ResourceBasedRegistryInterface<IndexScopeProviderInterface> $indexScopeProviderRegistry
+     * @param ResourceBasedRegistryInterface<IndexNameResolverInterface> $indexNameResolverRegistry
+     * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
      * @param class-string<DocumentInterface> $documentClass
      * @param list<string> $validationGroups
@@ -156,9 +159,9 @@ class GenericIndexer implements IndexerInterface
     }
 
     /**
-     * @return iterable<list<scalar>>
+     * @return \Generator<list<scalar>>
      */
-    protected function getIdBatches(IndexableResource $resource): iterable
+    protected function getIdBatches(IndexableResource $resource): \Generator
     {
         $manager = $this->getManager($resource->className);
 
@@ -183,10 +186,18 @@ class GenericIndexer implements IndexerInterface
             $ids = $qb->getQuery()->getResult();
             Assert::isArray($ids);
 
-            /** @psalm-suppress MissingClosureReturnType */
-            yield array_map(static function (array $elm) {
+            /**
+             * @var list<scalar> $ids
+             *
+             * @psalm-suppress MissingClosureReturnType
+             */
+            $ids = array_map(static function (array $elm) {
+                Assert::keyExists($elm, 'id');
+
                 return $elm['id'];
             }, $ids);
+
+            yield $ids;
 
             $firstResult += $maxResults;
 
@@ -197,6 +208,8 @@ class GenericIndexer implements IndexerInterface
     /**
      * @param list<scalar> $resources
      * @param class-string<ResourceInterface> $resourceClass
+     *
+     * @return array<array-key, ResourceInterface>
      */
     private function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
     {
@@ -226,6 +239,7 @@ class GenericIndexer implements IndexerInterface
     private function prepareIndex(string $indexName, SettingsInterface $indexSettings): SearchIndex
     {
         $index = $this->algoliaClient->initIndex($indexName);
+        Assert::isInstanceOf($index, SearchIndex::class);
 
         // if the index already exists we don't want to override any settings
         if ($index->exists()) {

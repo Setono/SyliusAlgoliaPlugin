@@ -12,6 +12,7 @@ final class ProductUrlGenerator extends AbstractResourceUrlGenerator
 {
     /**
      * @param ProductInterface|ResourceInterface $resource
+     * @param array<string, mixed> $context
      */
     public function generate(ResourceInterface $resource, array $context = []): string
     {

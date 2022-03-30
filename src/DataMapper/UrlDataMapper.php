@@ -20,6 +20,9 @@ final class UrlDataMapper implements DataMapperInterface
         $this->urlGenerator = $urlGenerator;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     public function map(
         ResourceInterface $source,
         DocumentInterface $target,

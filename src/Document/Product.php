@@ -26,6 +26,8 @@ class Product implements DocumentInterface, UrlAwareInterface, ImageUrlsAwareInt
 
     /**
      * All images (excluding the primary)
+     *
+     * @var list<string>
      */
     public array $imageUrls = [];
 

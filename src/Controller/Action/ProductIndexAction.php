@@ -35,6 +35,9 @@ final class ProductIndexAction
 
     private string $algoliaSearchApiKey;
 
+    /**
+     * @param ResourceBasedRegistryInterface<IndexNameResolverInterface> $indexNameResolverRegistry
+     */
     public function __construct(
         Environment $twig,
         ResourceBasedRegistryInterface $indexNameResolverRegistry,

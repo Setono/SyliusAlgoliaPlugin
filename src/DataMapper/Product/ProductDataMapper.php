@@ -17,6 +17,7 @@ final class ProductDataMapper implements DataMapperInterface
     /**
      * @param ProductInterface|ResourceInterface $source
      * @param Product|DocumentInterface $target
+     * @param array<string, mixed> $context
      */
     public function map(
         ResourceInterface $source,
