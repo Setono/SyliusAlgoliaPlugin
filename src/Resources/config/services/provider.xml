@@ -3,6 +3,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Index scope providers -->
+        <service id="setono_sylius_algolia.provider.index_scope.composite"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\CompositeIndexScopeProvider"/>
+
         <service id="setono_sylius_algolia.provider.index_scope.default"
                  class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\DefaultIndexScopeProvider">
             <tag name="setono_sylius_algolia.index_scope_provider" priority="-64"/>
@@ -10,6 +13,9 @@
 
         <service id="setono_sylius_algolia.provider.index_scope.product"
                  class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\ProductIndexScopeProvider">
+            <argument type="service" id="sylius.context.channel"/>
+            <argument type="service" id="sylius.context.locale"/>
+            <argument type="service" id="sylius.context.currency"/>
             <argument type="service" id="sylius.repository.channel"/>
 
             <tag name="setono_sylius_algolia.index_scope_provider"/>

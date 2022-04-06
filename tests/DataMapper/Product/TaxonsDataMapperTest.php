@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 
 use PHPUnit\Framework\TestCase;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonsDataMapper;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
@@ -37,8 +38,9 @@ final class TaxonsDataMapperTest extends TestCase
 
         $productDocument = new ProductDocument();
 
-        $indexScope = new IndexScope();
-        $indexScope->localeCode = self::LOCALE;
+        $indexableResource = new IndexableResource('sylius.product', Product::class);
+
+        $indexScope = new IndexScope($indexableResource, null, self::LOCALE);
 
         $dataMapper = new TaxonsDataMapper();
         $dataMapper->map($product, $productDocument, $indexScope);

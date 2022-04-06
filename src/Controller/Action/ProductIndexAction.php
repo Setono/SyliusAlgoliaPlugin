@@ -8,7 +8,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
-use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
@@ -20,8 +19,7 @@ final class ProductIndexAction
 {
     private Environment $twig;
 
-    /** @var ResourceBasedRegistryInterface<IndexNameResolverInterface> */
-    private ResourceBasedRegistryInterface $indexNameResolverRegistry;
+    private IndexNameResolverInterface $indexNameResolver;
 
     private TaxonRepositoryInterface $taxonRepository;
 
@@ -35,12 +33,9 @@ final class ProductIndexAction
 
     private string $algoliaSearchApiKey;
 
-    /**
-     * @param ResourceBasedRegistryInterface<IndexNameResolverInterface> $indexNameResolverRegistry
-     */
     public function __construct(
         Environment $twig,
-        ResourceBasedRegistryInterface $indexNameResolverRegistry,
+        IndexNameResolverInterface $indexNameResolver,
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
         EventDispatcherInterface $eventDispatcher,
@@ -49,7 +44,7 @@ final class ProductIndexAction
         string $algoliaSearchApiKey
     ) {
         $this->twig = $twig;
-        $this->indexNameResolverRegistry = $indexNameResolverRegistry;
+        $this->indexNameResolver = $indexNameResolver;
         $this->taxonRepository = $taxonRepository;
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
@@ -77,10 +72,7 @@ final class ProductIndexAction
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
 
-        /** @var IndexNameResolverInterface $indexNameResolver */
-        $indexNameResolver = $this->indexNameResolverRegistry->get($indexableResource);
-
-        $index = $indexNameResolver->resolve($indexableResource);
+        $index = $this->indexNameResolver->resolve($indexableResource);
 
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
             'index' => $index,

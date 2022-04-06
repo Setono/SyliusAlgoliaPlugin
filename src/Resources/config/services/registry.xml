@@ -7,16 +7,6 @@
             <argument>\Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface</argument>
         </service>
 
-        <service id="setono_sylius_algolia.registry.index_name_resolver"
-                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
-            <argument>\Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface</argument>
-        </service>
-
-        <service id="setono_sylius_algolia.registry.index_scope_provider"
-                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
-            <argument>\Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface</argument>
-        </service>
-
         <service id="setono_sylius_algolia.registry.index_settings_provider"
                  class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
             <argument>\Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface</argument>
