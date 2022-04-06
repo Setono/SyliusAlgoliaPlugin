@@ -31,7 +31,6 @@ use Webmozart\Assert\Assert;
 class GenericIndexer implements IndexerInterface
 {
     use ORMManagerTrait;
-
     use SupportsResourceAwareTrait;
 
     /** @var ResourceBasedRegistryInterface<IndexScopeProviderInterface> */
