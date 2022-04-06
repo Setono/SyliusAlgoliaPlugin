@@ -21,6 +21,7 @@
         "Sylius\\Component\\Channel\\Model\\ChannelInterface",
         "Sylius\\Component\\Channel\\Repository\\ChannelRepositoryInterface",
         "Sylius\\Component\\Core\\Model\\ChannelInterface",
+        "Sylius\\Component\\Core\\Model\\ImagesAwareInterface",
         "Sylius\\Component\\Core\\Model\\ProductInterface",
         "Sylius\\Component\\Core\\Repository\\ProductRepositoryInterface",
         "Sylius\\Component\\Currency\\Context\\CurrencyContextInterface",
