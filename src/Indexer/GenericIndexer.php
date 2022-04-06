@@ -148,7 +148,7 @@ class GenericIndexer implements IndexerInterface
                 $this->dataMapper->map($obj, $doc, $indexScope);
 
                 // todo handle errors
-                $constraintViolationList = $this->validator->validate($doc, null, $this->validationGroups);
+                //$constraintViolationList = $this->validator->validate($doc, null, $this->validationGroups);
 
                 $data = $this->normalize($doc);
 
