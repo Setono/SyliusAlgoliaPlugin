@@ -46,12 +46,16 @@ final class IndexableResourceCollection implements \IteratorAggregate
     /**
      * Returns true if any indexable resource is an instance of the given class
      *
-     * @param class-string $class
+     * @param object|class-string $class
      */
-    public function hasWithClass(string $class): bool
+    public function hasWithClass($class): bool
     {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
         foreach ($this->resources as $resource) {
-            if (is_a($resource->className, $class, true)) {
+            if (is_a($class, $resource->className, true)) {
                 return true;
             }
         }

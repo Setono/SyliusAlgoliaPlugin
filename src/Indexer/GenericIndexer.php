@@ -15,7 +15,8 @@ use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Setono\SyliusAlgoliaPlugin\Message\Command\IndexMultipleResources;
+use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
+use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
@@ -106,16 +107,16 @@ class GenericIndexer implements IndexerInterface
     public function indexResource(IndexableResource $resource): void
     {
         foreach ($this->getIdBatches($resource) as $ids) {
-            $this->commandBus->dispatch(new IndexMultipleResources($resource, $ids));
+            $this->commandBus->dispatch(new IndexEntities($resource, $ids));
         }
     }
 
     public function indexEntity(ResourceInterface $entity): void
     {
-        $this->indexMultipleEntities([$entity]);
+        $this->indexEntities([$entity]);
     }
 
-    public function indexMultipleEntities(array $entities, IndexableResource $indexableResource = null): void
+    public function indexEntities(array $entities, IndexableResource $indexableResource = null): void
     {
         if ([] === $entities) {
             return;
@@ -143,6 +144,35 @@ class GenericIndexer implements IndexerInterface
                 $data = $this->normalize($doc);
 
                 $index->saveObject($data);
+            }
+        }
+    }
+
+    public function removeEntity(ResourceInterface $entity): void
+    {
+        $this->removeEntities([$entity]);
+    }
+
+    public function removeEntities(array $entities, IndexableResource $indexableResource = null): void
+    {
+        if ([] === $entities) {
+            return;
+        }
+
+        [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
+
+        /** @var IndexSettingsProviderInterface $indexSettingsProvider */
+        $indexSettingsProvider = $this->indexSettingsProviderRegistry->get($indexableResource);
+
+        // process input
+        foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
+            $index = $this->prepareIndex(
+                $this->indexNameResolver->resolveFromIndexScope($indexScope),
+                $indexSettingsProvider->getSettings($indexScope)
+            );
+
+            foreach ($this->getObjects($entities, $indexableResource->className, $indexScope) as $obj) {
+                $index->deleteObject($obj->getObjectId());
             }
         }
     }
@@ -197,8 +227,9 @@ class GenericIndexer implements IndexerInterface
     /**
      * @param list<scalar> $resources
      * @param class-string<ResourceInterface> $resourceClass
+     * @psalm-suppress InvalidReturnType
      *
-     * @return array<array-key, ResourceInterface>
+     * @return list<ResourceInterface&ObjectIdAwareInterface>
      */
     private function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
     {
@@ -212,6 +243,7 @@ class GenericIndexer implements IndexerInterface
             IndexableResourceRepositoryInterface::class
         ));
 
+        /** @psalm-suppress InvalidReturnStatement */
         return $repository->findFromIndexScopeAndIds($indexScope, $resources);
     }
 

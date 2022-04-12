@@ -6,7 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Message\Command;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 
-final class IndexMultipleResources implements CommandInterface
+final class IndexEntities implements CommandInterface
 {
     public IndexableResource $resource;
 
