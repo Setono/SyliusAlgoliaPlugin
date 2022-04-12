@@ -34,7 +34,11 @@ final class IndexableResource
     {
         Assert::stringNotEmpty($name);
         if (!is_a($className, ResourceInterface::class, true)) {
-            throw new \InvalidArgumentException(sprintf('The class %s MUST be an instance of %s', $className, ResourceInterface::class));
+            throw new \InvalidArgumentException(sprintf(
+                'The class %s MUST be an instance of %s',
+                $className,
+                ResourceInterface::class
+            ));
         }
 
         $this->name = $name;
