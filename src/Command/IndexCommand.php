@@ -22,8 +22,10 @@ final class IndexCommand extends Command
 
     private IndexableResourceCollection $indexableResourceCollection;
 
-    public function __construct(MessageBusInterface $messageBus, IndexableResourceCollection $indexableResourceCollection)
-    {
+    public function __construct(
+        MessageBusInterface $messageBus,
+        IndexableResourceCollection $indexableResourceCollection
+    ) {
         parent::__construct();
 
         $this->commandBus = $messageBus;
