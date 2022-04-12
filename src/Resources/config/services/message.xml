@@ -2,7 +2,7 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.message.handler.index_multiple_resource"
+        <service id="setono_sylius_algolia.message.handler.index_entities"
                  class="Setono\SyliusAlgoliaPlugin\Message\Handler\IndexEntitiesHandler">
             <argument type="service" id="setono_sylius_algolia.registry.indexer"/>
 
@@ -11,6 +11,22 @@
 
         <service id="setono_sylius_algolia.message.handler.index_resource"
                  class="Setono\SyliusAlgoliaPlugin\Message\Handler\IndexResourceHandler">
+            <argument type="service" id="setono_sylius_algolia.registry.indexer"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="setono_sylius_algolia.message.handler.index_entity"
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\IndexEntityHandler">
+            <argument type="service" id="doctrine"/>
+            <argument type="service" id="setono_sylius_algolia.registry.indexer"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="setono_sylius_algolia.message.handler.remove_entity"
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\RemoveEntityHandler">
+            <argument type="service" id="doctrine"/>
             <argument type="service" id="setono_sylius_algolia.registry.indexer"/>
 
             <tag name="messenger.message_handler"/>
