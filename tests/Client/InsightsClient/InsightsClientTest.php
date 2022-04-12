@@ -105,13 +105,13 @@ final class InsightsClientTest extends AbstractClientTestCase
         };
 
         $normalizer = new class() implements NormalizerInterface {
-            public function normalize($object, string $format = null, array $context = []): array
+            public function normalize($object, $format = null, array $context = []): array
             {
                 return [
                 ];
             }
 
-            public function supportsNormalization($data, string $format = null): bool
+            public function supportsNormalization($data, $format = null): bool
             {
                 return true;
             }
