@@ -34,5 +34,14 @@
 
             <tag name="kernel.event_subscriber"/>
         </service>
+
+        <!-- Doctrine specific event subscribers -->
+        <service id="setono_sylius_algolia.event_subscriber.doctrine.entity_change"
+                 class="Setono\SyliusAlgoliaPlugin\EventSubscriber\Doctrine\EntityChangeSubscriber">
+            <argument type="service" id="setono_sylius_algolia.command_bus"/>
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
+
+            <tag name="doctrine.event_subscriber"/>
+        </service>
     </services>
 </container>

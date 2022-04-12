@@ -27,5 +27,16 @@ interface IndexerInterface extends SupportsResourceAwareInterface
      *
      * @param list<scalar|ResourceInterface> $entities
      */
-    public function indexMultipleEntities(array $entities, IndexableResource $indexableResource = null): void;
+    public function indexEntities(array $entities, IndexableResource $indexableResource = null): void;
+
+    public function removeEntity(ResourceInterface $entity): void;
+
+    /**
+     * Will remove multiple entities
+     *
+     * If the entities are scalars, then the $indexableResource must be set (else we can't deduce the entity type)
+     *
+     * @param list<scalar|ResourceInterface> $entities
+     */
+    public function removeEntities(array $entities, IndexableResource $indexableResource = null): void;
 }
