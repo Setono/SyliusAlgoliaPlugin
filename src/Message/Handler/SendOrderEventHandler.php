@@ -9,7 +9,7 @@ use Algolia\AlgoliaSearch\Exceptions\BadRequestException;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClientInterface;
 use Setono\SyliusAlgoliaPlugin\Message\Command\SendOrderEvent;
 use Sylius\Component\Core\Model\OrderInterface;
-use Sylius\Component\Order\Repository\OrderRepositoryInterface;
+use Sylius\Component\Core\Repository\OrderRepositoryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
