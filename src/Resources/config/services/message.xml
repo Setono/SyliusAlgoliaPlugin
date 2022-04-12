@@ -15,5 +15,13 @@
 
             <tag name="messenger.message_handler"/>
         </service>
+
+        <service id="setono_sylius_algolia.message.handler.send_order_event"
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\SendOrderEventHandler">
+            <argument type="service" id="setono.sylius_algolia.client.insights_client"/>
+            <argument type="service" id="sylius.repository.order"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
     </services>
 </container>

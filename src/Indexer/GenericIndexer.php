@@ -12,7 +12,7 @@ use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
-use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexMultipleResources;
@@ -55,7 +55,7 @@ class GenericIndexer implements IndexerInterface
     /** @var class-string<ResourceInterface> */
     private string $supports;
 
-    /** @var class-string<DocumentInterface> */
+    /** @var class-string<Document> */
     private string $documentClass;
 
     /** @var list<string> */
@@ -67,7 +67,7 @@ class GenericIndexer implements IndexerInterface
     /**
      * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
-     * @param class-string<DocumentInterface> $documentClass
+     * @param class-string<Document> $documentClass
      * @param list<string> $validationGroups
      * @param list<string> $normalizationGroups
      */
@@ -215,7 +215,7 @@ class GenericIndexer implements IndexerInterface
         return $repository->findFromIndexScopeAndIds($indexScope, $resources);
     }
 
-    protected function normalize(DocumentInterface $document): array
+    protected function normalize(Document $document): array
     {
         $res = $this->normalizer->normalize($document, null, [
             'groups' => $this->normalizationGroups,
@@ -273,10 +273,10 @@ class GenericIndexer implements IndexerInterface
         return [$processed, $indexableResource];
     }
 
-    protected function createNewDocument(): DocumentInterface
+    protected function createNewDocument(): Document
     {
         $obj = new $this->documentClass();
-        Assert::isInstanceOf($obj, DocumentInterface::class);
+        Assert::isInstanceOf($obj, Document::class);
 
         return $obj;
     }

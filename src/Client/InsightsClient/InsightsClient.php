@@ -12,6 +12,7 @@ use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Webmozart\Assert\Assert;
 
 final class InsightsClient implements InsightsClientInterface
@@ -26,18 +27,22 @@ final class InsightsClient implements InsightsClientInterface
 
     private IndexNameResolverInterface $indexNameResolver;
 
+    private NormalizerInterface $normalizer;
+
     public function __construct(
         AlgoliaInsightsClient $algoliaInsightsClient,
         ClientIdProviderInterface $clientIdProvider,
         IndexableResourceCollection $indexableResourceCollection,
         IndexScopeProviderInterface $indexScopeProvider,
-        IndexNameResolverInterface $indexNameResolver
+        IndexNameResolverInterface $indexNameResolver,
+        NormalizerInterface $normalizer
     ) {
         $this->algoliaInsightsClient = $algoliaInsightsClient;
         $this->clientIdProvider = $clientIdProvider;
         $this->indexableResourceCollection = $indexableResourceCollection;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->indexNameResolver = $indexNameResolver;
+        $this->normalizer = $normalizer;
     }
 
     public function sendConversionEventFromOrder(OrderInterface $order, string $queryId = null): void
@@ -96,6 +101,21 @@ final class InsightsClient implements InsightsClientInterface
             $event->timestamp = (int) $createdAt->format('Uv');
         }
 
-        $this->algoliaInsightsClient->sendEvent($event->toArray());
+        $this->sendEvent($event);
+    }
+
+    public function sendEvent(Event $event): void
+    {
+        $this->sendEvents([$event]);
+    }
+
+    /**
+     * @param list<Event> $events
+     */
+    public function sendEvents(array $events): void
+    {
+        foreach ($events as $event) {
+            $this->algoliaInsightsClient->sendEvent($this->normalizer->normalize($event));
+        }
     }
 }

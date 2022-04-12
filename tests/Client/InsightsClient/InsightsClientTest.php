@@ -18,6 +18,7 @@ use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderItem;
 use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductVariant;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Tests\Setono\SyliusAlgoliaPlugin\Client\AbstractClientTestCase;
 
 /**
@@ -103,12 +104,26 @@ final class InsightsClientTest extends AbstractClientTestCase
             }
         };
 
+        $normalizer = new class() implements NormalizerInterface {
+            public function normalize($object, string $format = null, array $context = []): array
+            {
+                return [
+                ];
+            }
+
+            public function supportsNormalization($data, string $format = null): bool
+            {
+                return true;
+            }
+        };
+
         $client = new InsightsClient(
             $this->algoliaInsightsClient,
             $clientIdProvider,
             $indexableResourceCollection,
             $indexScopeProvider,
-            $indexNameResolver
+            $indexNameResolver,
+            $normalizer
         );
         $client->sendConversionEventFromOrder($order);
     }

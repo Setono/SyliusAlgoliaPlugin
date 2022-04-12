@@ -66,20 +66,4 @@ final class Event
             self::EVENT_TYPE_VIEW,
         ];
     }
-
-    /**
-     * todo use serializer instead
-     */
-    public function toArray(): array
-    {
-        return array_filter([
-            'eventType' => $this->eventType,
-            'eventName' => $this->eventName,
-            'index' => $this->index,
-            'userToken' => $this->userToken,
-            'objectIDs' => $this->objectIds,
-            'timestamp' => $this->timestamp,
-            'queryID' => $this->queryId,
-        ]);
-    }
 }
