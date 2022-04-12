@@ -69,12 +69,18 @@ final class IndexableResourceCollection implements \IteratorAggregate
         }
 
         foreach ($this->resources as $resource) {
-            if (is_a($resource->className, $class, true)) {
+            if (is_a($class, $resource->className, true)) {
                 return $resource;
             }
         }
 
-        throw new \InvalidArgumentException(sprintf('No indexable resource is an instance of %s', $class));
+        throw new \InvalidArgumentException(
+            sprintf(
+                'No indexable resource is an instance of %s. Available resources: [%s]',
+                $class,
+                implode(', ', array_keys($this->resources))
+            )
+        );
     }
 
     public function getIterator(): \ArrayIterator

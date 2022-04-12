@@ -2,10 +2,39 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.client" class="Algolia\AlgoliaSearch\SearchClient">
+        <!-- These two services are the native Algolia clients for search and recommendations respectively -->
+        <service id="setono_sylius_algolia.insights_client" class="Algolia\AlgoliaSearch\InsightsClient">
+            <factory class="Algolia\AlgoliaSearch\InsightsClient" method="create"/>
+            <argument>%setono_sylius_algolia.app_id%</argument>
+            <argument>%setono_sylius_algolia.admin_api_key%</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.recommend_client" class="Algolia\AlgoliaSearch\RecommendClient">
+            <factory class="Algolia\AlgoliaSearch\RecommendClient" method="create"/>
+            <argument>%setono_sylius_algolia.app_id%</argument>
+            <argument>%setono_sylius_algolia.admin_api_key%</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.search_client" class="Algolia\AlgoliaSearch\SearchClient">
             <factory class="Algolia\AlgoliaSearch\SearchClient" method="create"/>
             <argument>%setono_sylius_algolia.app_id%</argument>
             <argument>%setono_sylius_algolia.admin_api_key%</argument>
+        </service>
+
+        <!-- Here comes the clients specific to this plugin -->
+        <service id="setono.sylius_algolia.client.insights_client"
+                 class="Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient">
+            <argument type="service" id="setono_sylius_algolia.insights_client"/>
+            <argument type="service" id="setono_client_id.provider.default_client_id"/>
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
+            <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
+            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="serializer"/>
+        </service>
+
+        <service id="setono.sylius_algolia.client.recommendations_client"
+                 class="Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClient">
+            <argument type="service" id="setono_sylius_algolia.recommend_client"/>
         </service>
     </services>
 </container>

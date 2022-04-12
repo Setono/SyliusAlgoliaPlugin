@@ -7,10 +7,8 @@ namespace Setono\SyliusAlgoliaPlugin\Document;
 /**
  * Should not be final, so it's easier for plugin users to extend it and add more properties
  */
-class Product implements DocumentInterface, UrlAwareInterface, ImageUrlsAwareInterface
+class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInterface
 {
-    public ?int $id = null;
-
     public ?string $code = null;
 
     public ?string $name = null;
@@ -45,11 +43,6 @@ class Product implements DocumentInterface, UrlAwareInterface, ImageUrlsAwareInt
 
     /** @var array<string, array<array-key, string>> */
     public array $options = [];
-
-    public function getId(): int
-    {
-        return (int) $this->id;
-    }
 
     public function isOnSale(): bool
     {

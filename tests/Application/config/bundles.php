@@ -60,4 +60,5 @@ return [
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Setono\PrerenderBundle\SetonoPrerenderBundle::class => ['all' => true],
     Setono\BotDetectionBundle\SetonoBotDetectionBundle::class => ['all' => true],
+    Setono\ClientIdBundle\SetonoClientIdBundle::class => ['all' => true],
 ];

@@ -2,3 +2,11 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en_US
+
+services:
+    Tests\Setono\SyliusAlgoliaPlugin\Application\Command\SendOrderCompleteEventCommand:
+        arguments:
+            - "@event_dispatcher"
+            - "@sylius.repository.order"
+        tags:
+            - "console.command"

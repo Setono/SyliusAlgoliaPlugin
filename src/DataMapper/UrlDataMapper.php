@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
-use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Document\UrlAwareInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\UrlGenerator\ResourceUrlGeneratorInterface;
@@ -25,7 +25,7 @@ final class UrlDataMapper implements DataMapperInterface
      */
     public function map(
         ResourceInterface $source,
-        DocumentInterface $target,
+        Document $target,
         IndexScope $indexScope,
         array $context = []
     ): void {
@@ -43,7 +43,7 @@ final class UrlDataMapper implements DataMapperInterface
      */
     public function supports(
         ResourceInterface $source,
-        DocumentInterface $target,
+        Document $target,
         IndexScope $indexScope,
         array $context = []
     ): bool {

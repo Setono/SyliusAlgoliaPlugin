@@ -15,5 +15,11 @@
     <php>
         <env name="APP_ENV" value="test"/>
         <env name="SHELL_VERBOSITY" value="-1"/>
+
+        <!-- Input these values to test the Algolia implementation on a live application -->
+        <env name="ALGOLIA_LIVE" value="0"/> <!-- Set to 1 to enable live testing -->
+        <env name="ALGOLIA_APP_ID" value=""/>
+        <env name="ALGOLIA_ADMIN_API_KEY" value=""/>
+        <env name="ALGOLIA_SEARCH_ONLY_API_KEY" value=""/>
     </php>
 </phpunit>

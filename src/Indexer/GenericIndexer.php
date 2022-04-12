@@ -12,7 +12,7 @@ use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
-use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexMultipleResources;
@@ -33,11 +33,9 @@ class GenericIndexer implements IndexerInterface
     use ORMManagerTrait;
     use SupportsResourceAwareTrait;
 
-    /** @var ResourceBasedRegistryInterface<IndexScopeProviderInterface> */
-    private ResourceBasedRegistryInterface $indexScopeProviderRegistry;
+    private IndexScopeProviderInterface $indexScopeProvider;
 
-    /** @var ResourceBasedRegistryInterface<IndexNameResolverInterface> */
-    private ResourceBasedRegistryInterface $indexNameResolverRegistry;
+    private IndexNameResolverInterface $indexNameResolver;
 
     /** @var ResourceBasedRegistryInterface<IndexSettingsProviderInterface> */
     private ResourceBasedRegistryInterface $indexSettingsProviderRegistry;
@@ -57,7 +55,7 @@ class GenericIndexer implements IndexerInterface
     /** @var class-string<ResourceInterface> */
     private string $supports;
 
-    /** @var class-string<DocumentInterface> */
+    /** @var class-string<Document> */
     private string $documentClass;
 
     /** @var list<string> */
@@ -67,18 +65,16 @@ class GenericIndexer implements IndexerInterface
     private array $normalizationGroups;
 
     /**
-     * @param ResourceBasedRegistryInterface<IndexScopeProviderInterface> $indexScopeProviderRegistry
-     * @param ResourceBasedRegistryInterface<IndexNameResolverInterface> $indexNameResolverRegistry
      * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
-     * @param class-string<DocumentInterface> $documentClass
+     * @param class-string<Document> $documentClass
      * @param list<string> $validationGroups
      * @param list<string> $normalizationGroups
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        ResourceBasedRegistryInterface $indexScopeProviderRegistry,
-        ResourceBasedRegistryInterface $indexNameResolverRegistry,
+        IndexScopeProviderInterface $indexScopeProviderRegistry,
+        IndexNameResolverInterface $indexNameResolver,
         ResourceBasedRegistryInterface $indexSettingsProviderRegistry,
         DataMapperInterface $dataMapper,
         MessageBusInterface $commandBus,
@@ -92,8 +88,8 @@ class GenericIndexer implements IndexerInterface
         array $normalizationGroups = ['setono:sylius-algolia:document']
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->indexScopeProviderRegistry = $indexScopeProviderRegistry;
-        $this->indexNameResolverRegistry = $indexNameResolverRegistry;
+        $this->indexScopeProvider = $indexScopeProviderRegistry;
+        $this->indexNameResolver = $indexNameResolver;
         $this->indexSettingsProviderRegistry = $indexSettingsProviderRegistry;
         $this->dataMapper = $dataMapper;
         $this->commandBus = $commandBus;
@@ -127,19 +123,13 @@ class GenericIndexer implements IndexerInterface
 
         [$resources, $indexableResource] = $this->processInput($resources, $indexableResource);
 
-        /** @var IndexScopeProviderInterface $indexScopeProvider */
-        $indexScopeProvider = $this->indexScopeProviderRegistry->get($indexableResource);
-
-        /** @var IndexNameResolverInterface $indexNameResolver */
-        $indexNameResolver = $this->indexNameResolverRegistry->get($indexableResource);
-
         /** @var IndexSettingsProviderInterface $indexSettingsProvider */
         $indexSettingsProvider = $this->indexSettingsProviderRegistry->get($indexableResource);
 
         // process input
-        foreach ($indexScopeProvider->getIndexScopes() as $indexScope) {
+        foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
             $index = $this->prepareIndex(
-                $indexNameResolver->resolveFromIndexScope($indexScope, $indexableResource),
+                $this->indexNameResolver->resolveFromIndexScope($indexScope),
                 $indexSettingsProvider->getSettings($indexScope)
             );
 
@@ -225,7 +215,7 @@ class GenericIndexer implements IndexerInterface
         return $repository->findFromIndexScopeAndIds($indexScope, $resources);
     }
 
-    protected function normalize(DocumentInterface $document): array
+    protected function normalize(Document $document): array
     {
         $res = $this->normalizer->normalize($document, null, [
             'groups' => $this->normalizationGroups,
@@ -283,10 +273,10 @@ class GenericIndexer implements IndexerInterface
         return [$processed, $indexableResource];
     }
 
-    protected function createNewDocument(): DocumentInterface
+    protected function createNewDocument(): Document
     {
         $obj = new $this->documentClass();
-        Assert::isInstanceOf($obj, DocumentInterface::class);
+        Assert::isInstanceOf($obj, Document::class);
 
         return $obj;
     }

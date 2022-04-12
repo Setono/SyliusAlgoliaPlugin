@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Document\ImageUrlsAwareInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\ImagesAwareInterface;
@@ -27,7 +27,7 @@ final class ImageUrlsDataMapper implements DataMapperInterface
      */
     public function map(
         ResourceInterface $source,
-        DocumentInterface $target,
+        Document $target,
         IndexScope $indexScope,
         array $context = []
     ): void {
@@ -57,7 +57,7 @@ final class ImageUrlsDataMapper implements DataMapperInterface
      */
     public function supports(
         ResourceInterface $source,
-        DocumentInterface $target,
+        Document $target,
         IndexScope $indexScope,
         array $context = []
     ): bool {

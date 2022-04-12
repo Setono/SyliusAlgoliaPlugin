@@ -20,3 +20,4 @@ sylius_product:
         product:
             classes:
                 repository: Tests\Setono\SyliusAlgoliaPlugin\Application\Repository\ProductRepository
+                model: Tests\Setono\SyliusAlgoliaPlugin\Application\Entity\Product

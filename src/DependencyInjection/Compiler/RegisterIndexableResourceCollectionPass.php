@@ -6,6 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -31,10 +32,15 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
         foreach (array_keys($indexableResources) as $indexableResourceName) {
             Assert::keyExists($resources, $indexableResourceName, sprintf('The resource "%s" is not a valid Sylius resource', $indexableResourceName));
 
+            $resourceClass = $resources[$indexableResourceName]['classes']['model'];
+            if (!is_a($resourceClass, ObjectIdAwareInterface::class, true)) {
+                throw new \InvalidArgumentException(sprintf('Resources configured as indexable resources must implement the %s', ObjectIdAwareInterface::class));
+            }
+
             $indexableResourceDefinitionId = sprintf('setono_sylius_algolia.indexable_resource.%s', $indexableResourceName);
             $container->setDefinition(
                 $indexableResourceDefinitionId,
-                new Definition(IndexableResource::class, [$indexableResourceName, $resources[$indexableResourceName]['classes']['model']])
+                new Definition(IndexableResource::class, [$indexableResourceName, $resourceClass])
             );
 
             $definition->addArgument(new Reference($indexableResourceDefinitionId));

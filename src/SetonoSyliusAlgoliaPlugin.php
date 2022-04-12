@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin;
 
+use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterCompositeServicesPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterDataMappersPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourceCollectionPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterResourceBasedServicesPass;
@@ -23,6 +24,10 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
         $container->addCompilerPass(new RegisterDataMappersPass());
         $container->addCompilerPass(new RegisterUrlGeneratorsPass());
         $container->addCompilerPass(new RegisterIndexableResourceCollectionPass());
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.provider.index_scope.composite',
+            'setono_sylius_algolia.index_scope_provider'
+        ));
 
         // Register services in registries
         $container->addCompilerPass(new RegisterResourceBasedServicesPass(
@@ -33,16 +38,6 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
         $container->addCompilerPass(new RegisterResourceBasedServicesPass(
             'setono_sylius_algolia.registry.indexer',
             'setono_sylius_algolia.indexer'
-        ));
-
-        $container->addCompilerPass(new RegisterResourceBasedServicesPass(
-            'setono_sylius_algolia.registry.index_name_resolver',
-            'setono_sylius_algolia.index_name_resolver'
-        ));
-
-        $container->addCompilerPass(new RegisterResourceBasedServicesPass(
-            'setono_sylius_algolia.registry.index_scope_provider',
-            'setono_sylius_algolia.index_scope_provider'
         ));
     }
 }

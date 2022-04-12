@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\DataMapper\Product;
 
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
-use Setono\SyliusAlgoliaPlugin\Document\DocumentInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -16,15 +16,11 @@ final class ProductDataMapper implements DataMapperInterface
 {
     /**
      * @param ProductInterface|ResourceInterface $source
-     * @param Product|DocumentInterface $target
+     * @param Product|Document $target
      * @param array<string, mixed> $context
      */
-    public function map(
-        ResourceInterface $source,
-        DocumentInterface $target,
-        IndexScope $indexScope,
-        array $context = []
-    ): void {
+    public function map(ResourceInterface $source, Document $target, IndexScope $indexScope, array $context = []): void
+    {
         Assert::true(
             $this->supports($source, $target, $indexScope, $context),
             'The given $source and $target is not supported'
@@ -32,7 +28,7 @@ final class ProductDataMapper implements DataMapperInterface
 
         $sourceTranslation = $source->getTranslation($indexScope->localeCode);
 
-        $target->id = (int) $source->getId();
+        $target->objectId = (string) $source->getId();
         $target->code = $source->getCode();
         $target->name = $sourceTranslation->getName();
 
@@ -66,7 +62,7 @@ final class ProductDataMapper implements DataMapperInterface
      */
     public function supports(
         ResourceInterface $source,
-        DocumentInterface $target,
+        Document $target,
         IndexScope $indexScope,
         array $context = []
     ): bool {

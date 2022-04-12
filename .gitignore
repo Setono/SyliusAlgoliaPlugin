@@ -6,6 +6,7 @@
 /tests/Application/yarn.lock
 
 /.phpunit.result.cache
+/phpunit.xml
 
 /src/Resources/assets/yarn.lock
 /src/Resources/assets/node_modules/

@@ -7,6 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\IndexNameResolver;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
+use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Component\String\Inflector\InflectorInterface;
@@ -21,44 +22,56 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
 
     private InflectorInterface $inflector;
 
+    private IndexScopeProviderInterface $indexScopeProvider;
+
     public function __construct(
         IndexableResourceCollection $indexableResourceCollection,
+        IndexScopeProviderInterface $indexScopeProvider,
         InflectorInterface $inflector = null
     ) {
         $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexScopeProvider = $indexScopeProvider;
         $this->inflector = $inflector ?? new EnglishInflector();
     }
 
     public function resolve($resource): string
     {
-        return $this->resolveFromResource($resource);
+        return $this->resolveFromIndexScope($this->resolveIndexScope($resource));
     }
 
-    public function resolveFromIndexScope(IndexScope $indexScope, $resource): string
+    public function resolveFromIndexScope(IndexScope $indexScope): string
     {
-        return $this->resolveFromResource($resource);
+        $str = $this->inflector->pluralize($indexScope->resource->shortName)[0];
+
+        if (null !== $indexScope->channelCode) {
+            $str .= '__' . $indexScope->channelCode;
+        }
+
+        if (null !== $indexScope->localeCode) {
+            $str .= '__' . $indexScope->localeCode;
+        }
+
+        if (null !== $indexScope->currencyCode) {
+            $str .= '__' . $indexScope->currencyCode;
+        }
+
+        return strtolower($str);
     }
 
-    public function supports($resource): bool
+    public function supports(IndexableResource $indexableResource): bool
     {
         return true;
     }
 
     /**
-     * @param IndexableResource|ResourceInterface $resource
+     * @param class-string<ResourceInterface>|ResourceInterface|IndexableResource $resource
      */
-    private function resolveFromResource($resource): string
+    private function resolveIndexScope($resource): IndexScope
     {
-        $indexableResource = $this->getIndexableResource($resource);
+        if (!$resource instanceof IndexableResource) {
+            $resource = $this->indexableResourceCollection->getByClass($resource);
+        }
 
-        return $this->inflector->pluralize($indexableResource->shortName)[0];
-    }
-
-    /**
-     * @param IndexableResource|ResourceInterface $resource
-     */
-    private function getIndexableResource($resource): IndexableResource
-    {
-        return $resource instanceof IndexableResource ? $resource : $this->indexableResourceCollection->getByClass($resource);
+        return $this->indexScopeProvider->getFromContext($resource);
     }
 }
