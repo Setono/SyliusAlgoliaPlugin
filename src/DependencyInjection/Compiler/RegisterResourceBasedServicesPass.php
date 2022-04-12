@@ -33,6 +33,10 @@ final class RegisterResourceBasedServicesPass implements CompilerPassInterface
 
         $registry = $container->getDefinition($this->registry);
 
+        /**
+         * @var string $id
+         * @var array $tags
+         */
         foreach ($container->findTaggedServiceIds($this->tag) as $id => $tags) {
             /** @var array $tag */
             foreach ($tags as $tag) {

@@ -18,6 +18,7 @@ final class RegisterUrlGeneratorsPass implements CompilerPassInterface
 
         $composite = $container->getDefinition('setono_sylius_algolia.url_generator.composite_resource');
 
+        /** @var string $id */
         foreach (array_keys($container->findTaggedServiceIds('setono_sylius_algolia.url_generator')) as $id) {
             $composite->addMethodCall('add', [new Reference($id)]);
         }
