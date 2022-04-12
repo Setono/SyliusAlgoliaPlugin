@@ -32,6 +32,6 @@ final class IndexMultipleResourcesHandler implements MessageHandlerInterface
             throw new UnrecoverableMessageHandlingException($e->getMessage(), 0, $e);
         }
 
-        $indexer->indexMultiple($message->ids, $message->resource);
+        $indexer->indexMultipleEntities($message->ids, $message->resource);
     }
 }

@@ -110,18 +110,18 @@ class GenericIndexer implements IndexerInterface
         }
     }
 
-    public function index(ResourceInterface $resource): void
+    public function indexEntity(ResourceInterface $entity): void
     {
-        $this->indexMultiple([$resource]);
+        $this->indexMultipleEntities([$entity]);
     }
 
-    public function indexMultiple(array $resources, IndexableResource $indexableResource = null): void
+    public function indexMultipleEntities(array $entities, IndexableResource $indexableResource = null): void
     {
-        if ([] === $resources) {
+        if ([] === $entities) {
             return;
         }
 
-        [$resources, $indexableResource] = $this->processInput($resources, $indexableResource);
+        [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
 
         /** @var IndexSettingsProviderInterface $indexSettingsProvider */
         $indexSettingsProvider = $this->indexSettingsProviderRegistry->get($indexableResource);
@@ -133,7 +133,7 @@ class GenericIndexer implements IndexerInterface
                 $indexSettingsProvider->getSettings($indexScope)
             );
 
-            foreach ($this->getObjects($resources, $indexableResource->className, $indexScope) as $obj) {
+            foreach ($this->getObjects($entities, $indexableResource->className, $indexScope) as $obj) {
                 $doc = $this->createNewDocument();
                 $this->dataMapper->map($obj, $doc, $indexScope);
 

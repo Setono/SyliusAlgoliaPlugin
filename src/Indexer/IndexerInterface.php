@@ -18,14 +18,14 @@ interface IndexerInterface extends SupportsResourceAwareInterface
     /**
      * Will index a single entity
      */
-    public function index(ResourceInterface $resource): void;
+    public function indexEntity(ResourceInterface $entity): void;
 
     /**
      * Will index multiple entities
      *
-     * If the entities are scalar, then the $indexableResource must be set (else we can't deduce the entity type)
+     * If the entities are scalars, then the $indexableResource must be set (else we can't deduce the entity type)
      *
-     * @param list<scalar|ResourceInterface> $resources
+     * @param list<scalar|ResourceInterface> $entities
      */
-    public function indexMultiple(array $resources, IndexableResource $indexableResource = null): void;
+    public function indexMultipleEntities(array $entities, IndexableResource $indexableResource = null): void;
 }
