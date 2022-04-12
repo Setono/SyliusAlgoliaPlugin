@@ -20,17 +20,21 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
 {
     private IndexableResourceCollection $indexableResourceCollection;
 
-    private InflectorInterface $inflector;
-
     private IndexScopeProviderInterface $indexScopeProvider;
+
+    private string $environment;
+
+    private InflectorInterface $inflector;
 
     public function __construct(
         IndexableResourceCollection $indexableResourceCollection,
         IndexScopeProviderInterface $indexScopeProvider,
+        string $environment,
         InflectorInterface $inflector = null
     ) {
         $this->indexableResourceCollection = $indexableResourceCollection;
         $this->indexScopeProvider = $indexScopeProvider;
+        $this->environment = $environment;
         $this->inflector = $inflector ?? new EnglishInflector();
     }
 
@@ -54,6 +58,8 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
         if (null !== $indexScope->currencyCode) {
             $str .= '__' . $indexScope->currencyCode;
         }
+
+        $str .= '__' . $this->environment;
 
         return strtolower($str);
     }
