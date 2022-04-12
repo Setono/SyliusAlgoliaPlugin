@@ -10,7 +10,7 @@ use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class IndexMultipleEntitiesHandler implements MessageHandlerInterface
+final class IndexEntitiesHandler implements MessageHandlerInterface
 {
     /** @var ResourceBasedRegistryInterface<IndexerInterface> */
     private ResourceBasedRegistryInterface $indexerRegistry;

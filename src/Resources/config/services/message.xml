@@ -3,7 +3,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="setono_sylius_algolia.message.handler.index_multiple_resource"
-                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\IndexMultipleEntitiesHandler">
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\IndexEntitiesHandler">
             <argument type="service" id="setono_sylius_algolia.registry.indexer"/>
 
             <tag name="messenger.message_handler"/>
