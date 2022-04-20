@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin;
 
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterCompositeServicesPass;
-use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterDataMappersPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourceCollectionPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterResourceBasedServicesPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
@@ -20,10 +19,14 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new RegisterDataMappersPass());
         $container->addCompilerPass(new RegisterIndexableResourceCollectionPass());
 
         // Register services in composite services
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.data_mapper.composite',
+            'setono_sylius_algolia.data_mapper'
+        ));
+
         $container->addCompilerPass(new RegisterCompositeServicesPass(
             'setono_sylius_algolia.url_generator.composite',
             'setono_sylius_algolia.url_generator'

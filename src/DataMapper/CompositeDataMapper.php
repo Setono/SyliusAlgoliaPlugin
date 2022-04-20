@@ -6,29 +6,21 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use SplPriorityQueue;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class CompositeDataMapper implements DataMapperInterface
 {
-    private SplPriorityQueue $dataMappers;
+    /** @var list<DataMapperInterface> */
+    private array $dataMappers = [];
 
-    public function __construct()
+    public function add(DataMapperInterface $dataMapper): void
     {
-        $this->dataMappers = new SplPriorityQueue();
-    }
-
-    public function add(DataMapperInterface $dataMapper, int $priority = 0): void
-    {
-        $this->dataMappers->insert($dataMapper, $priority);
+        $this->dataMappers[] = $dataMapper;
     }
 
     public function map(ResourceInterface $source, Document $target, IndexScope $indexScope, array $context = []): void
     {
-        /** @var array<array-key, DataMapperInterface> $dataMappers */
-        $dataMappers = clone $this->dataMappers; // todo use another implementation of a priority queue which does not dequeue on foreach
-
-        foreach ($dataMappers as $dataMapper) {
+        foreach ($this->dataMappers as $dataMapper) {
             if ($dataMapper->supports($source, $target, $indexScope, $context)) {
                 $dataMapper->map($source, $target, $indexScope, $context);
             }
@@ -37,10 +29,7 @@ final class CompositeDataMapper implements DataMapperInterface
 
     public function supports(ResourceInterface $source, Document $target, IndexScope $indexScope, array $context = []): bool
     {
-        /** @var array<array-key, DataMapperInterface> $dataMappers */
-        $dataMappers = clone $this->dataMappers;
-
-        foreach ($dataMappers as $dataMapper) {
+        foreach ($this->dataMappers as $dataMapper) {
             if ($dataMapper->supports($source, $target, $indexScope, $context)) {
                 return true;
             }
