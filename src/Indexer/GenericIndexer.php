@@ -13,6 +13,8 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
+use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
+use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInterface;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
@@ -53,6 +55,10 @@ class GenericIndexer implements IndexerInterface
 
     private IndexableResourceCollection $indexableResourceCollection;
 
+    private DoctrineFilterInterface $doctrineFilter;
+
+    private ObjectFilterInterface $objectFilter;
+
     /** @var class-string<ResourceInterface> */
     private string $supports;
 
@@ -83,6 +89,8 @@ class GenericIndexer implements IndexerInterface
         NormalizerInterface $normalizer,
         SearchClient $algoliaClient,
         IndexableResourceCollection $indexableResourceCollection,
+        DoctrineFilterInterface $doctrineFilter,
+        ObjectFilterInterface $objectFilter,
         string $supports,
         string $documentClass,
         array $validationGroups = ['setono_sylius_algolia'],
@@ -98,6 +106,8 @@ class GenericIndexer implements IndexerInterface
         $this->normalizer = $normalizer;
         $this->algoliaClient = $algoliaClient;
         $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->doctrineFilter = $doctrineFilter;
+        $this->objectFilter = $objectFilter;
         $this->supports = $supports;
         $this->documentClass = $documentClass;
         $this->validationGroups = $validationGroups;
@@ -137,6 +147,8 @@ class GenericIndexer implements IndexerInterface
             foreach ($this->getObjects($entities, $indexableResource->className, $indexScope) as $obj) {
                 $doc = $this->createNewDocument();
                 $this->dataMapper->map($obj, $doc, $indexScope);
+
+                $this->objectFilter->filter($obj, $doc, $indexScope);
 
                 // todo handle errors
                 //$constraintViolationList = $this->validator->validate($doc, null, $this->validationGroups);
@@ -180,15 +192,15 @@ class GenericIndexer implements IndexerInterface
     /**
      * @return \Generator<list<scalar>>
      */
-    protected function getIdBatches(IndexableResource $resource): \Generator
+    protected function getIdBatches(IndexableResource $indexableResource): \Generator
     {
-        $manager = $this->getManager($resource->className);
+        $manager = $this->getManager($indexableResource->className);
 
         /** @var IndexableResourceRepositoryInterface|ObjectRepository $repository */
-        $repository = $manager->getRepository($resource->className);
+        $repository = $manager->getRepository($indexableResource->className);
         Assert::isInstanceOf($repository, IndexableResourceRepositoryInterface::class, sprintf(
             'The repository for resource "%s" must implement the interface %s',
-            $resource->name,
+            $indexableResource->name,
             IndexableResourceRepositoryInterface::class
         ));
 
@@ -198,6 +210,8 @@ class GenericIndexer implements IndexerInterface
         $qb = $repository->createIndexableCollectionQueryBuilder();
         $qb->select(sprintf('%s.id', $qb->getRootAliases()[0]));
         $qb->setMaxResults($maxResults);
+
+        $this->doctrineFilter->apply($qb, $indexableResource);
 
         do {
             $qb->setFirstResult($firstResult);
