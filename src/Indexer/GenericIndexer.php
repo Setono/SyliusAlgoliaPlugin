@@ -28,7 +28,6 @@ use Setono\SyliusAlgoliaPlugin\Settings\SettingsInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Webmozart\Assert\Assert;
 
 class GenericIndexer implements IndexerInterface
@@ -46,8 +45,6 @@ class GenericIndexer implements IndexerInterface
     protected DataMapperInterface $dataMapper;
 
     private MessageBusInterface $commandBus;
-
-    private ValidatorInterface $validator;
 
     private NormalizerInterface $normalizer;
 
@@ -85,7 +82,6 @@ class GenericIndexer implements IndexerInterface
         ResourceBasedRegistryInterface $indexSettingsProviderRegistry,
         DataMapperInterface $dataMapper,
         MessageBusInterface $commandBus,
-        ValidatorInterface $validator,
         NormalizerInterface $normalizer,
         SearchClient $algoliaClient,
         IndexableResourceCollection $indexableResourceCollection,
@@ -102,7 +98,6 @@ class GenericIndexer implements IndexerInterface
         $this->indexSettingsProviderRegistry = $indexSettingsProviderRegistry;
         $this->dataMapper = $dataMapper;
         $this->commandBus = $commandBus;
-        $this->validator = $validator;
         $this->normalizer = $normalizer;
         $this->algoliaClient = $algoliaClient;
         $this->indexableResourceCollection = $indexableResourceCollection;
@@ -149,9 +144,6 @@ class GenericIndexer implements IndexerInterface
                 $this->dataMapper->map($obj, $doc, $indexScope);
 
                 $this->objectFilter->filter($obj, $doc, $indexScope);
-
-                // todo handle errors
-                //$constraintViolationList = $this->validator->validate($doc, null, $this->validationGroups);
 
                 $data = $this->normalize($doc);
 

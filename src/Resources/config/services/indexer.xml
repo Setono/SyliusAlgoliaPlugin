@@ -13,7 +13,6 @@
             <argument type="service" id="setono_sylius_algolia.registry.index_settings_provider"/>
             <argument type="service" id="setono_sylius_algolia.data_mapper.composite"/>
             <argument type="service" id="setono_sylius_algolia.command_bus"/>
-            <argument type="service" id="validator"/>
             <argument type="service" id="serializer"/>
             <argument type="service" id="setono_sylius_algolia.search_client"/>
             <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
