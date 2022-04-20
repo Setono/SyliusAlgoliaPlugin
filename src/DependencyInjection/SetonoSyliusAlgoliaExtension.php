@@ -20,7 +20,8 @@ final class SetonoSyliusAlgoliaExtension extends Extension
          *      indexable_resources: list<string>,
          *      app_id: string,
          *      search_only_api_key: string,
-         *      admin_api_key: string
+         *      admin_api_key: string,
+         *      cache: array{adapter: string, enabled: bool, ttl: int}
          * } $config
          */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
@@ -32,5 +33,12 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         $container->setParameter('setono_sylius_algolia.indexable_resources', $config['indexable_resources']);
 
         $loader->load('services.xml');
+
+        $container->setParameter('setono_sylius_algolia.cache.adapter', $config['cache']['adapter']);
+        $container->setParameter('setono_sylius_algolia.cache.ttl', $config['cache']['ttl']);
+
+        if ($config['cache']['enabled']) {
+            $loader->load('services/conditional/renderer.xml');
+        }
     }
 }

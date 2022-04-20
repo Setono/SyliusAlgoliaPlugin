@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="setono_sylius_algolia.renderer.recommendations_cached"
+                 class="Setono\SyliusAlgoliaPlugin\Renderer\CachedRecommendationsRenderer"
+                 decorates="setono_sylius_algolia.renderer.recommendations" decoration-priority="64">
+            <argument type="service" id="setono_sylius_algolia.renderer.recommendations_cached.inner"/>
+            <argument type="service" id="setono_sylius_algolia.cache_pool.recommendations"/>
+            <argument>%setono_sylius_algolia.cache.ttl%</argument>
+        </service>
+    </services>
+</container>

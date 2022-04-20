@@ -50,6 +50,23 @@ final class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
+                ->arrayNode('cache')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('adapter')
+                            ->defaultValue('cache.adapter.filesystem')
+                            ->info('The cache adapter to use')
+                        ->end()
+                        ->booleanNode('enabled')
+                            ->defaultTrue()
+                            ->info('Whether to enable cache or not')
+                        ->end()
+                        ->integerNode('ttl')
+                            ->info('The number of seconds before an element is automatically invalidated in the cache')
+                            ->defaultValue(604_800) // default is 7 days
+                        ->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

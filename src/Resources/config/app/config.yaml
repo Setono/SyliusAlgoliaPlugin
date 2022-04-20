@@ -1,4 +1,8 @@
 framework:
+    cache:
+        pools:
+            setono_sylius_algolia.cache_pool.recommendations:
+                adapter: "%setono_sylius_algolia.cache.adapter%"
     messenger:
         buses:
             setono_sylius_algolia.command_bus: ~

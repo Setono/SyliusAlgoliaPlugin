@@ -7,5 +7,13 @@
         <attribute name="objectId" serialized-name="objectID">
             <group>setono:sylius-algolia:document</group>
         </attribute>
+
+        <attribute name="id">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
+        <attribute name="resourceName">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
     </class>
 </serializer>

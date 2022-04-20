@@ -22,7 +22,7 @@
         </service>
 
         <!-- Here comes the clients specific to this plugin -->
-        <service id="setono.sylius_algolia.client.insights_client"
+        <service id="setono_sylius_algolia.client.insights_client"
                  class="Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient">
             <argument type="service" id="setono_sylius_algolia.insights_client"/>
             <argument type="service" id="setono_client_id.provider.default_client_id"/>
@@ -32,9 +32,11 @@
             <argument type="service" id="serializer"/>
         </service>
 
-        <service id="setono.sylius_algolia.client.recommendations_client"
+        <service id="setono_sylius_algolia.client.recommendations_client"
                  class="Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClient">
             <argument type="service" id="setono_sylius_algolia.recommend_client"/>
+            <argument type="service" id="serializer"/>
+            <argument>%setono_sylius_algolia.document.product%</argument>
         </service>
     </services>
 </container>

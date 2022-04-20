@@ -47,5 +47,17 @@
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ObjectIdDataMapper">
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
+
+        <service id="setono_sylius_algolia.data_mapper.id"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\IdDataMapper">
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
+
+        <service id="setono_sylius_algolia.data_mapper.resource_name"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ResourceNameDataMapper">
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
+
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
     </services>
 </container>

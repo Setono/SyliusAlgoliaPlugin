@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient;
 
-use Sylius\Component\Core\Model\ProductInterface;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
+use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 
 interface RecommendationsClientInterface
 {
     /**
-     * This method will return a list of products that are frequently bought together with the given $product
+     * This method will return a list of object ids that are frequently bought together with the given $product
      *
-     * @param int|string|ProductInterface $product
+     * @param int|string|ObjectIdAwareInterface $product
      *
-     * @return list<ProductInterface>
+     * @return iterable<Document>
      */
-    public function getFrequentlyBoughtTogether($product, string $index): array;
+    public function getFrequentlyBoughtTogether($product, string $index, int $max = 10): iterable;
 }

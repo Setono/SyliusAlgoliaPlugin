@@ -1,0 +1,22 @@
+{% if debug %}
+    <div class="ui negative message">
+        <div class="header">Could not show recommendations</div>
+        <p>This is most likely because of one of two reasons:</p>
+        <p><strong>1) The recommendation index was not created. Follow these instructions</strong></p>
+        <ol>
+            <li>Go to <a href="https://www.algolia.com/dashboard" target="_blank">Algolia dashboard</a></li>
+            <li>Click on <strong>Recommend</strong></li>
+            <li>Click on <strong>Start using</strong> on the Frequently Bought Together</li>
+        </ol>
+        <p>
+            <strong>2) There is not enough data to show recommendations for this specific product.</strong>
+            You can test this by going to the <a href="https://www.algolia.com/dashboard" target="_blank">Algolia dashboard</a>
+            and clicking the <strong>Recommend</strong>, choosing your model and input the name '{{ product.name }}'
+            into the preview field
+        </p>
+        <p><strong>Error message</strong></p>
+        <pre>{{ error }}</pre>
+    </div>
+{% else %}
+    <!-- Could not render 'frequently bought together' products -->
+{% endif %}
