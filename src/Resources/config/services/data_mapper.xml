@@ -42,5 +42,10 @@
 
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
+
+        <service id="setono_sylius_algolia.data_mapper.object_id"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ObjectIdDataMapper">
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
     </services>
 </container>

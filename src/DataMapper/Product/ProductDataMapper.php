@@ -28,7 +28,6 @@ final class ProductDataMapper implements DataMapperInterface
 
         $sourceTranslation = $source->getTranslation($indexScope->localeCode);
 
-        $target->objectId = (string) $source->getId();
         $target->code = $source->getCode();
         $target->name = $sourceTranslation->getName();
 
