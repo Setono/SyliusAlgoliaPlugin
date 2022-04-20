@@ -6,10 +6,10 @@ namespace Setono\SyliusAlgoliaPlugin\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Sylius\Component\Core\Repository\ProductRepositoryInterface as BaseProductRepositoryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-interface IndexableResourceRepositoryInterface extends BaseProductRepositoryInterface
+interface IndexableResourceRepositoryInterface extends RepositoryInterface
 {
     public function createIndexableCollectionQueryBuilder(): QueryBuilder;
 
