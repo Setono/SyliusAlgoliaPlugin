@@ -20,7 +20,11 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
-        <attribute name="imageUrl">
+        <attribute name="primaryImageUrl">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
+        <attribute name="imageUrls">
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
