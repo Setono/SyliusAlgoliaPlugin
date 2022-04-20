@@ -29,6 +29,16 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
             'setono_sylius_algolia.index_scope_provider'
         ));
 
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.filter.doctrine.composite',
+            'setono_sylius_algolia.doctrine_filter'
+        ));
+
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.filter.object.composite',
+            'setono_sylius_algolia.object_filter'
+        ));
+
         // Register services in registries
         $container->addCompilerPass(new RegisterResourceBasedServicesPass(
             'setono_sylius_algolia.registry.index_settings_provider',

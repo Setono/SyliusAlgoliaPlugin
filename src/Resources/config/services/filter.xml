@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <!-- Doctrine filters -->
+        <service id="setono_sylius_algolia.filter.doctrine.composite"
+                 class="Setono\SyliusAlgoliaPlugin\Filter\Doctrine\CompositeFilter"/>
+
+        <service id="setono_sylius_algolia.filter.doctrine.enabled"
+                 class="Setono\SyliusAlgoliaPlugin\Filter\Doctrine\EnabledFilter">
+            <tag name="setono_sylius_algolia.doctrine_filter"/>
+        </service>
+
+        <!-- Object filters -->
+        <service id="setono_sylius_algolia.filter.object.composite"
+                 class="Setono\SyliusAlgoliaPlugin\Filter\Object\CompositeFilter"/>
+
+        <service id="setono_sylius_algolia.filter.object.filterable"
+                 class="Setono\SyliusAlgoliaPlugin\Filter\Object\FilterableFilter">
+            <tag name="setono_sylius_algolia.object_filter"/>
+        </service>
+    </services>
+</container>

@@ -7,6 +7,7 @@
         <import resource="services/controller.xml"/>
         <import resource="services/data_mapper.xml"/>
         <import resource="services/event_subscriber.xml"/>
+        <import resource="services/filter.xml"/>
         <import resource="services/index_name_resolver.xml"/>
         <import resource="services/indexer.xml"/>
         <import resource="services/message.xml"/>
