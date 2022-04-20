@@ -19,7 +19,7 @@ final class CompositeResourceUrlGenerator implements ResourceUrlGeneratorInterfa
     public function generate(ResourceInterface $resource, array $context = []): string
     {
         foreach ($this->generators as $generator) {
-            if ($generator->supports($resource)) {
+            if ($generator->supports($resource, $context)) {
                 return $generator->generate($resource, $context);
             }
         }
