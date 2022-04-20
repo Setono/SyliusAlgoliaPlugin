@@ -8,7 +8,6 @@ use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterCompositeSer
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterDataMappersPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourceCollectionPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterResourceBasedServicesPass;
-use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterUrlGeneratorsPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -22,8 +21,14 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterDataMappersPass());
-        $container->addCompilerPass(new RegisterUrlGeneratorsPass());
         $container->addCompilerPass(new RegisterIndexableResourceCollectionPass());
+
+        // Register services in composite services
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.url_generator.composite',
+            'setono_sylius_algolia.url_generator'
+        ));
+
         $container->addCompilerPass(new RegisterCompositeServicesPass(
             'setono_sylius_algolia.provider.index_scope.composite',
             'setono_sylius_algolia.index_scope_provider'
