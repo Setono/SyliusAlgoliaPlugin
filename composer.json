@@ -23,7 +23,7 @@
         "setono/bot-detection-bundle": "^1.4",
         "setono/client-id-bundle": "^0.2",
         "setono/client-id-contracts": "^0.2",
-        "setono/doctrine-object-manager-trait": "^1.0",
+        "setono/doctrine-object-manager-trait": "^1.1",
         "setono/prerender-bundle": "dev-master",
         "sylius/resource-bundle": "^1.6",
         "symfony/cache-contracts": "^2.0",

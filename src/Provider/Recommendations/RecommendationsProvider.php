@@ -40,9 +40,12 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
             Assert::notNull($document->resourceName);
 
             $indexableResource = $this->indexableResourceCollection->getByName($document->resourceName);
-            $manager = $this->getManager($indexableResource->className);
 
-            $entity = $manager->find($indexableResource->className, $document->id);
+            $repository = $this->getRepository($indexableResource->className);
+            $entity = $repository->findOneBy([
+                'code' => $document->code,
+            ]);
+
             Assert::nullOrIsInstanceOf($entity, ProductInterface::class);
 
             if (null !== $entity) {

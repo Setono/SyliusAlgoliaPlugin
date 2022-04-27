@@ -9,8 +9,6 @@ namespace Setono\SyliusAlgoliaPlugin\Document;
  */
 class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInterface
 {
-    public ?string $code = null;
-
     public ?string $name = null;
 
     /**

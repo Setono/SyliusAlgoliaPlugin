@@ -16,11 +16,9 @@ abstract class Document
     public ?string $objectId = null;
 
     /**
-     * This is the id in the database
-     *
-     * @var mixed
+     * This is the code in the database
      */
-    public $id;
+    public ?string $code = null;
 
     /**
      * This is the name of the resource, for the product entity in Sylius, this would be 'sylius.product' for example
