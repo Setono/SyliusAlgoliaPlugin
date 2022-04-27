@@ -3,6 +3,9 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <!-- Doctrine filters -->
+        <service id="Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface"
+                 alias="setono_sylius_algolia.filter.doctrine.composite"/>
+
         <service id="setono_sylius_algolia.filter.doctrine.composite"
                  class="Setono\SyliusAlgoliaPlugin\Filter\Doctrine\CompositeFilter"/>
 
@@ -12,6 +15,9 @@
         </service>
 
         <!-- Object filters -->
+        <service id="Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface"
+                 alias="setono_sylius_algolia.filter.object.composite"/>
+
         <service id="setono_sylius_algolia.filter.object.composite"
                  class="Setono\SyliusAlgoliaPlugin\Filter\Object\CompositeFilter"/>
 

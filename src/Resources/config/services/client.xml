@@ -2,7 +2,7 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <!-- These two services are the native Algolia clients for search and recommendations respectively -->
+        <!-- These three services are the native Algolia clients for insight, recommendations, and search respectively -->
         <service id="setono_sylius_algolia.insights_client" class="Algolia\AlgoliaSearch\InsightsClient">
             <factory class="Algolia\AlgoliaSearch\InsightsClient" method="create"/>
             <argument>%setono_sylius_algolia.app_id%</argument>
@@ -22,6 +22,9 @@
         </service>
 
         <!-- Here comes the clients specific to this plugin -->
+        <service id="Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClientInterface"
+                 alias="setono_sylius_algolia.client.insights_client"/>
+
         <service id="setono_sylius_algolia.client.insights_client"
                  class="Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient">
             <argument type="service" id="setono_sylius_algolia.insights_client"/>
@@ -31,6 +34,9 @@
             <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
             <argument type="service" id="serializer"/>
         </service>
+
+        <service id="Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClientInterface"
+                 alias="setono_sylius_algolia.client.recommendations_client"/>
 
         <service id="setono_sylius_algolia.client.recommendations_client"
                  class="Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClient">
