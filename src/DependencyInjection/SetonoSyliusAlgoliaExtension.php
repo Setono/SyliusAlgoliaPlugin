@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DependencyInjection;
 
+use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
+use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
+use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInterface;
+use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
+use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
+use Setono\SyliusAlgoliaPlugin\UrlGenerator\ResourceUrlGeneratorInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -40,5 +46,24 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         if ($config['cache']['enabled']) {
             $loader->load('services/conditional/renderer.xml');
         }
+
+        // auto configuration
+        $container->registerForAutoconfiguration(DataMapperInterface::class)
+            ->addTag('setono_sylius_algolia.data_mapper');
+
+        $container->registerForAutoconfiguration(DoctrineFilterInterface::class)
+            ->addTag('setono_sylius_algolia.doctrine_filter');
+
+        $container->registerForAutoconfiguration(IndexScopeProviderInterface::class)
+            ->addTag('setono_sylius_algolia.index_scope_provider');
+
+        $container->registerForAutoconfiguration(IndexSettingsProviderInterface::class)
+            ->addTag('setono_sylius_algolia.index_settings_provider');
+
+        $container->registerForAutoconfiguration(ObjectFilterInterface::class)
+            ->addTag('setono_sylius_algolia.object_filter');
+
+        $container->registerForAutoconfiguration(ResourceUrlGeneratorInterface::class)
+            ->addTag('setono_sylius_algolia.url_generator');
     }
 }
