@@ -19,21 +19,24 @@ class RecommendationRequest
 
     private string $model;
 
-    public function __construct(string $indexName, string $objectId, string $model)
+    private int $maxRecommendations;
+
+    public function __construct(string $indexName, string $objectId, string $model, int $maxRecommendations)
     {
         $this->indexName = $indexName;
         $this->objectId = $objectId;
         $this->model = $model;
+        $this->maxRecommendations = $maxRecommendations;
     }
 
-    public static function createFrequentlyBoughtTogether(string $indexName, string $objectId): self
+    public static function createFrequentlyBoughtTogether(string $indexName, string $objectId, int $maxRecommendations): self
     {
-        return new self($indexName, $objectId, self::MODEL_BOUGHT_TOGETHER);
+        return new self($indexName, $objectId, self::MODEL_BOUGHT_TOGETHER, $maxRecommendations);
     }
 
-    public static function createRelatedProducts(string $indexName, string $objectId): self
+    public static function createRelatedProducts(string $indexName, string $objectId, int $maxRecommendations): self
     {
-        return new self($indexName, $objectId, self::MODEL_RELATED_PRODUCTS);
+        return new self($indexName, $objectId, self::MODEL_RELATED_PRODUCTS, $maxRecommendations);
     }
 
     public function toArray(): array
@@ -42,6 +45,7 @@ class RecommendationRequest
             'indexName' => $this->indexName,
             'objectID' => $this->objectId,
             'model' => $this->model,
+            'maxRecommendations' => $this->maxRecommendations,
         ];
     }
 }

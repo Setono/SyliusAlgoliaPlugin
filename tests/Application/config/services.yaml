@@ -10,3 +10,10 @@ services:
             - "@sylius.repository.order"
         tags:
             - "console.command"
+
+    Tests\Setono\SyliusAlgoliaPlugin\Application\Command\SendInsightsEventsCommand:
+        arguments:
+            - "@sylius.repository.product"
+            - "@setono_sylius_algolia.client.insights_client"
+        tags:
+            - "console.command"

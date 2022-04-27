@@ -114,8 +114,10 @@ final class InsightsClient implements InsightsClientInterface
      */
     public function sendEvents(array $events): void
     {
-        foreach ($events as $event) {
-            $this->algoliaInsightsClient->sendEvent($this->normalizer->normalize($event));
-        }
+        $events = array_map(function (Event $event) {
+            return $this->normalizer->normalize($event);
+        }, $events);
+
+        $this->algoliaInsightsClient->sendEvents($events);
     }
 }

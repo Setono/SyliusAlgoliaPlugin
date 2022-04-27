@@ -47,6 +47,11 @@ final class ConfigurationTest extends TestCase
             'search_only_api_key' => 'last_search_only_api_key',
             'admin_api_key' => 'last_admin_api_key',
             'indexable_resources' => [],
+            'cache' => [
+                'adapter' => 'cache.adapter.filesystem',
+                'enabled' => true,
+                'ttl' => 604800,
+            ],
         ]);
     }
 }

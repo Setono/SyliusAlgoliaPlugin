@@ -37,7 +37,7 @@ final class Event
     /**
      * The time of the event in milliseconds
      */
-    public ?int $timestamp = null;
+    public int $timestamp;
 
     public ?string $queryId = null;
 
@@ -53,6 +53,7 @@ final class Event
         $this->index = $index;
         $this->userToken = $userToken;
         $this->objectIds = $objectIds;
+        $this->timestamp = time() * 1000;
     }
 
     /**

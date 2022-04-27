@@ -9,4 +9,11 @@ use Sylius\Component\Core\Model\OrderInterface;
 interface InsightsClientInterface
 {
     public function sendConversionEventFromOrder(OrderInterface $order, string $queryId = null): void;
+
+    public function sendEvent(Event $event): void;
+
+    /**
+     * @param list<Event> $events
+     */
+    public function sendEvents(array $events): void;
 }
