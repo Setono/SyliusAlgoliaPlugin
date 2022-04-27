@@ -17,9 +17,7 @@ trait ProductRepositoryTrait
 {
     public function createIndexableCollectionQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.enabled = true')
-        ;
+        return $this->createQueryBuilder('o');
     }
 
     /**
