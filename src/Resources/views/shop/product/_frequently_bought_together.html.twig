@@ -1,6 +1,8 @@
-<h4 class="ui horizontal section divider header">Frequently bought together (by Algolia)</h4>
-<div class="ui four doubling cards">
-    {% for product in products %}
-        {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
-    {% endfor %}
-</div>
+{% if products|length > 0 %}
+    <h4 class="ui horizontal section divider header">Frequently bought together</h4>
+    <div class="ui four doubling cards">
+        {% for product in products %}
+            {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
+        {% endfor %}
+    </div>
+{% endif %}
