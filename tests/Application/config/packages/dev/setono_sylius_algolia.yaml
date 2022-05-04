@@ -1,0 +1,3 @@
+setono_sylius_algolia:
+    cache:
+        enabled: false
