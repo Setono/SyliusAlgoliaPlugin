@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 
-use Setono\ClientId\ClientId;
-use Setono\ClientId\Provider\ClientIdProviderInterface;
+use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\EventContext;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
@@ -34,13 +33,6 @@ final class InsightsClientTest extends AbstractClientTestCase
         if (!$this->isLive()) {
             $this->markTestSkipped('This test only works on live application atm.');
         }
-
-        $clientIdProvider = new class() implements ClientIdProviderInterface {
-            public function getClientId(): ClientId
-            {
-                return new ClientId('client_id');
-            }
-        };
 
         $product = new class() extends Product implements ObjectIdAwareInterface {
             use ObjectIdAwareTrait;
@@ -119,12 +111,11 @@ final class InsightsClientTest extends AbstractClientTestCase
 
         $client = new InsightsClient(
             $this->algoliaInsightsClient,
-            $clientIdProvider,
             $indexableResourceCollection,
             $indexScopeProvider,
             $indexNameResolver,
             $normalizer
         );
-        $client->sendConversionEventFromOrder($order);
+        $client->sendConversionEventFromOrder($order, new EventContext('client_id', 'FASHION_WEB', 'en_US', 'USD'));
     }
 }

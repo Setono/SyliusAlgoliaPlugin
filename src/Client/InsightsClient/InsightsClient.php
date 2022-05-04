@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 
 use Algolia\AlgoliaSearch\InsightsClient as AlgoliaInsightsClient;
-use Setono\ClientId\Provider\ClientIdProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Webmozart\Assert\Assert;
@@ -18,8 +18,6 @@ use Webmozart\Assert\Assert;
 final class InsightsClient implements InsightsClientInterface
 {
     private AlgoliaInsightsClient $algoliaInsightsClient;
-
-    private ClientIdProviderInterface $clientIdProvider;
 
     private IndexableResourceCollection $indexableResourceCollection;
 
@@ -31,21 +29,19 @@ final class InsightsClient implements InsightsClientInterface
 
     public function __construct(
         AlgoliaInsightsClient $algoliaInsightsClient,
-        ClientIdProviderInterface $clientIdProvider,
         IndexableResourceCollection $indexableResourceCollection,
         IndexScopeProviderInterface $indexScopeProvider,
         IndexNameResolverInterface $indexNameResolver,
         NormalizerInterface $normalizer
     ) {
         $this->algoliaInsightsClient = $algoliaInsightsClient;
-        $this->clientIdProvider = $clientIdProvider;
         $this->indexableResourceCollection = $indexableResourceCollection;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->indexNameResolver = $indexNameResolver;
         $this->normalizer = $normalizer;
     }
 
-    public function sendConversionEventFromOrder(OrderInterface $order, string $queryId = null): void
+    public function sendConversionEventFromOrder(OrderInterface $order, EventContext $eventContext): void
     {
         $objectIds = [];
         $product = null;
@@ -69,37 +65,54 @@ final class InsightsClient implements InsightsClientInterface
 
         $indexableResource = $this->indexableResourceCollection->getByClass($product);
 
-        $channel = $order->getChannel();
-        Assert::notNull($channel);
-
-        $locale = $order->getLocaleCode();
-        Assert::notNull($locale);
-
-        $currencyCode = $order->getCurrencyCode();
-        Assert::notNull($currencyCode);
-
         $indexScope = $this->indexScopeProvider->getFromChannelAndLocaleAndCurrency(
             $indexableResource,
-            $channel->getCode(),
-            $locale,
-            $currencyCode
+            $eventContext->channelCode,
+            $eventContext->localeCode,
+            $eventContext->currencyCode
         );
 
         $indexName = $this->indexNameResolver->resolveFromIndexScope($indexScope);
 
         $event = new Event(
             Event::EVENT_TYPE_CONVERSION,
-            Event::EVENT_NAME,
+            Event::EVENT_NAME_PRODUCT_PURCHASED,
             $indexName,
-            (string) $this->clientIdProvider->getClientId(),
-            $objectIds
+            $eventContext->clientId,
+            $objectIds,
+            $order->getCreatedAt() ?? $eventContext->timestamp,
+            $eventContext->queryId
         );
-        $event->queryId = $queryId;
 
-        $createdAt = $order->getCreatedAt();
-        if (null !== $createdAt) {
-            $event->timestamp = (int) $createdAt->format('Uv');
-        }
+        $this->sendEvent($event);
+    }
+
+    public function sendProductDetailPageViewedEventFromProduct(
+        ProductInterface $product,
+        EventContext $eventContext
+    ): void {
+        Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+
+        $indexableResource = $this->indexableResourceCollection->getByClass($product);
+
+        $indexScope = $this->indexScopeProvider->getFromChannelAndLocaleAndCurrency(
+            $indexableResource,
+            $eventContext->channelCode,
+            $eventContext->localeCode,
+            $eventContext->currencyCode
+        );
+
+        $indexName = $this->indexNameResolver->resolveFromIndexScope($indexScope);
+
+        $event = new Event(
+            Event::EVENT_TYPE_VIEW,
+            Event::EVENT_NAME_PRODUCT_DETAIL_PAGE_VIEWED,
+            $indexName,
+            $eventContext->clientId,
+            [$product->getObjectId()],
+            $eventContext->timestamp,
+            $eventContext->queryId
+        );
 
         $this->sendEvent($event);
     }

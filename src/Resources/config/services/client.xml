@@ -28,7 +28,6 @@
         <service id="setono_sylius_algolia.client.insights_client"
                  class="Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient">
             <argument type="service" id="setono_sylius_algolia.insights_client"/>
-            <argument type="service" id="setono_client_id.provider.default_client_id"/>
             <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
             <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
             <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>

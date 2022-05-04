@@ -32,10 +32,18 @@
             <tag name="messenger.message_handler"/>
         </service>
 
-        <service id="setono_sylius_algolia.message.handler.send_order_event"
-                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\SendOrderEventHandler">
+        <service id="setono_sylius_algolia.message.handler.algolia.order_placed"
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\Algolia\OrderPlacedHandler">
             <argument type="service" id="setono_sylius_algolia.client.insights_client"/>
             <argument type="service" id="sylius.repository.order"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service id="setono_sylius_algolia.message.handler.algolia.product_detail_page_viewed"
+                 class="Setono\SyliusAlgoliaPlugin\Message\Handler\Algolia\ProductDetailPageViewedHandler">
+            <argument type="service" id="setono_sylius_algolia.client.insights_client"/>
+            <argument type="service" id="sylius.repository.product"/>
 
             <tag name="messenger.message_handler"/>
         </service>

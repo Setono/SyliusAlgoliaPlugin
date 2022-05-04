@@ -21,7 +21,9 @@ final class Event
      * You can use anything for event names as long as you make sure to use the same name when you send the same event.
      * These constants are just provided to make that easier
      */
-    public const EVENT_NAME = 'Product Purchased';
+    public const EVENT_NAME_PRODUCT_PURCHASED = 'Product Purchased';
+
+    public const EVENT_NAME_PRODUCT_DETAIL_PAGE_VIEWED = 'Product Detail Page Viewed';
 
     public string $eventType;
 
@@ -39,12 +41,13 @@ final class Event
      */
     public int $timestamp;
 
-    public ?string $queryId = null;
+    public ?string $queryId;
 
     /**
      * @param list<string> $objectIds
+     * @param int|\DateTimeInterface|null $timestamp
      */
-    public function __construct(string $eventType, string $eventName, string $index, string $userToken, array $objectIds)
+    public function __construct(string $eventType, string $eventName, string $index, string $userToken, array $objectIds, $timestamp = null, string $queryId = null)
     {
         Assert::oneOf($eventType, self::getEventTypes());
 
@@ -53,7 +56,15 @@ final class Event
         $this->index = $index;
         $this->userToken = $userToken;
         $this->objectIds = $objectIds;
-        $this->timestamp = time() * 1000;
+
+        if ($timestamp instanceof \DateTimeInterface) {
+            $timestamp = (int) $timestamp->format('Uv');
+        }
+        $timestamp = $timestamp ?? time() * 1000;
+        Assert::integer($timestamp);
+
+        $this->timestamp = $timestamp;
+        $this->queryId = $queryId;
     }
 
     /**

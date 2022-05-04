@@ -29,8 +29,9 @@
 
         <!-- Algolia specific event subscribers -->
         <service id="setono_sylius_algolia.event_subscriber.algolia.product_purchased"
-                 class="Setono\SyliusAlgoliaPlugin\EventSubscriber\Algolia\ProductPurchasedEventSubscriber">
-            <argument type="service" id="setono_sylius_algolia.command_bus"/>
+                 class="Setono\SyliusAlgoliaPlugin\EventSubscriber\Algolia\OrderPlacedEventSubscriber">
+            <argument type="service" id="setono_sylius_algolia.event_bus"/>
+            <argument type="service" id="setono_sylius_algolia.provider.event_context.provider"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>
