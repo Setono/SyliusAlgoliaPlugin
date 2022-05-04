@@ -10,7 +10,7 @@ use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 interface RecommendationsClientInterface
 {
     /**
-     * This method will return a list of object ids that are frequently bought together with the given $product
+     * This method will return a list of documents that are frequently bought together with the given $product
      *
      * @param int|string|ObjectIdAwareInterface $product
      *

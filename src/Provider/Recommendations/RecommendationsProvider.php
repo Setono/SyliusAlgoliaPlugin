@@ -30,7 +30,7 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
         $this->managerRegistry = $managerRegistry;
     }
 
-    public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): iterable
+    public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): \Generator
     {
         Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
 
