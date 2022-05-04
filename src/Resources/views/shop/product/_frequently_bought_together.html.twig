@@ -1,12 +1,10 @@
-{% if error is null %}
-    {% if products|length > 0 %}
-        <h4 class="ui horizontal section divider header">Frequently bought together</h4>
-        <div class="ui four doubling cards">
-            {% for product in products %}
-                {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
-            {% endfor %}
-        </div>
-    {% endif %}
+{% if products|length > 0 %}
+    <h4 class="ui horizontal section divider header">Frequently bought together</h4>
+    <div class="ui four doubling cards">
+        {% for product in products %}
+            {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
+        {% endfor %}
+    </div>
 {% else %}
     {% if debug %}
         <div class="ui negative message">
@@ -25,7 +23,7 @@
                 into the preview field
             </p>
             <p><strong>Error message</strong></p>
-            <pre>{{ error }}</pre>
+            <pre>{{ error is null ? 'No error message': error }}</pre>
         </div>
     {% else %}
         <!-- Could not render 'frequently bought together' products -->
