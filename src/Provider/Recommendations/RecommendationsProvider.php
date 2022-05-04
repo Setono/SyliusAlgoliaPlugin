@@ -53,4 +53,28 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
             }
         }
     }
+
+    public function getRelatedProducts(ProductInterface $product, string $index, int $max = 10): \Generator
+    {
+        Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+
+        $documents = $this->recommendationsClient->getRelatedProducts($product, $index, $max);
+
+        foreach ($documents as $document) {
+            Assert::notNull($document->resourceName);
+
+            $indexableResource = $this->indexableResourceCollection->getByName($document->resourceName);
+
+            $repository = $this->getRepository($indexableResource->className);
+            $entity = $repository->findOneBy([
+                'code' => $document->code,
+            ]);
+
+            Assert::nullOrIsInstanceOf($entity, ProductInterface::class);
+
+            if (null !== $entity) {
+                yield $entity;
+            }
+        }
+    }
 }

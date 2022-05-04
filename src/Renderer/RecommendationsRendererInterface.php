@@ -9,4 +9,6 @@ use Sylius\Component\Core\Model\ProductInterface;
 interface RecommendationsRendererInterface
 {
     public function renderFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): string;
+
+    public function renderRelatedProducts(ProductInterface $product, string $index, int $max = 10): string;
 }

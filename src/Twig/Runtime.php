@@ -31,4 +31,13 @@ final class Runtime implements RuntimeExtensionInterface
             $max
         );
     }
+
+    public function renderRelatedProducts(ProductInterface $product, int $max = 10): string
+    {
+        return $this->recommendationsRenderer->renderRelatedProducts(
+            $product,
+            $this->indexNameResolver->resolve($product),
+            $max
+        );
+    }
 }

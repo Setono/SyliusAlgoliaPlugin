@@ -54,4 +54,30 @@ final class RecommendationsClient implements RecommendationsClientInterface
             }
         }
     }
+
+    public function getRelatedProducts($product, string $index, int $max = 10): iterable
+    {
+        if ($product instanceof ObjectIdAwareInterface) {
+            $product = $product->getObjectId();
+        }
+        Assert::scalar($product);
+
+        $response = $this->recommendClient->getRelatedProducts([
+            RecommendationRequest::createRelatedProducts($index, (string) $product, $max)->toArray(),
+        ]);
+
+        Assert::keyExists($response, 'results');
+        Assert::isArray($response['results']);
+
+        foreach ($response['results'] as $result) {
+            Assert::isArray($result);
+            Assert::keyExists($result, 'hits');
+            Assert::isArray($result['hits']);
+
+            /** @var mixed $hit */
+            foreach ($result['hits'] as $hit) {
+                yield $this->denormalizer->denormalize($hit, $this->productDocumentClass, 'json');
+            }
+        }
+    }
 }

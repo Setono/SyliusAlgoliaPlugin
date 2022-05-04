@@ -1,0 +1,31 @@
+{% if products|length > 0 %}
+    <h4 class="ui horizontal section divider header">Related products</h4>
+    <div class="ui four doubling cards">
+        {% for product in products %}
+            {% include '@SyliusShop/Product/_box.html.twig' with {'product': product} %}
+        {% endfor %}
+    </div>
+{% else %}
+    {% if debug %}
+        <div class="ui negative message">
+            <div class="header">Could not show related products</div>
+            <p>This is most likely because of one of two reasons:</p>
+            <p><strong>1) The recommendation index was not created. Follow these instructions</strong></p>
+            <ol>
+                <li>Go to <a href="https://www.algolia.com/dashboard" target="_blank">Algolia dashboard</a></li>
+                <li>Click on <strong>Recommend</strong></li>
+                <li>Click on <strong>Start using</strong> on the Related products</li>
+            </ol>
+            <p>
+                <strong>2) There is not enough data to show recommendations for this specific product.</strong>
+                You can test this by going to the <a href="https://www.algolia.com/dashboard" target="_blank">Algolia dashboard</a>
+                and clicking the <strong>Recommend</strong>, choosing your model and input the name '{{ product.name }}'
+                into the preview field
+            </p>
+            <p><strong>Error message</strong></p>
+            <pre>{{ error is null ? 'No error message': error }}</pre>
+        </div>
+    {% else %}
+        <!-- Could not render 'related products' -->
+    {% endif %}
+{% endif %}

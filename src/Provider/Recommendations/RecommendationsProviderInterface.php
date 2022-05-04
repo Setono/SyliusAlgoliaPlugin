@@ -12,4 +12,9 @@ interface RecommendationsProviderInterface
      * @return iterable<ProductInterface>
      */
     public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): iterable;
+
+    /**
+     * @return iterable<ProductInterface>
+     */
+    public function getRelatedProducts(ProductInterface $product, string $index, int $max = 10): iterable;
 }

@@ -43,7 +43,7 @@ final class RecommendationsRenderer implements RecommendationsRendererInterface,
             $error = $e->getMessage();
 
             $this->logger->error(sprintf(
-                "An error occurred while trying to fetch recommended products for product with code '%s'. The error was: %s. The trace was:\n\n%s\n",
+                "An error occurred while trying to fetch frequently bought together for product with code '%s'. The error was: %s. The trace was:\n\n%s\n",
                 (string) $product->getCode(),
                 $e->getMessage(),
                 $e->getTraceAsString()
@@ -51,6 +51,32 @@ final class RecommendationsRenderer implements RecommendationsRendererInterface,
         }
 
         return $this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/_frequently_bought_together.html.twig', [
+            'product' => $product,
+            'products' => $products,
+            'error' => $error,
+            'debug' => $this->debug,
+        ]);
+    }
+
+    public function renderRelatedProducts(ProductInterface $product, string $index, int $max = 10): string
+    {
+        $error = null;
+
+        try {
+            $products = [...$this->recommendationsProvider->getRelatedProducts($product, $index, $max)];
+        } catch (\Throwable $e) {
+            $products = [];
+            $error = $e->getMessage();
+
+            $this->logger->error(sprintf(
+                "An error occurred while trying to fetch related products for product with code '%s'. The error was: %s. The trace was:\n\n%s\n",
+                (string) $product->getCode(),
+                $e->getMessage(),
+                $e->getTraceAsString()
+            ));
+        }
+
+        return $this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/_related_products.html.twig', [
             'product' => $product,
             'products' => $products,
             'error' => $error,

@@ -17,6 +17,11 @@ final class Extension extends AbstractExtension
                 [Runtime::class, 'renderFrequentlyBoughtTogether'],
                 ['is_safe' => ['html']]
             ),
+            new TwigFunction(
+                'ssa_render_related_products',
+                [Runtime::class, 'renderRelatedProducts'],
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 }
