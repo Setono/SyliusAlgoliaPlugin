@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
+use Sylius\Component\Resource\Model\CodeAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
@@ -23,7 +24,7 @@ final class IndexableResource
     /**
      * This is the FQCN for the Sylius resource, i.e. for sylius.product this could be App\Entity\Product\Product
      *
-     * @var class-string<ResourceInterface>
+     * @var class-string<ResourceInterface&CodeAwareInterface>
      */
     public string $className;
 
@@ -38,6 +39,14 @@ final class IndexableResource
                 'The class %s MUST be an instance of %s',
                 $className,
                 ResourceInterface::class
+            ));
+        }
+
+        if (!is_a($className, CodeAwareInterface::class, true)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The class %s MUST be an instance of %s',
+                $className,
+                CodeAwareInterface::class
             ));
         }
 
