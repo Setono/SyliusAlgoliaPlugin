@@ -55,7 +55,7 @@ final class IndexableResourceCollection implements \IteratorAggregate
         }
 
         foreach ($this->resources as $resource) {
-            if (is_a($class, $resource->className, true)) {
+            if (is_a($resource->className, $class, true)) {
                 return true;
             }
         }
@@ -73,7 +73,7 @@ final class IndexableResourceCollection implements \IteratorAggregate
         }
 
         foreach ($this->resources as $resource) {
-            if (is_a($class, $resource->className, true)) {
+            if (is_a($resource->className, $class, true)) {
                 return $resource;
             }
         }

@@ -9,6 +9,7 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Sylius\Component\Core\Model\Image;
 use Sylius\Component\Core\Model\Product;
+use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\Taxon;
 
 /**
@@ -86,6 +87,16 @@ final class IndexableResourceCollectionTest extends TestCase
     {
         $collection = $this->getCollection();
         $indexableResource = $collection->getByClass(Product::class);
+        self::assertSame('sylius.product', $indexableResource->name);
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_by_interface(): void
+    {
+        $collection = $this->getCollection();
+        $indexableResource = $collection->getByClass(ProductInterface::class);
         self::assertSame('sylius.product', $indexableResource->name);
     }
 
