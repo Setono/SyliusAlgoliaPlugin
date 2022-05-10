@@ -14,38 +14,38 @@ namespace Setono\SyliusAlgoliaPlugin\Settings;
  */
 class IndexSettings extends Settings
 {
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $searchableAttributes = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $attributesForFaceting = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $unretrievableAttributes = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $ranking = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $customRanking = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $replicas = null;
 
     public ?int $paginationLimitedTo = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $disableTypoToleranceOnWords = null;
 
     public ?string $separatorsToIndex = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $attributesToTransliterate = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $camelCaseAttributes = null;
 
-    /** @var array<string, array<array-key, string>>|null */
+    /** @var array<string, list<string>>|null */
     public ?array $decompoundedAttributes = null;
 
     public ?string $keepDiacriticsOnCharacters = null;
@@ -53,13 +53,13 @@ class IndexSettings extends Settings
     /** @var array<string, array<string, string>>|null */
     public ?array $customNormalization = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $indexLanguages = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $disablePrefixOnAttributes = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $numericAttributesForFiltering = null;
 
     public ?bool $allowCompressionOfIntegerArray = null;

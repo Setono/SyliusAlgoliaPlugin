@@ -14,7 +14,7 @@ namespace Setono\SyliusAlgoliaPlugin\Settings;
  */
 class Settings implements SettingsInterface
 {
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $attributesToRetrieve = null;
 
     public ?int $relevancyStrictness = null;
@@ -23,10 +23,10 @@ class Settings implements SettingsInterface
 
     public ?string $sortFacetValuesBy = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $attributesToHighlight = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $attributesToSnippet = null;
 
     public ?string $highlightPreTag = null;
@@ -48,16 +48,16 @@ class Settings implements SettingsInterface
 
     public ?bool $allowTyposOnNumericTokens = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $disableTypoToleranceOnAttributes = null;
 
-    /** @var bool|array<array-key, string>|null */
+    /** @var bool|list<string>|null */
     public $ignorePlurals;
 
-    /** @var bool|array<array-key, string>|null */
+    /** @var bool|list<string>|null */
     public $removeStopWords;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $queryLanguages = null;
 
     public ?bool $decompoundQuery = null;
@@ -74,19 +74,19 @@ class Settings implements SettingsInterface
 
     public ?bool $advancedSyntax = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $optionalWords = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $disableExactOnAttributes = null;
 
     /** @psalm-var 'attribute'|'none'|'word'|null */
     public ?string $exactOnSingleWordQuery = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $alternativesAsExact = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $advancedSyntaxFeatures = null;
 
     /** @psalm-var 0|1|2|3|null */
@@ -96,7 +96,7 @@ class Settings implements SettingsInterface
 
     public ?int $minProximity = null;
 
-    /** @var array<array-key, string>|null */
+    /** @var list<string>|null */
     public ?array $responseFields = null;
 
     public ?int $maxFacetHits = null;
