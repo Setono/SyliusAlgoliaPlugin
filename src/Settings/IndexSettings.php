@@ -8,7 +8,6 @@ namespace Setono\SyliusAlgoliaPlugin\Settings;
  * This class holds all the settings that are unique to the scope 'settings'
  *
  * todo add descriptions from docs
- * todo add type hints
  *
  * See https://www.algolia.com/doc/api-reference/settings-api-parameters/
  */
