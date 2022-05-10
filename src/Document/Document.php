@@ -25,6 +25,9 @@ abstract class Document
      */
     public ?string $resourceName = null;
 
+    /**
+     * This allows us to always be able to instantiate an extending class without worrying about constructor arguments
+     */
     final public function __construct()
     {
     }
