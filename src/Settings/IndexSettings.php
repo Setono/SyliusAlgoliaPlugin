@@ -14,59 +14,67 @@ namespace Setono\SyliusAlgoliaPlugin\Settings;
  */
 class IndexSettings extends Settings
 {
-    /** @var list<string>|null */
-    public ?array $searchableAttributes = null;
+    /** @var list<string> */
+    public array $searchableAttributes = [];
 
-    /** @var list<string>|null */
-    public ?array $attributesForFaceting = null;
+    /** @var list<string> */
+    public array $attributesForFaceting = [];
 
-    /** @var list<string>|null */
-    public ?array $unretrievableAttributes = null;
+    /** @var list<string> */
+    public array $unretrievableAttributes = [];
 
-    /** @var list<string>|null */
-    public ?array $ranking = null;
+    /** @var list<string> */
+    public array $ranking = [];
 
-    /** @var list<string>|null */
-    public ?array $customRanking = null;
+    /** @var list<string> */
+    public array $customRanking = [];
 
-    /** @var list<string>|null */
-    public ?array $replicas = null;
+    /** @var list<string> */
+    public array $replicas = [];
 
     public ?int $paginationLimitedTo = null;
 
-    /** @var list<string>|null */
-    public ?array $disableTypoToleranceOnWords = null;
+    /** @var list<string> */
+    public array $disableTypoToleranceOnWords = [];
 
     public ?string $separatorsToIndex = null;
 
-    /** @var list<string>|null */
-    public ?array $attributesToTransliterate = null;
+    /** @var list<string> */
+    public array $attributesToTransliterate = [];
 
-    /** @var list<string>|null */
-    public ?array $camelCaseAttributes = null;
+    /** @var list<string> */
+    public array $camelCaseAttributes = [];
 
-    /** @var array<string, list<string>>|null */
-    public ?array $decompoundedAttributes = null;
+    /**
+     * See: https://www.algolia.com/doc/api-reference/api-parameters/decompoundedAttributes/
+     *
+     * @var list<array<string, list<string>>>
+     */
+    public array $decompoundedAttributes = [];
 
     public ?string $keepDiacriticsOnCharacters = null;
 
-    /** @var array<string, array<string, string>>|null */
-    public ?array $customNormalization = null;
+    /**
+     * See: https://www.algolia.com/doc/api-reference/api-parameters/customNormalization/
+     *
+     * @var array<string, array<string, string>>
+     */
+    public array $customNormalization = [];
 
-    /** @var list<string>|null */
-    public ?array $indexLanguages = null;
+    /** @var list<string> */
+    public array $indexLanguages = [];
 
-    /** @var list<string>|null */
-    public ?array $disablePrefixOnAttributes = null;
+    /** @var list<string> */
+    public array $disablePrefixOnAttributes = [];
 
-    /** @var list<string>|null */
-    public ?array $numericAttributesForFiltering = null;
+    /** @var list<string> */
+    public array $numericAttributesForFiltering = [];
 
     public ?bool $allowCompressionOfIntegerArray = null;
 
     public ?string $attributeForDistinct = null;
 
-    public ?array $userData = null;
+    public array $userData = [];
 
-    public ?array $renderingContent = null;
+    public array $renderingContent = [];
 }
