@@ -63,16 +63,12 @@ class GenericIndexer implements IndexerInterface
     private string $documentClass;
 
     /** @var list<string> */
-    private array $validationGroups;
-
-    /** @var list<string> */
     private array $normalizationGroups;
 
     /**
      * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
      * @param class-string<Document> $documentClass
-     * @param list<string> $validationGroups
      * @param list<string> $normalizationGroups
      */
     public function __construct(
@@ -89,7 +85,6 @@ class GenericIndexer implements IndexerInterface
         ObjectFilterInterface $objectFilter,
         string $supports,
         string $documentClass,
-        array $validationGroups = ['setono_sylius_algolia'],
         array $normalizationGroups = ['setono:sylius-algolia:document']
     ) {
         $this->managerRegistry = $managerRegistry;
@@ -105,7 +100,6 @@ class GenericIndexer implements IndexerInterface
         $this->objectFilter = $objectFilter;
         $this->supports = $supports;
         $this->documentClass = $documentClass;
-        $this->validationGroups = $validationGroups;
         $this->normalizationGroups = $normalizationGroups;
     }
 
