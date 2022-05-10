@@ -7,7 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\Message\Command;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 
 /**
- * A resource in this command are all entities gathered under a resource name, i.e. if you sent this command with the
+ * A resource in this command are all entities gathered under a resource name, i.e. if you send this command with the
  * resource 'sylius.product' then it would index ALL product entities
  */
 final class IndexResource implements CommandInterface
