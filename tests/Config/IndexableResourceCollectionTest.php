@@ -7,6 +7,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Config;
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Sylius\Component\Core\Model\Channel;
 use Sylius\Component\Core\Model\Image;
 use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -93,6 +94,16 @@ final class IndexableResourceCollectionTest extends TestCase
     /**
      * @test
      */
+    public function it_gets_by_class2(): void
+    {
+        $collection = $this->getCollection();
+        $indexableResource = $collection->getByClass(ChildChannel::class);
+        self::assertSame('sylius.channel', $indexableResource->name);
+    }
+
+    /**
+     * @test
+     */
     public function it_gets_by_interface(): void
     {
         $collection = $this->getCollection();
@@ -104,7 +115,12 @@ final class IndexableResourceCollectionTest extends TestCase
     {
         return new IndexableResourceCollection(
             new IndexableResource('sylius.product', Product::class),
-            new IndexableResource('sylius.taxon', Taxon::class)
+            new IndexableResource('sylius.taxon', Taxon::class),
+            new IndexableResource('sylius.channel', Channel::class)
         );
     }
+}
+
+class ChildChannel extends Channel
+{
 }
