@@ -28,7 +28,19 @@ final class CachedRecommendationsRenderer implements RecommendationsRendererInte
 
     public function renderFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): string
     {
-        $cacheKey = sprintf('%s_%s', (string) $product->getId(), $index);
+        $cacheKey = sprintf('%s_%s_%s', 'frequently_bought_together', (string) $product->getId(), $index);
+
+        /** @psalm-suppress ArgumentTypeCoercion */
+        return $this->cachePool->get($cacheKey, function (ItemInterface $item) use ($product, $index, $max): string {
+            $item->expiresAfter($this->cacheTtl);
+
+            return $this->decoratedRecommendationsRenderer->renderFrequentlyBoughtTogether($product, $index, $max);
+        });
+    }
+
+    public function renderRelatedProducts(ProductInterface $product, string $index, int $max = 10): string
+    {
+        $cacheKey = sprintf('%s_%s_%s', 'related_products', (string) $product->getId(), $index);
 
         /** @psalm-suppress ArgumentTypeCoercion */
         return $this->cachePool->get($cacheKey, function (ItemInterface $item) use ($product, $index, $max): string {

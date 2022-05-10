@@ -70,4 +70,13 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
         return [$document];
     }
+
+    public function getRelatedProducts($product, string $index, int $max = 10): iterable
+    {
+        $document = new ProductDocument();
+        $document->resourceName = 'sylius.product';
+        $document->code = 'product1';
+
+        return [$document];
+    }
 }
