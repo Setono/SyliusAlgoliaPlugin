@@ -36,6 +36,14 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="setono_sylius_algolia.event_subscriber.algolia.product_viewed"
+                 class="Setono\SyliusAlgoliaPlugin\EventSubscriber\Algolia\ProductViewedEventSubscriber">
+            <argument type="service" id="setono_sylius_algolia.event_bus"/>
+            <argument type="service" id="setono_sylius_algolia.provider.event_context.provider"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <!-- Doctrine specific event subscribers -->
         <service id="setono_sylius_algolia.event_subscriber.doctrine.entity_change"
                  class="Setono\SyliusAlgoliaPlugin\EventSubscriber\Doctrine\EntityChangeSubscriber">
