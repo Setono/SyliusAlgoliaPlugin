@@ -14,7 +14,7 @@
         "algolia/algoliasearch-client-php": "^3.2",
         "doctrine/event-manager": "^1.1",
         "doctrine/orm": "^2.7",
-        "doctrine/persistence": "^2.2",
+        "doctrine/persistence": "^2.5",
         "fig/link-util": "^1.1",
         "liip/imagine-bundle": "^2.6",
         "psr/cache": "^1.0",
