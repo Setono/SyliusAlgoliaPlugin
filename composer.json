@@ -25,7 +25,7 @@
         "setono/client-id-bundle": "^0.2",
         "setono/client-id-contracts": "^0.2",
         "setono/doctrine-object-manager-trait": "^1.1",
-        "setono/prerender-bundle": "dev-master",
+        "setono/prerender-bundle": "^0.1",
         "sylius/resource-bundle": "^1.6",
         "symfony/cache-contracts": "^2.0",
         "symfony/config": "^4.4 || ^5.0",
