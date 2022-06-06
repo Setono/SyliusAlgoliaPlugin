@@ -16,7 +16,7 @@
         "doctrine/orm": "^2.7",
         "doctrine/persistence": "^2.2",
         "fig/link-util": "^1.1",
-        "liip/imagine-bundle": "^2.6",
+        "liip/imagine-bundle": "^2.8",
         "psr/cache": "^1.0",
         "psr/event-dispatcher": "^1.0",
         "psr/link": "^1.0",
