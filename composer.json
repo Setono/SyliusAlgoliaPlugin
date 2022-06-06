@@ -40,7 +40,7 @@
         "symfony/string": "^5.0",
         "symfony/validator": "^4.4 || ^5.0",
         "twig/twig": "^2.14",
-        "webmozart/assert": "^1.10"
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "api-platform/core": "^2.6",
