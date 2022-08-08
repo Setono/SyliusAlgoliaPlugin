@@ -13,7 +13,7 @@
         "php": ">=7.4",
         "algolia/algoliasearch-client-php": "^3.2",
         "doctrine/event-manager": "^1.1",
-        "doctrine/orm": "^2.7",
+        "doctrine/orm": "^2.13",
         "doctrine/persistence": "^2.2",
         "fig/link-util": "^1.1",
         "liip/imagine-bundle": "^2.6",
