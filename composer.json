@@ -21,7 +21,7 @@
         "psr/event-dispatcher": "^1.0",
         "psr/link": "^1.0",
         "psr/log": "^1.0 || ^2.0",
-        "setono/bot-detection-bundle": "^1.6",
+        "setono/bot-detection-bundle": "^1.9",
         "setono/client-id-bundle": "^0.2",
         "setono/client-id-contracts": "^0.2",
         "setono/doctrine-object-manager-trait": "^1.1",
