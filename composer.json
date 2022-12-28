@@ -39,6 +39,7 @@
         "symfony/serializer": "^5.4 || ^6.0",
         "symfony/string": "^5.4 || ^6.0",
         "symfony/validator": "^5.4 || ^6.0",
+        "symfony/web-link": "^5.4 || ^6.0",
         "twig/twig": "^2.15 || ^3.0",
         "webmozart/assert": "^1.11"
     },
