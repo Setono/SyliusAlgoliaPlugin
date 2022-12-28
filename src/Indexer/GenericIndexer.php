@@ -228,7 +228,7 @@ class GenericIndexer implements IndexerInterface
     /**
      * @param list<scalar> $resources
      * @param class-string<ResourceInterface> $resourceClass
-     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnType,MoreSpecificReturnType
      *
      * @return list<ResourceInterface&ObjectIdAwareInterface>
      */
@@ -244,7 +244,7 @@ class GenericIndexer implements IndexerInterface
             IndexableResourceRepositoryInterface::class
         ));
 
-        /** @psalm-suppress InvalidReturnStatement */
+        /** @psalm-suppress InvalidReturnStatement,LessSpecificReturnStatement */
         return $repository->findFromIndexScopeAndIds($indexScope, $resources);
     }
 

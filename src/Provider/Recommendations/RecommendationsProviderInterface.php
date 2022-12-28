@@ -9,12 +9,12 @@ use Sylius\Component\Core\Model\ProductInterface;
 interface RecommendationsProviderInterface
 {
     /**
-     * @return iterable<ProductInterface>
+     * @return iterable<int, ProductInterface>
      */
     public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): iterable;
 
     /**
-     * @return iterable<ProductInterface>
+     * @return iterable<int, ProductInterface>
      */
     public function getRelatedProducts(ProductInterface $product, string $index, int $max = 10): iterable;
 }
