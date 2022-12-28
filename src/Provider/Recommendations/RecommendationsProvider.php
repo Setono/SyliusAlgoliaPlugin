@@ -48,7 +48,7 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
     /**
      * @param iterable<Document> $documents
      *
-     * @return \Generator<ProductInterface>
+     * @return \Generator<int, ProductInterface>
      */
     private function getRecommendations(iterable $documents): \Generator
     {
