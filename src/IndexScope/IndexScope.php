@@ -16,17 +16,47 @@ class IndexScope
      */
     public IndexableResource $resource;
 
-    public ?string $channelCode;
+    public ?string $channelCode = null;
 
-    public ?string $localeCode;
+    public ?string $localeCode = null;
 
-    public ?string $currencyCode;
+    public ?string $currencyCode = null;
 
-    public function __construct(IndexableResource $resource, string $channelCode = null, string $localeCode = null, string $currencyCode = null)
+    public function __construct(IndexableResource $resource)
     {
         $this->resource = $resource;
-        $this->channelCode = $channelCode;
-        $this->localeCode = $localeCode;
-        $this->currencyCode = $currencyCode;
+    }
+
+    /**
+     * @return static
+     */
+    public function withChannelCode(?string $channelCode): self
+    {
+        $obj = clone $this;
+        $obj->channelCode = $channelCode;
+
+        return $obj;
+    }
+
+    /**
+     * @return static
+     */
+    public function withLocaleCode(?string $localeCode): self
+    {
+        $obj = clone $this;
+        $obj->localeCode = $localeCode;
+
+        return $obj;
+    }
+
+    /**
+     * @return static
+     */
+    public function withCurrencyCode(?string $currencyCode): self
+    {
+        $obj = clone $this;
+        $obj->currencyCode = $currencyCode;
+
+        return $obj;
     }
 }

@@ -43,12 +43,11 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
         foreach ($channels as $channel) {
             foreach ($channel->getLocales() as $locale) {
                 foreach ($channel->getCurrencies() as $currency) {
-                    yield new IndexScope(
-                        $indexableResource,
-                        $channel->getCode(),
-                        $locale->getCode(),
-                        $currency->getCode()
-                    );
+                    yield (new IndexScope($indexableResource))
+                        ->withChannelCode($channel->getCode())
+                        ->withLocaleCode($locale->getCode())
+                        ->withCurrencyCode($currency->getCode())
+                    ;
                 }
             }
         }
@@ -70,7 +69,11 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
         string $localeCode = null,
         string $currencyCode = null
     ): IndexScope {
-        return new IndexScope($indexableResource, $channelCode, $localeCode, $currencyCode);
+        return (new IndexScope($indexableResource))
+            ->withChannelCode($channelCode)
+            ->withLocaleCode($localeCode)
+            ->withCurrencyCode($currencyCode)
+        ;
     }
 
     public function supports(IndexableResource $indexableResource): bool

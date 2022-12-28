@@ -40,7 +40,7 @@ final class TaxonsDataMapperTest extends TestCase
 
         $indexableResource = new IndexableResource('sylius.product', Product::class);
 
-        $indexScope = new IndexScope($indexableResource, null, self::LOCALE);
+        $indexScope = (new IndexScope($indexableResource))->withLocaleCode(self::LOCALE);
 
         $dataMapper = new TaxonsDataMapper();
         $dataMapper->map($product, $productDocument, $indexScope);
