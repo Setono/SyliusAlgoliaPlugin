@@ -1,0 +1,51 @@
+<script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.14.2/dist/algoliasearch-lite.umd.js" integrity="sha256-dImjLPUsG/6p3+i7gVKBiDM8EemJAhQ0VvkRK2pVsQY=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4.49.1/dist/instantsearch.production.min.js" integrity="sha256-3s8yn/IU/hV+UjoqczP+9xDS1VXIpMf3QYRUi9XoG0Y=" crossorigin="anonymous"></script>
+<script>
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    function init() {
+        const algoliaCredentials = document.getElementById('algolia-credentials');
+        const algoliaIndex = document.getElementById('algolia-index').dataset.value;
+        const algoliaTaxon = document.getElementById('algolia-taxon').dataset.value;
+        const algoliaHitTemplate = document.getElementById('algolia-hit-template').innerHTML;
+
+        const searchClient = algoliasearch(algoliaCredentials.dataset.appId, algoliaCredentials.dataset.searchApiKey);
+
+        const search = instantsearch({
+            indexName: algoliaIndex,
+            searchClient,
+            routing: true,
+        });
+
+        search.addWidgets([
+            instantsearch.widgets.hits({
+                container: '#hits',
+                templates: {
+                    item: algoliaHitTemplate,
+                }
+            }),
+            instantsearch.widgets.rangeSlider({
+                container: '#range-slider',
+                attribute: 'price',
+            }),
+            instantsearch.widgets.hierarchicalMenu({
+                container: '#hierarchical-menu',
+                attributes: [
+                    'taxons.lvl0',
+                    'taxons.lvl1',
+                    'taxons.lvl2',
+                ],
+                showParentLevel: false,
+            }),
+            instantsearch.widgets.configure({
+                filters: `taxonCodes:${algoliaTaxon}`
+            })
+        ]);
+
+        search.start();
+    }
+</script>

@@ -8,3 +8,14 @@ framework:
             setono_sylius_algolia.command_bus: ~
             setono_sylius_algolia.event_bus:
                 default_middleware: allow_no_handlers
+
+sylius_ui:
+    events:
+        sylius.shop.layout.javascripts:
+            blocks:
+                ssa_shop_product_index_scripts:
+                    template: "@SetonoSyliusAlgoliaPlugin/shop/product/index/_scripts.html.twig"
+        sylius.shop.layout.stylesheets:
+            blocks:
+                ssa_shop_product_index_styles:
+                    template: "@SetonoSyliusAlgoliaPlugin/shop/product/index/_styles.html.twig"
