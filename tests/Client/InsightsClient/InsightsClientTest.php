@@ -78,7 +78,11 @@ final class InsightsClientTest extends AbstractClientTestCase
 
             public function getFromContext(IndexableResource $indexableResource): IndexScope
             {
-                return new IndexScope($indexableResource, 'FASHION_WEB', 'en_US', 'USD');
+                return (new IndexScope($indexableResource))
+                    ->withChannelCode('FASHION_WEB')
+                    ->withLocaleCode('en_US')
+                    ->withCurrencyCode('USD')
+                ;
             }
 
             public function getFromChannelAndLocaleAndCurrency(
