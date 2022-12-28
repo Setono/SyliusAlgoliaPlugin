@@ -10,8 +10,6 @@
             <argument type="service" id="sylius.context.locale"/>
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
-            <argument>%setono_sylius_algolia.app_id%</argument>
-            <argument>%setono_sylius_algolia.search_only_api_key%</argument>
         </service>
     </services>
 </container>

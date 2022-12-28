@@ -8,7 +8,6 @@
         "slick-carousel": "^1.8"
     },
     "devDependencies": {
-        "@setono/sylius-algolia-plugin": "file:../../src/Resources/assets",
         "@symfony/webpack-encore": "^1.8",
         "eslint": "^8.18",
         "eslint-config-airbnb-base": "^15.0",
