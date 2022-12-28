@@ -42,9 +42,9 @@ class EventContext
         Assert::string($clientId);
 
         if ($channel instanceof ChannelInterface) {
-            $channel = $channel->getCode();
+            $channel = (string) $channel->getCode();
         }
-        Assert::string($channel);
+        Assert::stringNotEmpty($channel);
 
         $this->timestamp = new \DateTimeImmutable();
         $this->clientId = $clientId;
