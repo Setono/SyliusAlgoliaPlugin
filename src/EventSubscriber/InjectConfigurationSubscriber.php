@@ -60,7 +60,7 @@ final class InjectConfigurationSubscriber implements EventSubscriberInterface
 
     public function inject(ResponseEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

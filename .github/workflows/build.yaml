@@ -1,13 +1,14 @@
 name: "build"
+
 on:
     push:
         branches:
             - "master"
         paths-ignore:
-            - "*.md"
+            - "**/*.md"
     pull_request:
         paths-ignore:
-            - "*.md"
+            - "**/*.md"
     workflow_dispatch: ~
 
 env:
@@ -24,7 +25,7 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.1"
+                    - "7.4" # Always use the lowest version of PHP since a higher version would create actual syntax errors in lower versions
 
                 dependencies:
                     - "highest"
@@ -76,7 +77,6 @@ jobs:
                     - "highest"
 
                 symfony:
-                    - "^4.4"
                     - "^5.4"
 
         steps:
@@ -120,7 +120,6 @@ jobs:
                     - "highest"
 
                 symfony:
-                    - "^4.4"
                     - "^5.4"
 
         steps:
@@ -162,7 +161,6 @@ jobs:
                     - "highest"
 
                 symfony:
-                    - "^4.4"
                     - "^5.4"
 
         steps:
@@ -203,7 +201,6 @@ jobs:
                     - "highest"
 
                 symfony:
-                    - "^4.4"
                     - "^5.4"
 
         steps:
@@ -229,9 +226,7 @@ jobs:
                     dependency-versions: "${{ matrix.dependencies }}"
 
             -   name: "Lint container"
-                # Do not lint on SF4 because we get this error: Invalid definition for service "doctrine.migrations.dependency_factory": argument 2 of "Doctrine\Migrations\DependencyFactory::setDefinition()" accepts "callable", "SyliusLabs\DoctrineMigrationsExtraBundle\Factory\ContainerAwareVersionFactory" passed.
-                # Note: We cannot use the if statement here, because of https://github.community/t/matrix-cannot-be-used-in-jobs-level-if/17177/10
-                run: 'if [ "${{ matrix.symfony }}" != "^4.4" ]; then (cd tests/Application && bin/console lint:container); fi'
+                run: "(cd tests/Application && bin/console lint:container)"
 
             -   name: "Create database"
                 run: "(cd tests/Application && bin/console doctrine:database:create -vvv)"
