@@ -24,17 +24,21 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
 
     private string $environment;
 
+    private ?string $prefix;
+
     private InflectorInterface $inflector;
 
     public function __construct(
         IndexableResourceCollection $indexableResourceCollection,
         IndexScopeProviderInterface $indexScopeProvider,
         string $environment,
+        string $prefix = null,
         InflectorInterface $inflector = null
     ) {
         $this->indexableResourceCollection = $indexableResourceCollection;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->environment = $environment;
+        $this->prefix = $prefix;
         $this->inflector = $inflector ?? new EnglishInflector();
     }
 
@@ -45,7 +49,8 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
 
     public function resolveFromIndexScope(IndexScope $indexScope): string
     {
-        $str = $this->inflector->pluralize($indexScope->resource->shortName)[0];
+        $str = null !== $this->prefix ? ($this->prefix . '__') : '';
+        $str .= $this->environment . '__' . $this->inflector->pluralize($indexScope->resource->shortName)[0];
 
         if (null !== $indexScope->channelCode) {
             $str .= '__' . $indexScope->channelCode;
@@ -58,8 +63,6 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
         if (null !== $indexScope->currencyCode) {
             $str .= '__' . $indexScope->currencyCode;
         }
-
-        $str .= '__' . $this->environment;
 
         return strtolower($str);
     }

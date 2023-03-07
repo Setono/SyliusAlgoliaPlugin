@@ -10,6 +10,7 @@
             <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
             <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
             <argument>%kernel.environment%</argument>
+            <argument>%setono_sylius_algolia.index_name_prefix%</argument>
         </service>
     </services>
 </container>
