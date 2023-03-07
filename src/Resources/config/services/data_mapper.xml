@@ -34,11 +34,6 @@
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
-        <service id="setono_sylius_algolia.data_mapper.product.taxons"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonsDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
-        </service>
-
         <service id="setono_sylius_algolia.data_mapper.product.taxon_codes"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\TaxonCodesDataMapper">
             <argument>%sylius_shop.product_grid.include_all_descendants%</argument>

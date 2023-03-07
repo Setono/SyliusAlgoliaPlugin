@@ -18,11 +18,10 @@ final class ProductIndexSettingsProvider extends AbstractIndexSettingsProvider
         $settings->searchableAttributes = ['code', 'name'];
         $settings->attributesForFaceting = [
             'filterOnly(taxonCodes)', 'onSale', 'price',
-            'taxons.lvl0', 'taxons.lvl1', 'taxons.lvl2', // todo these should somehow be dynamically generated
         ];
         $settings->customRanking = ['desc(createdAt)'];
         $settings->disablePrefixOnAttributes = ['code'];
-        $settings->ignorePlurals = true; // remember to set query languages
+        $settings->ignorePlurals = true;
         $settings->allowTyposOnNumericTokens = false;
 
         return $settings;

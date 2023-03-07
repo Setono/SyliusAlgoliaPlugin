@@ -40,7 +40,7 @@ final class TaxonCodesDataMapper implements DataMapperInterface
             $this->populateTaxons($target, $taxon);
         }
 
-        $target->taxonCodes = array_unique($target->taxonCodes);
+        $target->taxonCodes = array_values(array_unique($target->taxonCodes));
     }
 
     private function populateTaxons(ProductDocument $productDocument, TaxonInterface $taxon): void

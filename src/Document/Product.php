@@ -27,20 +27,18 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
      */
     public array $imageUrls = [];
 
-    /** @var array<array-key, string> */
+    /**
+     * Holds a list of taxon codes. This makes it easy to filter by a taxon.
+     *
+     * @var list<string>
+     */
     public array $taxonCodes = [];
-
-    /** @var array<string, array<array-key, string>> */
-    public array $taxons = [];
 
     public ?string $currency = null;
 
     public ?float $price = null;
 
     public ?float $originalPrice = null;
-
-    /** @var array<string, list<string>> */
-    public array $options = [];
 
     public function isOnSale(): bool
     {
