@@ -40,6 +40,7 @@ final class ProductDataMapper implements DataMapperInterface
 
     private function mapOptions(ProductInterface $source, Product $target, string $locale): void
     {
+        $options = [];
         foreach ($source->getEnabledVariants() as $variant) {
             foreach ($variant->getOptionValues() as $optionValue) {
                 $option = $optionValue->getOption();
@@ -48,9 +49,15 @@ final class ProductDataMapper implements DataMapperInterface
                 $optionName = $option->getTranslation($locale)->getName();
                 Assert::notNull($optionName);
 
-                $target->options[$optionName][] = (string) $optionValue->getTranslation($locale)->getValue();
+                $options[$optionName][] = (string) $optionValue->getTranslation($locale)->getValue();
             }
         }
+
+        foreach ($options as $name => $values) {
+            $options[$name] = array_values(array_unique($values));
+        }
+
+        $target->options = $options;
     }
 
     /**

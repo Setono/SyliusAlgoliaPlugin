@@ -39,7 +39,7 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
 
     public ?float $originalPrice = null;
 
-    /** @var array<string, array<array-key, string>> */
+    /** @var array<string, list<string>> */
     public array $options = [];
 
     public function isOnSale(): bool
