@@ -24,6 +24,7 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
 
     private string $environment;
 
+    /** @var non-empty-string|null */
     private ?string $prefix;
 
     private InflectorInterface $inflector;
@@ -38,7 +39,7 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
         $this->indexableResourceCollection = $indexableResourceCollection;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->environment = $environment;
-        $this->prefix = $prefix;
+        $this->prefix = '' === $prefix ? null : $prefix;
         $this->inflector = $inflector ?? new EnglishInflector();
     }
 
