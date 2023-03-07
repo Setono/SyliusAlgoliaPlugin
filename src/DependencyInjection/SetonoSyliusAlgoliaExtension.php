@@ -27,6 +27,7 @@ final class SetonoSyliusAlgoliaExtension extends Extension
          *      app_id: string,
          *      search_only_api_key: string,
          *      admin_api_key: string,
+         *      routes: array{product_index: string},
          *      cache: array{adapter: string, enabled: bool, ttl: int}
          * } $config
          */
@@ -42,6 +43,7 @@ final class SetonoSyliusAlgoliaExtension extends Extension
 
         $container->setParameter('setono_sylius_algolia.cache.adapter', $config['cache']['adapter']);
         $container->setParameter('setono_sylius_algolia.cache.ttl', $config['cache']['ttl']);
+        $container->setParameter('setono_sylius_algolia.routes.product_index', $config['routes']['product_index']);
 
         if ($config['cache']['enabled']) {
             $loader->load('services/conditional/renderer.xml');

@@ -20,6 +20,7 @@ final class Configuration implements ConfigurationInterface
          * @psalm-suppress PossiblyNullReference
          */
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('indexable_resources')
                     ->info('An array of Sylius resources to index')
@@ -49,6 +50,16 @@ final class Configuration implements ConfigurationInterface
                     ->info('This is the ADMIN API key. Please keep it secret and use it ONLY from your backend: this key is used to create, update and DELETE your indices. You can also use it to manage your API keys.')
                     ->isRequired()
                     ->cannotBeEmpty()
+                ->end()
+                ->arrayNode('routes')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('product_index')
+                            ->defaultValue('taxons/{slug}')
+                            ->info('This is the path that should match the product index, i.e. product lists')
+                            ->cannotBeEmpty()
+                        ->end()
+                    ->end()
                 ->end()
                 ->arrayNode('cache')
                     ->addDefaultsIfNotSet()
