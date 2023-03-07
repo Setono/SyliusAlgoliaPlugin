@@ -21,7 +21,7 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
     public ?string $primaryImageUrl = null;
 
     /**
-     * All images (excluding the primary)
+     * All images (including the primary image url)
      *
      * @var list<string>
      */
@@ -52,17 +52,14 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
         $this->url = $url;
     }
 
-    public function getFilterSet(): string
-    {
-        return 'sylius_shop_product_thumbnail';
-    }
-
     public function setImageUrls(array $imageUrls): void
     {
-        $primaryImageUrl = [] === $imageUrls ? null : array_shift($imageUrls);
-
         $this->imageUrls = $imageUrls;
-        $this->primaryImageUrl = $primaryImageUrl;
+        $this->primaryImageUrl = null;
+
+        if (count($imageUrls) > 0) {
+            $this->primaryImageUrl = $imageUrls[0];
+        }
     }
 
     public function addImageUrl(string $imageUrl): void

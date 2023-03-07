@@ -17,14 +17,24 @@ final class ImageUrlsDataMapper implements DataMapperInterface
 {
     private CacheManager $cacheManager;
 
-    public function __construct(CacheManager $cacheManager)
-    {
-        $this->cacheManager = $cacheManager;
-    }
+    /** @var array<class-string<ResourceInterface>, string> */
+    private array $resourceToFilterSetMapping;
+
+    private string $defaultFilterSet;
 
     /**
-     * @param array<string, mixed> $context
+     * @param array<class-string<ResourceInterface>, string> $resourceToFilterSetMapping
      */
+    public function __construct(
+        CacheManager $cacheManager,
+        array $resourceToFilterSetMapping = [], // todo add this to the plugin configuration
+        string $defaultFilterSet = 'sylius_large'
+    ) {
+        $this->cacheManager = $cacheManager;
+        $this->resourceToFilterSetMapping = $resourceToFilterSetMapping;
+        $this->defaultFilterSet = $defaultFilterSet;
+    }
+
     public function map(
         ResourceInterface $source,
         Document $target,
@@ -41,7 +51,7 @@ final class ImageUrlsDataMapper implements DataMapperInterface
         foreach ($source->getImages() as $image) {
             $imageUrls[] = $this->cacheManager->getBrowserPath(
                 (string) $image->getPath(),
-                $target->getFilterSet(),
+                $this->resourceToFilterSetMapping[get_class($source)] ?? $this->defaultFilterSet,
                 [],
                 null,
                 UrlGeneratorInterface::ABSOLUTE_PATH

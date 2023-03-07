@@ -7,11 +7,6 @@ namespace Setono\SyliusAlgoliaPlugin\Document;
 interface ImageUrlsAwareInterface
 {
     /**
-     * Returns the filter set to use for generation
-     */
-    public function getFilterSet(): string;
-
-    /**
      * A list of image urls
      *
      * @param list<string> $imageUrls
