@@ -10,8 +10,7 @@ updates:
         ignore:
             -   dependency-name: "symfony/*"
             -   dependency-name: "sylius/*"
-        open-pull-requests-limit: 10
         package-ecosystem: "composer"
         schedule:
             interval: "weekly"
-        versioning-strategy: "increase"
+        versioning-strategy: "increase-if-necessary"
