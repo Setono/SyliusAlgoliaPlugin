@@ -87,6 +87,9 @@ final class IndexableResourceCollection implements \IteratorAggregate
         );
     }
 
+    /**
+     * @return \ArrayIterator<string, IndexableResource>
+     */
     public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->resources);
