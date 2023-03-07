@@ -16,7 +16,8 @@ abstract class Document
     public ?string $objectId = null;
 
     /**
-     * This is the code in the database
+     * This is the code in the database.
+     * Used together with the $resourceName, you can identify a given entity in your own database
      */
     public ?string $code = null;
 
