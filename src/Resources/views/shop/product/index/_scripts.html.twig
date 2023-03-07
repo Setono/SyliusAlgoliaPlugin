@@ -32,17 +32,8 @@
                 }
             }),
             instantsearch.widgets.rangeSlider({
-                container: '#range-slider',
+                container: '#price-slider',
                 attribute: 'price',
-            }),
-            instantsearch.widgets.hierarchicalMenu({
-                container: '#hierarchical-menu',
-                attributes: [
-                    'taxons.lvl0',
-                    'taxons.lvl1',
-                    'taxons.lvl2',
-                ],
-                showParentLevel: false,
             }),
             instantsearch.widgets.configure({
                 filters: `taxonCodes:${algoliaTaxon}`
