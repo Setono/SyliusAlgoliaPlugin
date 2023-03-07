@@ -93,6 +93,11 @@ class Product extends BaseProduct implements ObjectIdAwareInterface
 }
 ```
 
+### Implement the `IndexableResourceRepositoryInterface` in applicable repositories
+
+The configured indexable resources' associated repositories has to implement the `Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface`.
+If you're configuring the `sylius.product` there is a trait available you can use: `Setono\SyliusAlgoliaPlugin\Repository\ProductRepositoryTrait`.
+
 ## Usage
 
 TODO
