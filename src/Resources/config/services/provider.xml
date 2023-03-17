@@ -40,7 +40,7 @@
         <service id="setono_sylius_algolia.provider.recommendations"
                  class="Setono\SyliusAlgoliaPlugin\Provider\Recommendations\RecommendationsProvider">
             <argument type="service" id="setono_sylius_algolia.client.recommendations_client"/>
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
             <argument type="service" id="doctrine"/>
         </service>
     </services>

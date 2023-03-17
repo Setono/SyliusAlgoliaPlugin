@@ -4,6 +4,7 @@
     <imports>
         <import resource="services/client.xml"/>
         <import resource="services/command.xml"/>
+        <import resource="services/config.xml"/>
         <import resource="services/controller.xml"/>
         <import resource="services/data_mapper.xml"/>
         <import resource="services/event_subscriber.xml"/>

@@ -7,19 +7,12 @@ namespace Setono\SyliusAlgoliaPlugin\Config;
 /**
  * @implements \IteratorAggregate<string, IndexableResource>
  */
-final class IndexableResourceCollection implements \IteratorAggregate
+final class IndexableResourceRegistry implements \IteratorAggregate
 {
     /** @var array<string, IndexableResource> */
     private array $resources = [];
 
-    public function __construct(IndexableResource ...$resources)
-    {
-        foreach ($resources as $resource) {
-            $this->add($resource);
-        }
-    }
-
-    private function add(IndexableResource $resource): void
+    public function add(IndexableResource $resource): void
     {
         $this->resources[$resource->name] = $resource;
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Controller\Action;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -27,7 +27,7 @@ final class ProductIndexAction
 
     private EventDispatcherInterface $eventDispatcher;
 
-    private IndexableResourceCollection $indexableResourceCollection;
+    private IndexableResourceRegistry $indexableResourceRegistry;
 
     public function __construct(
         Environment $twig,
@@ -35,14 +35,14 @@ final class ProductIndexAction
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
         EventDispatcherInterface $eventDispatcher,
-        IndexableResourceCollection $indexableResourceCollection
+        IndexableResourceRegistry $indexableResourceRegistry
     ) {
         $this->twig = $twig;
         $this->indexNameResolver = $indexNameResolver;
         $this->taxonRepository = $taxonRepository;
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
-        $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexableResourceRegistry = $indexableResourceRegistry;
     }
 
     public function __invoke(string $slug): Response
@@ -59,7 +59,7 @@ final class ProductIndexAction
         }
 
         try {
-            $indexableResource = $this->indexableResourceCollection->getByClass(ProductInterface::class);
+            $indexableResource = $this->indexableResourceRegistry->getByClass(ProductInterface::class);
         } catch (\InvalidArgumentException $e) {
             throw new NotFoundHttpException($e->getMessage(), $e);
         }

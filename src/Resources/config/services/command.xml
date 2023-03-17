@@ -4,7 +4,7 @@
     <services>
         <service id="setono_sylius_algolia.command.index" class="Setono\SyliusAlgoliaPlugin\Command\IndexCommand">
             <argument type="service" id="setono_sylius_algolia.command_bus"/>
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_collection"/>
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
 
             <tag name="console.command"/>
         </service>

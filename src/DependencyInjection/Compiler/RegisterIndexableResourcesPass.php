@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
 use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -13,11 +12,13 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Webmozart\Assert\Assert;
 
-final class RegisterIndexableResourceCollectionPass implements CompilerPassInterface
+final class RegisterIndexableResourcesPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasParameter('sylius.resources') || !$container->hasParameter('setono_sylius_algolia.indexable_resources')) {
+        if (!$container->hasParameter('sylius.resources')
+            || !$container->hasParameter('setono_sylius_algolia.indexable_resources')
+            || !$container->hasDefinition('setono_sylius_algolia.config.indexable_resource_registry')) {
             return;
         }
 
@@ -27,7 +28,7 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
         /** @var array<string, array{document: class-string}> $indexableResources */
         $indexableResources = $container->getParameter('setono_sylius_algolia.indexable_resources');
 
-        $definition = new Definition(IndexableResourceCollection::class);
+        $registry = $container->getDefinition('setono_sylius_algolia.config.indexable_resource_registry');
 
         foreach ($indexableResources as $indexableResourceName => $indexableResource) {
             Assert::keyExists($resources, $indexableResourceName, sprintf('The resource "%s" is not a valid Sylius resource', $indexableResourceName));
@@ -43,10 +44,7 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
                 new Definition(IndexableResource::class, [$indexableResourceName, $resourceClass, $indexableResource['document']])
             );
 
-            $definition->addArgument(new Reference($indexableResourceDefinitionId));
+            $registry->addMethodCall('add', [new Reference($indexableResourceDefinitionId)]);
         }
-
-        $container->setDefinition('setono_sylius_algolia.config.indexable_resource_collection', $definition);
-        $container->getParameterBag()->remove('setono_sylius_algolia.indexable_resources');
     }
 }

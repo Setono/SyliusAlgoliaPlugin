@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\IndexNameResolver;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\String\Inflector\InflectorInterface;
  */
 final class DefaultIndexNameResolver implements IndexNameResolverInterface
 {
-    private IndexableResourceCollection $indexableResourceCollection;
+    private IndexableResourceRegistry $indexableResourceRegistry;
 
     private IndexScopeProviderInterface $indexScopeProvider;
 
@@ -30,13 +30,13 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
     private InflectorInterface $inflector;
 
     public function __construct(
-        IndexableResourceCollection $indexableResourceCollection,
+        IndexableResourceRegistry $indexableResourceRegistry,
         IndexScopeProviderInterface $indexScopeProvider,
         string $environment,
         string $prefix = null,
         InflectorInterface $inflector = null
     ) {
-        $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexableResourceRegistry = $indexableResourceRegistry;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->environment = $environment;
         $this->prefix = '' === $prefix ? null : $prefix;
@@ -79,7 +79,7 @@ final class DefaultIndexNameResolver implements IndexNameResolverInterface
     private function resolveIndexScope($resource): IndexScope
     {
         if (!$resource instanceof IndexableResource) {
-            $resource = $this->indexableResourceCollection->getByClass($resource);
+            $resource = $this->indexableResourceRegistry->getByClass($resource);
         }
 
         return $this->indexScopeProvider->getFromContext($resource);

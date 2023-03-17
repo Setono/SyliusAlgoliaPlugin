@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Command;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,21 +20,21 @@ final class IndexCommand extends Command
 
     private MessageBusInterface $commandBus;
 
-    private IndexableResourceCollection $indexableResourceCollection;
+    private IndexableResourceRegistry $indexableResourceRegistry;
 
     public function __construct(
         MessageBusInterface $messageBus,
-        IndexableResourceCollection $indexableResourceCollection
+        IndexableResourceRegistry $indexableResourceRegistry
     ) {
         parent::__construct();
 
         $this->commandBus = $messageBus;
-        $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexableResourceRegistry = $indexableResourceRegistry;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach ($this->indexableResourceCollection as $indexableResource) {
+        foreach ($this->indexableResourceRegistry as $indexableResource) {
             $this->commandBus->dispatch(new IndexResource($indexableResource));
         }
 
