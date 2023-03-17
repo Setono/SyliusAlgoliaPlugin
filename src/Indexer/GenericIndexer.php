@@ -10,7 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
@@ -51,7 +51,7 @@ class GenericIndexer implements IndexerInterface
 
     private SearchClient $algoliaClient;
 
-    private IndexableResourceCollection $indexableResourceCollection;
+    private IndexableResourceRegistry $indexableResourceRegistry;
 
     private DoctrineFilterInterface $doctrineFilter;
 
@@ -81,7 +81,7 @@ class GenericIndexer implements IndexerInterface
         MessageBusInterface $commandBus,
         NormalizerInterface $normalizer,
         SearchClient $algoliaClient,
-        IndexableResourceCollection $indexableResourceCollection,
+        IndexableResourceRegistry $indexableResourceRegistry,
         DoctrineFilterInterface $doctrineFilter,
         ObjectFilterInterface $objectFilter,
         string $supports,
@@ -96,7 +96,7 @@ class GenericIndexer implements IndexerInterface
         $this->commandBus = $commandBus;
         $this->normalizer = $normalizer;
         $this->algoliaClient = $algoliaClient;
-        $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexableResourceRegistry = $indexableResourceRegistry;
         $this->doctrineFilter = $doctrineFilter;
         $this->objectFilter = $objectFilter;
         $this->supports = $supports;
@@ -294,7 +294,7 @@ class GenericIndexer implements IndexerInterface
                     throw new \InvalidArgumentException('When the $resources array are scalars, the $indexableResource must be set');
                 }
 
-                $indexableResource = $this->indexableResourceCollection->getByClass($resource);
+                $indexableResource = $this->indexableResourceRegistry->getByClass($resource);
             }
 
             $id = $resource instanceof ResourceInterface ? $resource->getId() : $resource;

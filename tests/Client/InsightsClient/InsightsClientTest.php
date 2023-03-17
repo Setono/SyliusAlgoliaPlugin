@@ -7,7 +7,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\EventContext;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
@@ -52,7 +52,8 @@ final class InsightsClientTest extends AbstractClientTestCase
         $order->addItem($item);
 
         $indexableResource = new IndexableResource('sylius.product', Product::class, ProductDocument::class);
-        $indexableResourceCollection = new IndexableResourceCollection($indexableResource);
+        $indexableResourceRegistry = new IndexableResourceRegistry();
+        $indexableResourceRegistry->add($indexableResource);
 
         $indexNameResolver = new class() implements IndexNameResolverInterface {
             public function resolve($resource): string
@@ -116,7 +117,7 @@ final class InsightsClientTest extends AbstractClientTestCase
 
         $client = new InsightsClient(
             $this->algoliaInsightsClient,
-            $indexableResourceCollection,
+            $indexableResourceRegistry,
             $indexScopeProvider,
             $indexNameResolver,
             $normalizer

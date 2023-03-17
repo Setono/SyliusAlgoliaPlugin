@@ -7,7 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\Provider\Recommendations;
 use Doctrine\Persistence\ManagerRegistry;
 use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClientInterface;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -19,15 +19,15 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
 
     private RecommendationsClientInterface $recommendationsClient;
 
-    private IndexableResourceCollection $indexableResourceCollection;
+    private IndexableResourceRegistry $indexableResourceRegistry;
 
     public function __construct(
         RecommendationsClientInterface $recommendationsClient,
-        IndexableResourceCollection $indexableResourceCollection,
+        IndexableResourceRegistry $indexableResourceRegistry,
         ManagerRegistry $managerRegistry
     ) {
         $this->recommendationsClient = $recommendationsClient;
-        $this->indexableResourceCollection = $indexableResourceCollection;
+        $this->indexableResourceRegistry = $indexableResourceRegistry;
         $this->managerRegistry = $managerRegistry;
     }
 
@@ -55,7 +55,7 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
         foreach ($documents as $document) {
             Assert::notNull($document->resourceName);
 
-            $indexableResource = $this->indexableResourceCollection->getByName($document->resourceName);
+            $indexableResource = $this->indexableResourceRegistry->getByName($document->resourceName);
 
             $repository = $this->getRepository($indexableResource->resourceClass);
             $entity = $repository->findOneBy([
