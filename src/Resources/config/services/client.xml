@@ -41,7 +41,6 @@
                  class="Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClient">
             <argument type="service" id="setono_sylius_algolia.recommend_client"/>
             <argument type="service" id="serializer"/>
-            <argument>%setono_sylius_algolia.document.product%</argument>
         </service>
     </services>
 </container>

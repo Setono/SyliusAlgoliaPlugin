@@ -16,17 +16,12 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
     private DenormalizerInterface $denormalizer;
 
-    /** @var class-string<Document> */
-    private string $productDocumentClass;
-
-    /**
-     * @param class-string<Document> $productDocumentClass
-     */
-    public function __construct(RecommendClient $recommendClient, DenormalizerInterface $denormalizer, string $productDocumentClass)
-    {
+    public function __construct(
+        RecommendClient $recommendClient,
+        DenormalizerInterface $denormalizer
+    ) {
         $this->recommendClient = $recommendClient;
         $this->denormalizer = $denormalizer;
-        $this->productDocumentClass = $productDocumentClass;
     }
 
     public function getFrequentlyBoughtTogether($product, string $index, int $max = 10): iterable
@@ -50,7 +45,14 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
             /** @var mixed $hit */
             foreach ($result['hits'] as $hit) {
-                yield $this->denormalizer->denormalize($hit, $this->productDocumentClass, 'json');
+                Assert::isArray($hit);
+                Assert::keyExists($hit, 'documentClass');
+                Assert::string($hit['documentClass']);
+
+                $document = $this->denormalizer->denormalize($hit, $hit['documentClass'], 'json');
+                Assert::isInstanceOf($document, Document::class);
+
+                yield $document;
             }
         }
     }
@@ -76,7 +78,14 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
             /** @var mixed $hit */
             foreach ($result['hits'] as $hit) {
-                yield $this->denormalizer->denormalize($hit, $this->productDocumentClass, 'json');
+                Assert::isArray($hit);
+                Assert::keyExists($hit, 'documentClass');
+                Assert::string($hit['documentClass']);
+
+                $document = $this->denormalizer->denormalize($hit, $hit['documentClass'], 'json');
+                Assert::isInstanceOf($document, Document::class);
+
+                yield $document;
             }
         }
     }

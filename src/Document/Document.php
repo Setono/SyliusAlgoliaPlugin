@@ -27,10 +27,19 @@ abstract class Document
     public ?string $resourceName = null;
 
     /**
+     * This is the FQCN for the document being sent to Algolia. This makes it a lot easier to deserialize the JSON
+     * when it comes back from Algolia since we know which class to deserialize to
+     *
+     * @var class-string<Document>
+     */
+    public string $documentClass;
+
+    /**
      * This allows us to always be able to instantiate an extending class without worrying about constructor arguments
      */
     final public function __construct()
     {
+        $this->documentClass = static::class;
     }
 
     /**
