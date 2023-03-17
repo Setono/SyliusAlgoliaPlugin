@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <parameters>
-        <parameter key="setono_sylius_algolia.document.product">Setono\SyliusAlgoliaPlugin\Document\Product</parameter>
-    </parameters>
     <services>
         <service id="setono_sylius_algolia.indexer.product"
                  class="Setono\SyliusAlgoliaPlugin\Indexer\GenericIndexer">
@@ -19,7 +16,6 @@
             <argument type="service" id="setono_sylius_algolia.filter.doctrine.composite"/>
             <argument type="service" id="setono_sylius_algolia.filter.object.composite"/>
             <argument>%sylius.model.product.class%</argument>
-            <argument>%setono_sylius_algolia.document.product%</argument>
 
             <tag name="setono_sylius_algolia.indexer"/>
         </service>

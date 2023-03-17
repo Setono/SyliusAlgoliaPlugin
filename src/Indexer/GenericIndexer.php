@@ -36,40 +36,36 @@ class GenericIndexer implements IndexerInterface
 
     use SupportsResourceAwareTrait;
 
-    private IndexScopeProviderInterface $indexScopeProvider;
+    protected IndexScopeProviderInterface $indexScopeProvider;
 
-    private IndexNameResolverInterface $indexNameResolver;
+    protected IndexNameResolverInterface $indexNameResolver;
 
     /** @var ResourceBasedRegistryInterface<IndexSettingsProviderInterface> */
-    private ResourceBasedRegistryInterface $indexSettingsProviderRegistry;
+    protected ResourceBasedRegistryInterface $indexSettingsProviderRegistry;
 
     protected DataMapperInterface $dataMapper;
 
-    private MessageBusInterface $commandBus;
+    protected MessageBusInterface $commandBus;
 
-    private NormalizerInterface $normalizer;
+    protected NormalizerInterface $normalizer;
 
-    private SearchClient $algoliaClient;
+    protected SearchClient $algoliaClient;
 
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    protected IndexableResourceRegistry $indexableResourceRegistry;
 
-    private DoctrineFilterInterface $doctrineFilter;
+    protected DoctrineFilterInterface $doctrineFilter;
 
-    private ObjectFilterInterface $objectFilter;
+    protected ObjectFilterInterface $objectFilter;
 
     /** @var class-string<ResourceInterface> */
-    private string $supports;
-
-    /** @var class-string<Document> */
-    private string $documentClass;
+    protected string $supports;
 
     /** @var list<string> */
-    private array $normalizationGroups;
+    protected array $normalizationGroups;
 
     /**
      * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
-     * @param class-string<Document> $documentClass
      * @param list<string> $normalizationGroups
      */
     public function __construct(
@@ -85,7 +81,6 @@ class GenericIndexer implements IndexerInterface
         DoctrineFilterInterface $doctrineFilter,
         ObjectFilterInterface $objectFilter,
         string $supports,
-        string $documentClass,
         array $normalizationGroups = ['setono:sylius-algolia:document']
     ) {
         $this->managerRegistry = $managerRegistry;
@@ -100,7 +95,6 @@ class GenericIndexer implements IndexerInterface
         $this->doctrineFilter = $doctrineFilter;
         $this->objectFilter = $objectFilter;
         $this->supports = $supports;
-        $this->documentClass = $documentClass;
         $this->normalizationGroups = $normalizationGroups;
     }
 
@@ -135,7 +129,7 @@ class GenericIndexer implements IndexerInterface
             );
 
             foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
-                $doc = $this->createNewDocument();
+                $doc = new $indexableResource->documentClass();
                 $this->dataMapper->map($obj, $doc, $indexScope);
 
                 $this->objectFilter->filter($obj, $doc, $indexScope);
@@ -232,7 +226,7 @@ class GenericIndexer implements IndexerInterface
      *
      * @return list<ResourceInterface&ObjectIdAwareInterface>
      */
-    private function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
+    protected function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
     {
         $manager = $this->getManager($resourceClass);
 
@@ -258,7 +252,7 @@ class GenericIndexer implements IndexerInterface
         return $res;
     }
 
-    private function prepareIndex(string $indexName, SettingsInterface $indexSettings): SearchIndex
+    protected function prepareIndex(string $indexName, SettingsInterface $indexSettings): SearchIndex
     {
         $index = $this->algoliaClient->initIndex($indexName);
         Assert::isInstanceOf($index, SearchIndex::class);
@@ -278,7 +272,7 @@ class GenericIndexer implements IndexerInterface
      *
      * @return array{0: non-empty-list<scalar>, 1: IndexableResource}
      */
-    private function processInput(array $resources, ?IndexableResource $indexableResource): array
+    protected function processInput(array $resources, ?IndexableResource $indexableResource): array
     {
         $processed = [];
         foreach ($resources as $resource) {
@@ -304,14 +298,6 @@ class GenericIndexer implements IndexerInterface
         }
 
         return [$processed, $indexableResource];
-    }
-
-    protected function createNewDocument(): Document
-    {
-        $obj = new $this->documentClass();
-        Assert::isInstanceOf($obj, Document::class);
-
-        return $obj;
     }
 
     protected function getSupportingType(): string
