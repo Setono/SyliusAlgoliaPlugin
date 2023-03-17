@@ -14,7 +14,7 @@ trait SupportsResourceAwareTrait
      */
     public function supports($resource): bool
     {
-        $class = $resource instanceof IndexableResource ? $resource->className : get_class($resource);
+        $class = $resource instanceof IndexableResource ? $resource->resourceClass : get_class($resource);
 
         return is_a($class, $this->getSupportingType(), true);
     }

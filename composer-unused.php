@@ -7,7 +7,8 @@ use ComposerUnused\ComposerUnused\Configuration\NamedFilter;
 
 return static function (Configuration $config): Configuration {
     return $config
-        // used because we use the services it provides
+        // used because we use the services they provide
         ->addNamedFilter(NamedFilter::fromString('symfony/web-link'))
+        ->addNamedFilter(NamedFilter::fromString('setono/client-id-bundle'))
     ;
 };

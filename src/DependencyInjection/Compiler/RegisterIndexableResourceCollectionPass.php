@@ -24,12 +24,12 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
         /** @var array<string, array{classes: array<string, class-string>}> $resources */
         $resources = $container->getParameter('sylius.resources');
 
-        /** @var array<string, array> $indexableResources */
+        /** @var array<string, array{document: class-string}> $indexableResources */
         $indexableResources = $container->getParameter('setono_sylius_algolia.indexable_resources');
 
         $definition = new Definition(IndexableResourceCollection::class);
 
-        foreach (array_keys($indexableResources) as $indexableResourceName) {
+        foreach ($indexableResources as $indexableResourceName => $indexableResource) {
             Assert::keyExists($resources, $indexableResourceName, sprintf('The resource "%s" is not a valid Sylius resource', $indexableResourceName));
 
             $resourceClass = $resources[$indexableResourceName]['classes']['model'];
@@ -40,7 +40,7 @@ final class RegisterIndexableResourceCollectionPass implements CompilerPassInter
             $indexableResourceDefinitionId = sprintf('setono_sylius_algolia.indexable_resource.%s', $indexableResourceName);
             $container->setDefinition(
                 $indexableResourceDefinitionId,
-                new Definition(IndexableResource::class, [$indexableResourceName, $resourceClass])
+                new Definition(IndexableResource::class, [$indexableResourceName, $resourceClass, $indexableResource['document']])
             );
 
             $definition->addArgument(new Reference($indexableResourceDefinitionId));

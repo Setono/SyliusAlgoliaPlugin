@@ -29,7 +29,7 @@ final class ProductIndexSettingsProvider extends AbstractIndexSettingsProvider
 
     public function supports($resource): bool
     {
-        $class = $resource instanceof IndexableResource ? $resource->className : get_class($resource);
+        $class = $resource instanceof IndexableResource ? $resource->resourceClass : get_class($resource);
 
         return is_a($class, ProductInterface::class, true);
     }
