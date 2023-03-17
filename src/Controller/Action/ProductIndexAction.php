@@ -7,7 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\Controller\Action;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
-use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;

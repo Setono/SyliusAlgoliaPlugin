@@ -15,7 +15,6 @@ use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
 use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInterface;
-use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
@@ -24,6 +23,7 @@ use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInter
 use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
 use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareTrait;
 use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Settings\SettingsInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Messenger\MessageBusInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\IndexNameResolver;
+namespace Setono\SyliusAlgoliaPlugin\Resolver;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
