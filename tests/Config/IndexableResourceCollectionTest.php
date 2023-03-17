@@ -7,6 +7,8 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Config;
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceCollection;
+use Setono\SyliusAlgoliaPlugin\Document\Document;
+use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Sylius\Component\Core\Model\Channel;
 use Sylius\Component\Core\Model\Image;
 use Sylius\Component\Core\Model\Product;
@@ -23,8 +25,8 @@ final class IndexableResourceCollectionTest extends TestCase
      */
     public function it_adds_on_instantiation(): void
     {
-        $indexableResource1 = new IndexableResource('sylius.product', Product::class);
-        $indexableResource2 = new IndexableResource('sylius.taxon', Taxon::class);
+        $indexableResource1 = new IndexableResource('sylius.product', Product::class, ProductDocument::class);
+        $indexableResource2 = new IndexableResource('sylius.taxon', Taxon::class, TaxonDocument::class);
 
         $collection = new IndexableResourceCollection($indexableResource1, $indexableResource2);
         $resources = iterator_to_array($collection->getIterator());
@@ -114,13 +116,21 @@ final class IndexableResourceCollectionTest extends TestCase
     private function getCollection(): IndexableResourceCollection
     {
         return new IndexableResourceCollection(
-            new IndexableResource('sylius.product', Product::class),
-            new IndexableResource('sylius.taxon', Taxon::class),
-            new IndexableResource('sylius.channel', Channel::class)
+            new IndexableResource('sylius.product', Product::class, ProductDocument::class),
+            new IndexableResource('sylius.taxon', Taxon::class, TaxonDocument::class),
+            new IndexableResource('sylius.channel', Channel::class, ChannelDocument::class)
         );
     }
 }
 
 class ChildChannel extends Channel
+{
+}
+
+class TaxonDocument extends Document
+{
+}
+
+class ChannelDocument extends Document
 {
 }

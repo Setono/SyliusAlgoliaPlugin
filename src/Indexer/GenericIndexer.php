@@ -134,7 +134,7 @@ class GenericIndexer implements IndexerInterface
                 $indexSettingsProvider->getSettings($indexScope)
             );
 
-            foreach ($this->getObjects($entities, $indexableResource->className, $indexScope) as $obj) {
+            foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
                 $doc = $this->createNewDocument();
                 $this->dataMapper->map($obj, $doc, $indexScope);
 
@@ -170,7 +170,7 @@ class GenericIndexer implements IndexerInterface
                 $indexSettingsProvider->getSettings($indexScope)
             );
 
-            foreach ($this->getObjects($entities, $indexableResource->className, $indexScope) as $obj) {
+            foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
                 $index->deleteObject($obj->getObjectId());
             }
         }
@@ -181,10 +181,10 @@ class GenericIndexer implements IndexerInterface
      */
     protected function getIdBatches(IndexableResource $indexableResource): \Generator
     {
-        $manager = $this->getManager($indexableResource->className);
+        $manager = $this->getManager($indexableResource->resourceClass);
 
         /** @var IndexableResourceRepositoryInterface|ObjectRepository $repository */
-        $repository = $manager->getRepository($indexableResource->className);
+        $repository = $manager->getRepository($indexableResource->resourceClass);
         Assert::isInstanceOf($repository, IndexableResourceRepositoryInterface::class, sprintf(
             'The repository for resource "%s" must implement the interface %s',
             $indexableResource->name,

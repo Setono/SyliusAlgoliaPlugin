@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DependencyInjection;
 
+use Setono\SyliusAlgoliaPlugin\Document\Product;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -32,6 +33,11 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('resource')
                                 ->info('The name of the sylius resource, i.e. "sylius.product"')
                                 ->cannotBeEmpty()
+                            ->end()
+                            ->scalarNode('document')
+                                ->info(sprintf('The fully qualified class name for the document that the resource will be mapped to in Algolia. If you are indexing products this could be %s.', Product::class))
+                                ->cannotBeEmpty()
+                                ->isRequired()
                             ->end()
                         ->end()
                     ->end()

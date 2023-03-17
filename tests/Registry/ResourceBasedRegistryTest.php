@@ -6,6 +6,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Registry;
 
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry;
 use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareInterface;
 use Sylius\Component\Core\Model\Product;
@@ -29,7 +30,7 @@ final class ResourceBasedRegistryTest extends TestCase
         $registry->register($service1, 0);
         $registry->register($service2, 1); // this service has higher priority
 
-        $service = $registry->get(new IndexableResource('sylius.product', Product::class));
+        $service = $registry->get(new IndexableResource('sylius.product', Product::class, ProductDocument::class));
 
         self::assertSame($service2, $service);
     }

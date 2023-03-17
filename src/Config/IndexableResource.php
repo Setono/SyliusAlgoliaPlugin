@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
+use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Sylius\Component\Resource\Model\CodeAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
@@ -26,27 +27,44 @@ final class IndexableResource
      *
      * @var class-string<ResourceInterface&CodeAwareInterface>
      */
-    public string $className;
+    public string $resourceClass;
 
     /**
-     * @param class-string<ResourceInterface> $className
+     * This is the FQCN for the document that the above resource will be mapped to in Algolia.
+     * If you are indexing products this could be Setono\SyliusAlgoliaPlugin\Document\Product
+     *
+     * @var class-string<Document>
      */
-    public function __construct(string $name, string $className)
+    public string $documentClass;
+
+    /**
+     * @param class-string<ResourceInterface&CodeAwareInterface> $resourceClass
+     * @param class-string<Document> $documentClass
+     */
+    public function __construct(string $name, string $resourceClass, string $documentClass)
     {
         Assert::stringNotEmpty($name);
-        if (!is_a($className, ResourceInterface::class, true)) {
+        if (!is_a($resourceClass, ResourceInterface::class, true)) {
             throw new \InvalidArgumentException(sprintf(
-                'The class %s MUST be an instance of %s',
-                $className,
+                'The resource class %s MUST be an instance of %s',
+                $resourceClass,
                 ResourceInterface::class
             ));
         }
 
-        if (!is_a($className, CodeAwareInterface::class, true)) {
+        if (!is_a($resourceClass, CodeAwareInterface::class, true)) {
             throw new \InvalidArgumentException(sprintf(
-                'The class %s MUST be an instance of %s',
-                $className,
+                'The resource class %s MUST be an instance of %s',
+                $resourceClass,
                 CodeAwareInterface::class
+            ));
+        }
+
+        if (!is_a($documentClass, Document::class, true)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The document class %s MUST be an instance of %s',
+                $documentClass,
+                Document::class
             ));
         }
 
@@ -58,11 +76,12 @@ final class IndexableResource
             $this->shortName = substr($name, $pos + 1);
         }
 
-        $this->className = $className;
+        $this->resourceClass = $resourceClass;
+        $this->documentClass = $documentClass;
     }
 
     public function __toString(): string
     {
-        return sprintf('%s (%s)', $this->name, $this->className);
+        return sprintf('%s (%s)', $this->name, $this->resourceClass);
     }
 }

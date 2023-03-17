@@ -34,7 +34,7 @@ final class RecommendationsProviderTest extends TestCase
         $recommendedProduct = new Product();
         $recommendedProduct->setCode('product1');
 
-        $indexableResourceCollection = new IndexableResourceCollection(new IndexableResource('sylius.product', Product::class));
+        $indexableResourceCollection = new IndexableResourceCollection(new IndexableResource('sylius.product', Product::class, ProductDocument::class));
 
         $repository = $this->prophesize(ObjectRepository::class);
         $repository->findOneBy([

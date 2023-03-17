@@ -57,7 +57,7 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
 
             $indexableResource = $this->indexableResourceCollection->getByName($document->resourceName);
 
-            $repository = $this->getRepository($indexableResource->className);
+            $repository = $this->getRepository($indexableResource->resourceClass);
             $entity = $repository->findOneBy([
                 'code' => $document->code,
             ]);

@@ -32,4 +32,23 @@ abstract class Document
     final public function __construct()
     {
     }
+
+    /**
+     * MUST return an array indexed by the attribute name and the sort order as the value, e.g.
+     *
+     * [
+     *   'price' => 'asc',
+     *   'createdAt => 'desc'
+     * ]
+     *
+     * NOTE that this is not applied to the customRanking setting, but is used to create replica indexes where the
+     * ranking setting will match your sorting. The above example would result in two replica indexes with
+     * ranking as asc(price) and desc(createdAt) respectively
+     *
+     * @return array<string, string>
+     */
+    public static function getSortableAttributes(): array
+    {
+        return [];
+    }
 }

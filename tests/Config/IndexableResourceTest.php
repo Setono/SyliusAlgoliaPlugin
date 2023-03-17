@@ -6,6 +6,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Config;
 
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Sylius\Component\Core\Model\Product;
 
 /**
@@ -18,10 +19,10 @@ final class IndexableResourceTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $indexableResource = new IndexableResource('sylius.product', Product::class);
+        $indexableResource = new IndexableResource('sylius.product', Product::class, ProductDocument::class);
 
         self::assertSame('sylius.product', $indexableResource->name);
-        self::assertSame(Product::class, $indexableResource->className);
+        self::assertSame(Product::class, $indexableResource->resourceClass);
         self::assertSame('product', $indexableResource->shortName);
     }
 
@@ -33,7 +34,7 @@ final class IndexableResourceTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         /** @psalm-suppress InvalidArgument */
-        new IndexableResource('test', NotImplementingResource::class);
+        new IndexableResource('test', NotImplementingResource::class, ProductDocument::class);
     }
 }
 

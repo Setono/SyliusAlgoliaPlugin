@@ -78,6 +78,6 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
 
     public function supports(IndexableResource $indexableResource): bool
     {
-        return is_a($indexableResource->className, ProductInterface::class, true);
+        return is_a($indexableResource->resourceClass, ProductInterface::class, true);
     }
 }
