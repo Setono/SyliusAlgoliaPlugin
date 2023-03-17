@@ -7,7 +7,7 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Config;
 use PHPUnit\Framework\TestCase;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
-use Sylius\Component\Core\Model\Product;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
 
 /**
  * @covers \Setono\SyliusAlgoliaPlugin\Config\IndexableResource

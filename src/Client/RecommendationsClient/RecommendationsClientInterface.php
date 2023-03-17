@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient;
 
 use Setono\SyliusAlgoliaPlugin\Document\Document;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 
 interface RecommendationsClientInterface
 {
     /**
      * This method will return a list of documents that are frequently bought together with the given $product
      *
-     * @param int|string|ObjectIdAwareInterface $product
+     * @param int|string|IndexableInterface $product
      *
      * @return iterable<Document>
      */
@@ -21,7 +21,7 @@ interface RecommendationsClientInterface
     /**
      * This method will return a list of documents that are related to the given $product
      *
-     * @param int|string|ObjectIdAwareInterface $product
+     * @param int|string|IndexableInterface $product
      *
      * @return iterable<Document>
      */

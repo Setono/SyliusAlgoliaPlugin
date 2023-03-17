@@ -6,7 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient;
 
 use Algolia\AlgoliaSearch\RecommendClient;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Webmozart\Assert\Assert;
 
@@ -26,7 +26,7 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
     public function getFrequentlyBoughtTogether($product, string $index, int $max = 10): iterable
     {
-        if ($product instanceof ObjectIdAwareInterface) {
+        if ($product instanceof IndexableInterface) {
             $product = $product->getObjectId();
         }
         Assert::scalar($product);
@@ -59,7 +59,7 @@ final class RecommendationsClient implements RecommendationsClientInterface
 
     public function getRelatedProducts($product, string $index, int $max = 10): iterable
     {
-        if ($product instanceof ObjectIdAwareInterface) {
+        if ($product instanceof IndexableInterface) {
             $product = $product->getObjectId();
         }
         Assert::scalar($product);

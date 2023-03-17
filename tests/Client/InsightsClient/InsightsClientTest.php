@@ -11,15 +11,13 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareTrait;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderItem;
-use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductVariant;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Tests\Setono\SyliusAlgoliaPlugin\Client\AbstractClientTestCase;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
 
 /**
  * @covers \Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient
@@ -35,9 +33,7 @@ final class InsightsClientTest extends AbstractClientTestCase
             $this->markTestSkipped('This test only works on live application atm.');
         }
 
-        $product = new class() extends Product implements ObjectIdAwareInterface {
-            use ObjectIdAwareTrait;
-
+        $product = new class() extends Product {
             public function getId(): int
             {
                 return 1;

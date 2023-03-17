@@ -9,11 +9,11 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
-use Sylius\Component\Core\Model\Channel;
 use Sylius\Component\Core\Model\Image;
-use Sylius\Component\Core\Model\Product;
 use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Core\Model\Taxon;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Channel;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Taxon;
 
 /**
  * @covers \Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry

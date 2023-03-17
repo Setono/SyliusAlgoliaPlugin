@@ -9,7 +9,7 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry;
 use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareInterface;
-use Sylius\Component\Core\Model\Product;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
 
 /**
  * @covers \Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry
