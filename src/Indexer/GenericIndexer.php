@@ -18,7 +18,7 @@ use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInte
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
@@ -224,7 +224,7 @@ class GenericIndexer implements IndexerInterface
      * @param class-string<ResourceInterface> $resourceClass
      * @psalm-suppress InvalidReturnType,MoreSpecificReturnType
      *
-     * @return list<ResourceInterface&ObjectIdAwareInterface>
+     * @return list<IndexableInterface>
      */
     protected function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
     {

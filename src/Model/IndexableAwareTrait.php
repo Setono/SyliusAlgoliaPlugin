@@ -9,7 +9,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 /**
  * @mixin ResourceInterface
  */
-trait ObjectIdAwareTrait
+trait IndexableAwareTrait
 {
     /**
      * This will be the object id in Algolia. This MUST be unique across the index therefore if you mix

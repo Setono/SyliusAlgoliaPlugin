@@ -7,7 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 use Algolia\AlgoliaSearch\InsightsClient as AlgoliaInsightsClient;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\IndexNameResolver\IndexNameResolverInterface;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -46,13 +46,13 @@ final class InsightsClient implements InsightsClientInterface
         $objectIds = [];
         $product = null;
         foreach ($order->getItems() as $item) {
-            /** @var ObjectIdAwareInterface|null $product */
+            /** @var IndexableInterface|null $product */
             $product = $item->getProduct();
             if (null === $product) {
                 continue;
             }
 
-            Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+            Assert::isInstanceOf($product, IndexableInterface::class);
 
             $objectIds[] = $product->getObjectId();
         }
@@ -91,7 +91,7 @@ final class InsightsClient implements InsightsClientInterface
         ProductInterface $product,
         EventContext $eventContext
     ): void {
-        Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+        Assert::isInstanceOf($product, IndexableInterface::class);
 
         $indexableResource = $this->indexableResourceRegistry->getByClass($product);
 

@@ -67,9 +67,9 @@ $bundles = [
 ];
 ```
 
-### Implement the `ObjectIdAwareInterface` in your configured indexable resources
+### Implement the `IndexableInterface` in your configured indexable resources
 
-You have to implement the `Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface` in the indexable resources you
+You have to implement the `Setono\SyliusAlgoliaPlugin\Model\IndexableInterface` in the indexable resources you
 configured in `setono_sylius_algolia.indexable_resources`. In a typical Sylius application for the `Product` entity
 it could look like this:
 
@@ -80,17 +80,17 @@ declare(strict_types=1);
 namespace App\Entity\Product;
 
 use Doctrine\ORM\Mapping as ORM;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareTrait;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableAwareTrait;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Component\Core\Model\Product as BaseProduct;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="sylius_product")
  */
-class Product extends BaseProduct implements ObjectIdAwareInterface
+class Product extends BaseProduct implements IndexableInterface
 {
-    use ObjectIdAwareTrait;
+    use IndexableAwareTrait;
 }
 ```
 

@@ -41,13 +41,8 @@
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
-        <service id="setono_sylius_algolia.data_mapper.object_id"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ObjectIdDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
-        </service>
-
-        <service id="setono_sylius_algolia.data_mapper.code"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\CodeDataMapper">
+        <service id="setono_sylius_algolia.data_mapper.indexable"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\IndexableDataMapper">
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 

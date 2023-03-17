@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Model;
 
-interface ObjectIdAwareInterface
+use Sylius\Component\Resource\Model\CodeAwareInterface;
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+interface IndexableInterface extends ResourceInterface, CodeAwareInterface
 {
     /**
      * This will be the object id in Algolia. This MUST be unique across the index therefore if you mix

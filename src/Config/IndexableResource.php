@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
 use Setono\SyliusAlgoliaPlugin\Document\Document;
-use Sylius\Component\Resource\Model\CodeAwareInterface;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Webmozart\Assert\Assert;
 
 final class IndexableResource
@@ -25,7 +24,7 @@ final class IndexableResource
     /**
      * This is the FQCN for the Sylius resource, i.e. for sylius.product this could be App\Entity\Product\Product
      *
-     * @var class-string<ResourceInterface&CodeAwareInterface>
+     * @var class-string<IndexableInterface>
      */
     public string $resourceClass;
 
@@ -38,25 +37,17 @@ final class IndexableResource
     public string $documentClass;
 
     /**
-     * @param class-string<ResourceInterface&CodeAwareInterface> $resourceClass
+     * @param class-string<IndexableInterface> $resourceClass
      * @param class-string<Document> $documentClass
      */
     public function __construct(string $name, string $resourceClass, string $documentClass)
     {
         Assert::stringNotEmpty($name);
-        if (!is_a($resourceClass, ResourceInterface::class, true)) {
+        if (!is_a($resourceClass, IndexableInterface::class, true)) {
             throw new \InvalidArgumentException(sprintf(
                 'The resource class %s MUST be an instance of %s',
                 $resourceClass,
-                ResourceInterface::class
-            ));
-        }
-
-        if (!is_a($resourceClass, CodeAwareInterface::class, true)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The resource class %s MUST be an instance of %s',
-                $resourceClass,
-                CodeAwareInterface::class
+                IndexableInterface::class
             ));
         }
 

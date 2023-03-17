@@ -13,10 +13,8 @@ use Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClien
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareTrait;
 use Setono\SyliusAlgoliaPlugin\Provider\Recommendations\RecommendationsProvider;
-use Sylius\Component\Core\Model\Product as BaseProduct;
+use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
 
 /**
  * @covers \Setono\SyliusAlgoliaPlugin\Provider\Recommendations\RecommendationsProvider
@@ -54,11 +52,6 @@ final class RecommendationsProviderTest extends TestCase
         self::assertCount(1, $recommendedProducts);
         self::assertSame($recommendedProduct, $recommendedProducts[0]);
     }
-}
-
-final class Product extends BaseProduct implements ObjectIdAwareInterface
-{
-    use ObjectIdAwareTrait;
 }
 
 final class RecommendationsClient implements RecommendationsClientInterface

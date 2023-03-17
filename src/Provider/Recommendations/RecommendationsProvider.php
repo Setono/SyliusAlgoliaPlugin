@@ -9,7 +9,7 @@ use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClientInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Webmozart\Assert\Assert;
 
@@ -33,14 +33,14 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
 
     public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): \Generator
     {
-        Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+        Assert::isInstanceOf($product, IndexableInterface::class);
 
         return $this->getRecommendations($this->recommendationsClient->getFrequentlyBoughtTogether($product, $index, $max));
     }
 
     public function getRelatedProducts(ProductInterface $product, string $index, int $max = 10): \Generator
     {
-        Assert::isInstanceOf($product, ObjectIdAwareInterface::class);
+        Assert::isInstanceOf($product, IndexableInterface::class);
 
         return $this->getRecommendations($this->recommendationsClient->getRelatedProducts($product, $index, $max));
     }

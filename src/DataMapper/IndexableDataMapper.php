@@ -6,12 +6,16 @@ namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Setono\SyliusAlgoliaPlugin\Model\ObjectIdAwareInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Webmozart\Assert\Assert;
 
-final class ObjectIdDataMapper implements DataMapperInterface
+final class IndexableDataMapper implements DataMapperInterface
 {
+    /**
+     * @param ResourceInterface|IndexableInterface $source
+     * @param array<string, mixed> $context
+     */
     public function map(
         ResourceInterface $source,
         Document $target,
@@ -24,10 +28,11 @@ final class ObjectIdDataMapper implements DataMapperInterface
         );
 
         $target->objectId = $source->getObjectId();
+        $target->code = $source->getCode();
     }
 
     /**
-     * @psalm-assert-if-true ObjectIdAwareInterface $source
+     * @psalm-assert-if-true IndexableInterface $source
      */
     public function supports(
         ResourceInterface $source,
@@ -35,6 +40,6 @@ final class ObjectIdDataMapper implements DataMapperInterface
         IndexScope $indexScope,
         array $context = []
     ): bool {
-        return $source instanceof ObjectIdAwareInterface;
+        return $source instanceof IndexableInterface;
     }
 }
