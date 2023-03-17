@@ -22,7 +22,8 @@ imports:
 
 setono_sylius_algolia:
     indexable_resources:
-        sylius.product: ~
+        sylius.product:
+            document: 'Setono\SyliusAlgoliaPlugin\Document\Product'
     app_id: '%env(ALGOLIA_APP_ID)%'
     search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
     admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
@@ -32,9 +33,9 @@ In your `.env.local` add your parameters:
 
 ```dotenv
 ###> setono/sylius-algolia-plugin ###
-ALGOLIA_APP_ID=YOUR APPLICATION ID
-ALGOLIA_ADMIN_API_KEY=YOUR ADMIN API KEY
-ALGOLIA_SEARCH_ONLY_API_KEY=YOUR SEARCH ONLY KEY
+ALGOLIA_APP_ID=YOUR_APPLICATION_ID
+ALGOLIA_ADMIN_API_KEY=YOUR_ADMIN_API_KEY
+ALGOLIA_SEARCH_ONLY_API_KEY=YOUR_SEARCH_ONLY_KEY
 ###< setono/sylius-algolia-plugin ###
 ```
 
