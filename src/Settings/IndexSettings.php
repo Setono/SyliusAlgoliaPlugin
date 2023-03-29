@@ -28,7 +28,26 @@ class IndexSettings extends Settings
     /** @var list<string> */
     public array $customRanking = [];
 
-    /** @var list<string> */
+    /**
+     * If you add replica indexes they will automatically be prefixed with the primary index name
+     *
+     * Example:
+     * Your primary index name: prod__products__fashion_web__en_us__usd
+     * You set $replicas = ['a_b']
+     *
+     * When sent to Algolia, $replicas will be ['prod__products__fashion_web__en_us__usd__a_b']
+     *
+     * ----
+     *
+     * Also notice that if you have implemented \Setono\SyliusAlgoliaPlugin\Document\Document::getSortableAttributes()
+     * the $replicas will be automatically populated by the plugin. You don't have to do anything.
+     *
+     * Example:
+     * Your document's getSortableAttributes method returns ['price' => 'asc'] then the $replicas will automatically
+     * be set to [prod__products__fashion_web__en_us__usd__price_asc]
+     *
+     * @var list<string|SortableReplica>
+     */
     public array $replicas = [];
 
     public ?int $paginationLimitedTo = null;

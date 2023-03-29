@@ -26,12 +26,14 @@ final class SortByResolver implements SortByResolverInterface
     {
         $indexName = $this->indexNameResolver->resolve($indexableResource);
 
-        $sortBys = [];
+        $sortBys = [
+            new SortBy('setono_sylius_algolia.ui.sort_by.relevance', $indexName),
+        ];
 
         foreach ($indexableResource->documentClass::getSortableAttributes() as $attribute => $order) {
             $sortBys[] = new SortBy(
                 sprintf('setono_sylius_algolia.ui.sort_by.%s_%s', $attribute, $order),
-                $this->replicaIndexNameResolver->resolveFromIndexNameWithSortableAttribute(
+                $this->replicaIndexNameResolver->resolveFromIndexNameAndSortableAttribute(
                     $indexName,
                     $attribute,
                     $order

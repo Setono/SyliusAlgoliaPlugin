@@ -6,5 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndex;
 
 interface ReplicaIndexNameResolverInterface
 {
-    public function resolveFromIndexNameWithSortableAttribute(string $indexName, string $attribute, string $order): string;
+    public function resolveFromIndexNameAndExistingValue(string $indexName, string $existingValue): string;
+
+    public function resolveFromIndexNameAndSortableAttribute(string $indexName, string $attribute, string $order): string;
 }

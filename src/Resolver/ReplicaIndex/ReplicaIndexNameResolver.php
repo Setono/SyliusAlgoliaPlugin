@@ -6,11 +6,16 @@ namespace Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndex;
 
 final class ReplicaIndexNameResolver implements ReplicaIndexNameResolverInterface
 {
-    public function resolveFromIndexNameWithSortableAttribute(
+    public function resolveFromIndexNameAndExistingValue(string $indexName, string $existingValue): string
+    {
+        return sprintf('%s__%s', $indexName, $existingValue);
+    }
+
+    public function resolveFromIndexNameAndSortableAttribute(
         string $indexName,
         string $attribute,
         string $order
     ): string {
-        return sprintf('%s__%s__%s', $indexName, $attribute, $order);
+        return sprintf('%s__%s_%s', $indexName, $attribute, $order);
     }
 }

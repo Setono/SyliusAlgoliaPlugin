@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Settings;
 
+use Webmozart\Assert\Assert;
+
 /**
  * This class holds all the shared settings between the scope 'settings' and 'search'
  *
@@ -11,7 +13,7 @@ namespace Setono\SyliusAlgoliaPlugin\Settings;
  *
  * See https://www.algolia.com/doc/api-reference/settings-api-parameters/
  */
-class Settings implements SettingsInterface
+class Settings
 {
     /** @var list<string> */
     public array $attributesToRetrieve = [];
@@ -102,18 +104,67 @@ class Settings implements SettingsInterface
 
     public ?bool $attributeCriteriaComputedByMinProximity = null;
 
+    final public function __construct()
+    {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
-        return array_filter((array) $this, static function ($val): bool {
-            if (null === $val) {
-                return false;
+        /** @var array<string, mixed> $result */
+        $result = [];
+
+        /**
+         * @var string $property
+         * @var mixed $value
+         */
+        foreach ((array) $this as $property => $value) {
+            if (null === $value || [] === $value) {
+                continue;
             }
 
-            if ([] === $val) {
-                return false;
+            if (is_array($value)) {
+                /** @var mixed $item */
+                foreach ($value as &$item) {
+                    if (is_object($item) && method_exists($item, '__toString')) {
+                        $item = (string) $item;
+                    }
+                }
+                unset($item);
             }
 
-            return true;
-        });
+            /** @psalm-suppress MixedAssignment */
+            $result[$property] = $value;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $settings
+     *
+     * @return static
+     */
+    public static function fromArray(array $settings): self
+    {
+        $obj = new static();
+
+        /**
+         * @var string $key
+         * @var mixed $value
+         */
+        foreach ($settings as $key => $value) {
+            Assert::string($key);
+
+            if (null === $value || !property_exists(self::class, $key)) {
+                continue;
+            }
+
+            $obj->{$key} = $value;
+        }
+
+        return $obj;
     }
 }
