@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexSettings;
 
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareInterface;
-use Setono\SyliusAlgoliaPlugin\Settings\SettingsInterface;
+use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
 
-interface IndexSettingsProviderInterface extends SupportsResourceAwareInterface
+interface IndexSettingsProviderInterface
 {
-    public function getSettings(IndexScope $indexScope): SettingsInterface;
+    public function getSettings(IndexScope $indexScope): IndexSettings;
 }

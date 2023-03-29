@@ -20,7 +20,6 @@ use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
-use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
 use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareTrait;
 use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
@@ -40,8 +39,7 @@ class GenericIndexer implements IndexerInterface
 
     protected IndexNameResolverInterface $indexNameResolver;
 
-    /** @var ResourceBasedRegistryInterface<IndexSettingsProviderInterface> */
-    protected ResourceBasedRegistryInterface $indexSettingsProviderRegistry;
+    protected IndexSettingsProviderInterface $indexSettingsProvider;
 
     protected DataMapperInterface $dataMapper;
 
@@ -64,7 +62,6 @@ class GenericIndexer implements IndexerInterface
     protected array $normalizationGroups;
 
     /**
-     * @param ResourceBasedRegistryInterface<IndexSettingsProviderInterface> $indexSettingsProviderRegistry
      * @param class-string<ResourceInterface> $supports
      * @param list<string> $normalizationGroups
      */
@@ -72,7 +69,7 @@ class GenericIndexer implements IndexerInterface
         ManagerRegistry $managerRegistry,
         IndexScopeProviderInterface $indexScopeProviderRegistry,
         IndexNameResolverInterface $indexNameResolver,
-        ResourceBasedRegistryInterface $indexSettingsProviderRegistry,
+        IndexSettingsProviderInterface $indexSettingsProvider,
         DataMapperInterface $dataMapper,
         MessageBusInterface $commandBus,
         NormalizerInterface $normalizer,
@@ -86,7 +83,7 @@ class GenericIndexer implements IndexerInterface
         $this->managerRegistry = $managerRegistry;
         $this->indexScopeProvider = $indexScopeProviderRegistry;
         $this->indexNameResolver = $indexNameResolver;
-        $this->indexSettingsProviderRegistry = $indexSettingsProviderRegistry;
+        $this->indexSettingsProvider = $indexSettingsProvider;
         $this->dataMapper = $dataMapper;
         $this->commandBus = $commandBus;
         $this->normalizer = $normalizer;
@@ -118,14 +115,11 @@ class GenericIndexer implements IndexerInterface
 
         [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
 
-        /** @var IndexSettingsProviderInterface $indexSettingsProvider */
-        $indexSettingsProvider = $this->indexSettingsProviderRegistry->get($indexableResource);
-
         // process input
         foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
             $index = $this->prepareIndex(
                 $this->indexNameResolver->resolveFromIndexScope($indexScope),
-                $indexSettingsProvider->getSettings($indexScope)
+                $this->indexSettingsProvider->getSettings($indexScope)
             );
 
             foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
@@ -154,14 +148,11 @@ class GenericIndexer implements IndexerInterface
 
         [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
 
-        /** @var IndexSettingsProviderInterface $indexSettingsProvider */
-        $indexSettingsProvider = $this->indexSettingsProviderRegistry->get($indexableResource);
-
         // process input
         foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
             $index = $this->prepareIndex(
                 $this->indexNameResolver->resolveFromIndexScope($indexScope),
-                $indexSettingsProvider->getSettings($indexScope)
+                $this->indexSettingsProvider->getSettings($indexScope)
             );
 
             foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
@@ -257,7 +248,7 @@ class GenericIndexer implements IndexerInterface
         $index = $this->algoliaClient->initIndex($indexName);
         Assert::isInstanceOf($index, SearchIndex::class);
 
-        // if the index already exists we don't want to override any settings
+        // if the index already exists we don't want to override any settings. TODO why don't we want that? Should we make a command that resets settings to application defaults?
         if ($index->exists()) {
             return $index;
         }

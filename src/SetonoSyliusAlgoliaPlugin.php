@@ -49,11 +49,6 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
 
         // Register services in registries
         $container->addCompilerPass(new RegisterResourceBasedServicesPass(
-            'setono_sylius_algolia.registry.index_settings_provider',
-            'setono_sylius_algolia.index_settings_provider'
-        ));
-
-        $container->addCompilerPass(new RegisterResourceBasedServicesPass(
             'setono_sylius_algolia.registry.indexer',
             'setono_sylius_algolia.indexer'
         ));
