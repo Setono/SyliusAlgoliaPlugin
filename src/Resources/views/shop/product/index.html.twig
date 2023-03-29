@@ -3,6 +3,7 @@
 {% block content %}
     {{ sylius_template_event('sylius.shop.taxon.header', {'taxon': taxon}) }}
 
+    <div id="sort-by" data-value="{{ sortBy|json_encode }}"></div>
     <div id="price-slider"></div>
     <div id="hits"></div>
 {% endblock %}
