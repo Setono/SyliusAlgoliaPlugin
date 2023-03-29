@@ -8,7 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface;
 use Setono\SyliusAlgoliaPlugin\Message\Command\RemoveEntity;
-use Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistryInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -17,16 +16,12 @@ final class RemoveEntityHandler implements MessageHandlerInterface
 {
     use ORMManagerTrait;
 
-    /** @var ResourceBasedRegistryInterface<IndexerInterface> */
-    private ResourceBasedRegistryInterface $indexerRegistry;
+    private IndexerInterface $indexer;
 
-    /**
-     * @param ResourceBasedRegistryInterface<IndexerInterface> $indexerRegistry
-     */
-    public function __construct(ManagerRegistry $managerRegistry, ResourceBasedRegistryInterface $indexerRegistry)
+    public function __construct(ManagerRegistry $managerRegistry, IndexerInterface $indexer)
     {
         $this->managerRegistry = $managerRegistry;
-        $this->indexerRegistry = $indexerRegistry;
+        $this->indexer = $indexer;
     }
 
     public function __invoke(RemoveEntity $message): void
@@ -43,12 +38,9 @@ final class RemoveEntityHandler implements MessageHandlerInterface
         }
 
         try {
-            /** @var IndexerInterface $indexer */
-            $indexer = $this->indexerRegistry->get($obj);
+            $this->indexer->removeEntity($obj);
         } catch (\InvalidArgumentException $e) {
             throw new UnrecoverableMessageHandlingException($e->getMessage(), 0, $e);
         }
-
-        $indexer->removeEntity($obj);
     }
 }

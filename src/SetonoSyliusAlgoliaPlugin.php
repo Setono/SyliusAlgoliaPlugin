@@ -6,7 +6,6 @@ namespace Setono\SyliusAlgoliaPlugin;
 
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterCompositeServicesPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourcesPass;
-use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterResourceBasedServicesPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -47,9 +46,8 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
             'setono_sylius_algolia.object_filter'
         ));
 
-        // Register services in registries
-        $container->addCompilerPass(new RegisterResourceBasedServicesPass(
-            'setono_sylius_algolia.registry.indexer',
+        $container->addCompilerPass(new RegisterCompositeServicesPass(
+            'setono_sylius_algolia.indexer.composite',
             'setono_sylius_algolia.indexer'
         ));
     }
