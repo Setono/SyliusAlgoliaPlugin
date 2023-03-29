@@ -31,9 +31,8 @@
         </service>
 
         <!-- Index settings providers -->
-        <service id="setono_sylius_algolia.provider.index_settings.product"
-                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\ProductIndexSettingsProvider">
-            <tag name="setono_sylius_algolia.index_settings_provider"/>
+        <service id="setono_sylius_algolia.provider.index_settings"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProvider">
         </service>
 
         <!-- Recommendations providers -->

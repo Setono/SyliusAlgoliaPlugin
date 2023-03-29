@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Document;
 
+use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
+use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
+
 /**
  * Should not be final, so it's easier for plugin users to extend it and add more properties
  */
@@ -64,5 +67,28 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
     {
         $this->imageUrls[] = $imageUrl;
         $this->primaryImageUrl = $this->imageUrls[0];
+    }
+
+    public static function getDefaultSettings(IndexScope $indexScope): IndexSettings
+    {
+        $settings = parent::getDefaultSettings($indexScope);
+
+        $settings->searchableAttributes = [
+            'code', // usually the code is the SKU. This gives users the opportunity to search directly for a SKU if they know it
+            'name',
+        ];
+
+        $settings->attributesForFaceting = [
+            'filterOnly(taxonCodes)', // this allows us to show products in a given taxon. This is used in product lists
+            'onSale', // this will allow users to filter for products that are on sale
+            'price', // this will allow you to create a price slider
+        ];
+
+        $settings->customRanking = ['desc(createdAt)'];
+        $settings->disablePrefixOnAttributes = ['code'];
+        $settings->ignorePlurals = true;
+        $settings->allowTyposOnNumericTokens = false;
+
+        return $settings;
     }
 }

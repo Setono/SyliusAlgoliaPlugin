@@ -6,10 +6,5 @@
                  class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
             <argument>\Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface</argument>
         </service>
-
-        <service id="setono_sylius_algolia.registry.index_settings_provider"
-                 class="Setono\SyliusAlgoliaPlugin\Registry\ResourceBasedRegistry">
-            <argument>\Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface</argument>
-        </service>
     </services>
 </container>
