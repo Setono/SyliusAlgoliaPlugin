@@ -10,11 +10,11 @@ final class IndexEntities implements CommandInterface
 {
     public IndexableResource $resource;
 
-    /** @var list<scalar> */
+    /** @var non-empty-list<scalar> */
     public array $ids;
 
     /**
-     * @param list<scalar> $ids
+     * @param non-empty-list<scalar> $ids
      */
     public function __construct(IndexableResource $resource, array $ids)
     {

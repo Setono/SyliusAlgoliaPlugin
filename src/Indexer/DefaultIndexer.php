@@ -20,7 +20,6 @@ use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
-use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareTrait;
 use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Settings\SettingsInterface;
@@ -29,11 +28,12 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Webmozart\Assert\Assert;
 
-class GenericIndexer implements IndexerInterface
+/**
+ * NOT final as this makes it easier to override and extend this indexer
+ */
+class DefaultIndexer implements IndexerInterface
 {
     use ORMManagerTrait;
-
-    use SupportsResourceAwareTrait;
 
     protected IndexScopeProviderInterface $indexScopeProvider;
 
@@ -55,14 +55,10 @@ class GenericIndexer implements IndexerInterface
 
     protected ObjectFilterInterface $objectFilter;
 
-    /** @var class-string<ResourceInterface> */
-    protected string $supports;
-
     /** @var list<string> */
     protected array $normalizationGroups;
 
     /**
-     * @param class-string<ResourceInterface> $supports
      * @param list<string> $normalizationGroups
      */
     public function __construct(
@@ -77,7 +73,6 @@ class GenericIndexer implements IndexerInterface
         IndexableResourceRegistry $indexableResourceRegistry,
         DoctrineFilterInterface $doctrineFilter,
         ObjectFilterInterface $objectFilter,
-        string $supports,
         array $normalizationGroups = ['setono:sylius-algolia:document']
     ) {
         $this->managerRegistry = $managerRegistry;
@@ -91,7 +86,6 @@ class GenericIndexer implements IndexerInterface
         $this->indexableResourceRegistry = $indexableResourceRegistry;
         $this->doctrineFilter = $doctrineFilter;
         $this->objectFilter = $objectFilter;
-        $this->supports = $supports;
         $this->normalizationGroups = $normalizationGroups;
     }
 
@@ -109,6 +103,7 @@ class GenericIndexer implements IndexerInterface
 
     public function indexEntities(array $entities, IndexableResource $indexableResource = null): void
     {
+        /** @psalm-suppress TypeDoesNotContainType,DocblockTypeContradiction */
         if ([] === $entities) {
             return;
         }
@@ -142,6 +137,7 @@ class GenericIndexer implements IndexerInterface
 
     public function removeEntities(array $entities, IndexableResource $indexableResource = null): void
     {
+        /** @psalm-suppress TypeDoesNotContainType,DocblockTypeContradiction */
         if ([] === $entities) {
             return;
         }
@@ -162,7 +158,7 @@ class GenericIndexer implements IndexerInterface
     }
 
     /**
-     * @return \Generator<list<scalar>>
+     * @return \Generator<int, non-empty-list<scalar>>
      */
     protected function getIdBatches(IndexableResource $indexableResource): \Generator
     {
@@ -185,29 +181,29 @@ class GenericIndexer implements IndexerInterface
 
         $this->doctrineFilter->apply($qb, $indexableResource);
 
-        do {
+        while (true) {
             $qb->setFirstResult($firstResult);
 
             $ids = $qb->getQuery()->getResult();
             Assert::isArray($ids);
 
-            /**
-             * @var list<scalar> $ids
-             *
-             * @psalm-suppress MissingClosureReturnType
-             */
-            $ids = array_map(static function (array $elm) {
+            $ids = array_values(array_map(/** @return scalar */static function (array $elm) {
                 Assert::keyExists($elm, 'id');
+                Assert::scalar($elm['id']);
 
                 return $elm['id'];
-            }, $ids);
+            }, $ids));
+
+            if ([] === $ids) {
+                break;
+            }
 
             yield $ids;
 
             $firstResult += $maxResults;
 
             $manager->clear();
-        } while ([] !== $ids);
+        }
     }
 
     /**
@@ -291,8 +287,8 @@ class GenericIndexer implements IndexerInterface
         return [$processed, $indexableResource];
     }
 
-    protected function getSupportingType(): string
+    public function supports($resource): bool
     {
-        return $this->supports;
+        return true;
     }
 }

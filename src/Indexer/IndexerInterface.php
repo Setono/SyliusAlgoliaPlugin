@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Indexer;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Registry\SupportsResourceAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
-interface IndexerInterface extends SupportsResourceAwareInterface
+interface IndexerInterface
 {
     /**
      * This method will index all entities for a given indexable resource
@@ -25,7 +24,10 @@ interface IndexerInterface extends SupportsResourceAwareInterface
      *
      * If the entities are scalars, then the $indexableResource must be set (else we can't deduce the entity type)
      *
-     * @param list<scalar|ResourceInterface> $entities
+     * @template T of IndexableResource|null
+     *
+     * @param T $indexableResource
+     * @param (T is null ? non-empty-list<ResourceInterface> : non-empty-list<scalar|ResourceInterface>) $entities
      */
     public function indexEntities(array $entities, IndexableResource $indexableResource = null): void;
 
@@ -36,7 +38,15 @@ interface IndexerInterface extends SupportsResourceAwareInterface
      *
      * If the entities are scalars, then the $indexableResource must be set (else we can't deduce the entity type)
      *
-     * @param list<scalar|ResourceInterface> $entities
+     * @template T of IndexableResource|null
+     *
+     * @param T $indexableResource
+     * @param (T is null ? non-empty-list<ResourceInterface> : non-empty-list<scalar|ResourceInterface>) $entities
      */
     public function removeEntities(array $entities, IndexableResource $indexableResource = null): void;
+
+    /**
+     * @param ResourceInterface|IndexableResource $resource
+     */
+    public function supports($resource): bool;
 }
