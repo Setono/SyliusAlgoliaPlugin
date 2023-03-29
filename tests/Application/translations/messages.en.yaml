@@ -1,0 +1,4 @@
+setono_sylius_algolia:
+    ui:
+        sort_by:
+            price_asc: Price ascending

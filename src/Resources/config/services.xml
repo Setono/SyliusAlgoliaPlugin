@@ -15,6 +15,7 @@
         <import resource="services/provider.xml"/>
         <import resource="services/registry.xml"/>
         <import resource="services/renderer.xml"/>
+        <import resource="services/resolver.xml"/>
         <import resource="services/twig.xml"/>
         <import resource="services/url_generator.xml"/>
     </imports>

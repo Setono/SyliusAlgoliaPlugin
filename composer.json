@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": ">=7.4",
+        "ext-json": "*",
         "algolia/algoliasearch-client-php": "^3.3",
         "doctrine/event-manager": "^1.2",
         "doctrine/orm": "^2.14",
@@ -38,6 +39,7 @@
         "symfony/routing": "^5.4 || ^6.0",
         "symfony/serializer": "^5.4 || ^6.0",
         "symfony/string": "^5.4 || ^6.0",
+        "symfony/translation-contracts": "^1.1 || ^2.5 || ^3.2",
         "symfony/validator": "^5.4 || ^6.0",
         "symfony/web-link": "^5.4 || ^6.0",
         "twig/twig": "^2.15 || ^3.0",

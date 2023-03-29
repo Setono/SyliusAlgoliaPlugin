@@ -8,11 +8,14 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortBy;
+use Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortByResolverInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final class ProductIndexAction
@@ -29,13 +32,19 @@ final class ProductIndexAction
 
     private IndexableResourceRegistry $indexableResourceRegistry;
 
+    private SortByResolverInterface $sortByResolver;
+
+    private TranslatorInterface $translator;
+
     public function __construct(
         Environment $twig,
         IndexNameResolverInterface $indexNameResolver,
         TaxonRepositoryInterface $taxonRepository,
         LocaleContextInterface $localeContext,
         EventDispatcherInterface $eventDispatcher,
-        IndexableResourceRegistry $indexableResourceRegistry
+        IndexableResourceRegistry $indexableResourceRegistry,
+        SortByResolverInterface $sortByResolver,
+        TranslatorInterface $translator
     ) {
         $this->twig = $twig;
         $this->indexNameResolver = $indexNameResolver;
@@ -43,6 +52,8 @@ final class ProductIndexAction
         $this->localeContext = $localeContext;
         $this->eventDispatcher = $eventDispatcher;
         $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->sortByResolver = $sortByResolver;
+        $this->translator = $translator;
     }
 
     public function __invoke(string $slug): Response
@@ -69,6 +80,15 @@ final class ProductIndexAction
         $response = new Response($this->twig->render('@SetonoSyliusAlgoliaPlugin/shop/product/index.html.twig', [
             'index' => $index,
             'taxon' => $taxon,
+            // todo translate this in the resolver?
+            'sortBy' => array_map(
+                function (SortBy $sortBy) {
+                    $sortBy->label = $this->translator->trans($sortBy->label);
+
+                    return $sortBy;
+                },
+                $this->sortByResolver->resolveFromIndexableResource($indexableResource)
+            ),
         ]));
 
         $event = new ProductIndexEvent($response, $index, $taxon, $slug, $locale);
