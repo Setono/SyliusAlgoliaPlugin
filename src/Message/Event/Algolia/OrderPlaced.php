@@ -12,12 +12,12 @@ final class OrderPlaced extends BaseEvent
     /**
      * This is the order id
      *
-     * @var string|int
+     * @var mixed
      */
     public $order;
 
     /**
-     * @param int|string|OrderInterface $order
+     * @param mixed|OrderInterface $order
      */
     public function __construct(EventContext $eventContext, $order)
     {
@@ -26,10 +26,6 @@ final class OrderPlaced extends BaseEvent
         if ($order instanceof OrderInterface) {
             /** @var mixed $order */
             $order = $order->getId();
-        }
-
-        if (!is_string($order) && !is_int($order)) {
-            throw new \InvalidArgumentException(sprintf('The order must be an instance of int|string|%s', OrderInterface::class));
         }
 
         $this->order = $order;
