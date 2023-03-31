@@ -27,11 +27,11 @@ final class ProductDetailPageViewedHandler implements MessageHandlerInterface
 
     public function __invoke(ProductDetailPageViewed $message): void
     {
-        $product = $this->productRepository->find($message->productId);
+        $product = $this->productRepository->find($message->product);
         if (null === $product) {
             throw new UnrecoverableMessageHandlingException(sprintf(
                 'The product with id %s does not exist',
-                (string) $message->productId
+                (string) $message->product
             ));
         }
 

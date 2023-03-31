@@ -27,11 +27,11 @@ final class OrderPlacedHandler implements MessageHandlerInterface
 
     public function __invoke(OrderPlaced $message): void
     {
-        $order = $this->orderRepository->find($message->orderId);
+        $order = $this->orderRepository->find($message->order);
         if (null === $order) {
             throw new UnrecoverableMessageHandlingException(sprintf(
                 'The order with id %s does not exist',
-                (string) $message->orderId
+                (string) $message->order
             ));
         }
 
