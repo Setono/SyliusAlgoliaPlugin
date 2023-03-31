@@ -43,7 +43,7 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
 
     public ?float $originalPrice = null;
 
-    public function isOnSale(): bool
+    public function onSale(): bool
     {
         return null !== $this->originalPrice && null !== $this->price && $this->price < $this->originalPrice;
     }

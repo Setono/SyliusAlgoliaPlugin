@@ -40,7 +40,7 @@
             <group>setono:sylius-algolia:document</group>
         </attribute>
 
-        <attribute name="isOnSale" serialized-name="onSale">
+        <attribute name="onSale">
             <group>setono:sylius-algolia:document</group>
         </attribute>
     </class>
