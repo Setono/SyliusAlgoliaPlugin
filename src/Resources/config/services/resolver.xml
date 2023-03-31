@@ -3,7 +3,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="setono_sylius_algolia.resolver.replica_index_name"
-                 class="Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndex\ReplicaIndexNameResolver"/>
+                 class="Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName\ReplicaIndexNameResolver"/>
 
         <service id="setono_sylius_algolia.resolver.sort_by"
                  class="Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortByResolver">

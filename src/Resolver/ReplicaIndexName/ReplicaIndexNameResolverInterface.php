@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndex;
+namespace Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName;
 
 interface ReplicaIndexNameResolverInterface
 {
