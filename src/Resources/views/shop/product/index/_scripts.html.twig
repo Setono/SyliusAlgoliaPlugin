@@ -49,6 +49,9 @@
                 'container': '#on-sale',
                 'attribute': 'onSale'
             }),
+            instantsearch.widgets.pagination({
+                'container': '#pagination'
+            }),
             instantsearch.widgets.configure({
                 filters: `taxonCodes:${algoliaTaxon}`
             })
