@@ -17,3 +17,10 @@ sylius_product:
             classes:
                 repository: Tests\Setono\SyliusAlgoliaPlugin\Application\Repository\ProductRepository
                 model: Tests\Setono\SyliusAlgoliaPlugin\Application\Entity\Product
+                
+sylius_taxonomy:
+    resources:
+        taxon:
+            classes:
+                repository: Tests\Setono\SyliusAlgoliaPlugin\Application\Repository\TaxonRepository
+                model: Tests\Setono\SyliusAlgoliaPlugin\Application\Entity\Taxon

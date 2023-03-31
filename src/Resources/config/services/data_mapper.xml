@@ -8,11 +8,6 @@
         <service id="setono_sylius_algolia.data_mapper.composite"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\CompositeDataMapper"/>
 
-        <service id="setono_sylius_algolia.data_mapper.product"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\ProductDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
-        </service>
-
         <service id="setono_sylius_algolia.data_mapper.url"
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\UrlDataMapper">
             <argument type="service" id="setono_sylius_algolia.url_generator.composite"/>
@@ -24,6 +19,24 @@
                  class="Setono\SyliusAlgoliaPlugin\DataMapper\ImageUrlsDataMapper">
             <argument type="service" id="liip_imagine.cache.manager"/>
 
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
+
+        <service id="setono_sylius_algolia.data_mapper.indexable"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\IndexableDataMapper">
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
+
+        <service id="setono_sylius_algolia.data_mapper.resource_name"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ResourceNameDataMapper">
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
+
+            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
+        </service>
+
+        <!-- Product data mappers -->
+        <service id="setono_sylius_algolia.data_mapper.product"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Product\ProductDataMapper">
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
@@ -41,15 +54,9 @@
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
 
-        <service id="setono_sylius_algolia.data_mapper.indexable"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\IndexableDataMapper">
-            <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
-        </service>
-
-        <service id="setono_sylius_algolia.data_mapper.resource_name"
-                 class="Setono\SyliusAlgoliaPlugin\DataMapper\ResourceNameDataMapper">
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
-
+        <!-- Taxon data mappers -->
+        <service id="setono_sylius_algolia.data_mapper.taxon"
+                 class="Setono\SyliusAlgoliaPlugin\DataMapper\Taxon\TaxonDataMapper">
             <tag name="setono_sylius_algolia.data_mapper" priority="100"/>
         </service>
     </services>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<serializer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns="http://symfony.com/schema/dic/serializer-mapping"
+            xsi:schemaLocation="http://symfony.com/schema/dic/serializer-mapping https://symfony.com/schema/dic/serializer-mapping/serializer-mapping-1.0.xsd"
+>
+    <class name="Setono\SyliusAlgoliaPlugin\Document\Taxon">
+        <attribute name="name">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+
+        <attribute name="url">
+            <group>setono:sylius-algolia:document</group>
+        </attribute>
+    </class>
+</serializer>

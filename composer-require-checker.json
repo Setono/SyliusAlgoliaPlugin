@@ -24,6 +24,7 @@
         "Sylius\\Component\\Core\\Model\\ImagesAwareInterface",
         "Sylius\\Component\\Core\\Model\\OrderInterface",
         "Sylius\\Component\\Core\\Model\\ProductInterface",
+        "Sylius\\Component\\Core\\Model\\TaxonInterface",
         "Sylius\\Component\\Core\\Repository\\OrderRepositoryInterface",
         "Sylius\\Component\\Core\\Repository\\ProductRepositoryInterface",
         "Sylius\\Component\\Currency\\Context\\CurrencyContextInterface",

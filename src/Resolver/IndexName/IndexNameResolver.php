@@ -50,8 +50,16 @@ final class IndexNameResolver implements IndexNameResolverInterface
 
     public function resolveFromIndexScope(IndexScope $indexScope): string
     {
+        $pluralName = $this->inflector->pluralize($indexScope->resource->shortName)[0];
+
+        // this is a workaround specifically for the taxon because the inflector will return 'taxa' which doesn't make sense
+        if ('taxon' === $indexScope->resource->shortName) {
+            $pluralName = 'taxons';
+        }
+
         $str = null !== $this->prefix ? ($this->prefix . '__') : '';
-        $str .= $this->environment . '__' . $this->inflector->pluralize($indexScope->resource->shortName)[0];
+
+        $str .= $this->environment . '__' . $pluralName;
 
         if (null !== $indexScope->channelCode) {
             $str .= '__' . $indexScope->channelCode;

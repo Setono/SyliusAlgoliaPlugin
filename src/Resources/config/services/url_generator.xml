@@ -14,5 +14,12 @@
 
             <tag name="setono_sylius_algolia.url_generator"/>
         </service>
+
+        <service id="setono_sylius_algolia.url_generator.taxon"
+                 class="Setono\SyliusAlgoliaPlugin\UrlGenerator\TaxonUrlGenerator">
+            <argument type="service" id="router"/>
+
+            <tag name="setono_sylius_algolia.url_generator"/>
+        </service>
     </services>
 </container>

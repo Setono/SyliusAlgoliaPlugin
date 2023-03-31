@@ -30,6 +30,14 @@
             <tag name="setono_sylius_algolia.index_scope_provider"/>
         </service>
 
+        <service id="setono_sylius_algolia.provider.index_scope.taxon"
+                 class="Setono\SyliusAlgoliaPlugin\Provider\IndexScope\TaxonIndexScopeProvider">
+            <argument type="service" id="sylius.repository.locale"/>
+            <argument type="service" id="sylius.context.locale"/>
+
+            <tag name="setono_sylius_algolia.index_scope_provider"/>
+        </service>
+
         <!-- Index settings providers -->
         <service id="setono_sylius_algolia.provider.index_settings"
                  class="Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProvider">

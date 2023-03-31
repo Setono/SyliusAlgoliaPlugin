@@ -35,7 +35,12 @@ final class RegisterIndexableResourcesPass implements CompilerPassInterface
 
             $resourceClass = $resources[$indexableResourceName]['classes']['model'];
             if (!is_a($resourceClass, IndexableInterface::class, true)) {
-                throw new \InvalidArgumentException(sprintf('Resources configured as indexable resources must implement the %s', IndexableInterface::class));
+                throw new \InvalidArgumentException(sprintf(
+                    'The resource %s (%s) does not implement the %s',
+                    $indexableResourceName,
+                    $resourceClass,
+                    IndexableInterface::class
+                ));
             }
 
             $indexableResourceDefinitionId = sprintf('setono_sylius_algolia.indexable_resource.%s', $indexableResourceName);
