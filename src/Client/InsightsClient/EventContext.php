@@ -12,6 +12,8 @@ use Webmozart\Assert\Assert;
  * Intentionally not final to make it easier for developers to extend it with their own context.
  *
  * This class represent the values (context) that were present when the event happened
+ *
+ * This class must be serializable since it's included in event messages sent to the message bus
  */
 class EventContext
 {
