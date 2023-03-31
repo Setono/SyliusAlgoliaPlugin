@@ -9,7 +9,9 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 interface SortByResolverInterface
 {
     /**
+     * @param string|null $locale if null, the locale context will be used to retrieve the locale
+     *
      * @return list<SortBy>
      */
-    public function resolveFromIndexableResource(IndexableResource $indexableResource): array;
+    public function resolveFromIndexableResource(IndexableResource $indexableResource, string $locale = null): array;
 }

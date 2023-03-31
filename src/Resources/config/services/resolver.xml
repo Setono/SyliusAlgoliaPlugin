@@ -17,6 +17,8 @@
                  class="Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortByResolver">
             <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
             <argument type="service" id="setono_sylius_algolia.resolver.replica_index_name"/>
+            <argument type="service" id="translator"/>
+            <argument type="service" id="sylius.context.locale"/>
         </service>
     </services>
 </container>
