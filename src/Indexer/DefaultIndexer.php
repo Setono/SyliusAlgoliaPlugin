@@ -22,7 +22,8 @@ use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
-use Setono\SyliusAlgoliaPlugin\Settings\SettingsInterface;
+use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
+use Setono\SyliusAlgoliaPlugin\Settings\SortableReplica;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -239,17 +240,40 @@ class DefaultIndexer implements IndexerInterface
         return $res;
     }
 
-    protected function prepareIndex(string $indexName, SettingsInterface $indexSettings): SearchIndex
+    protected function prepareIndex(string $indexName, IndexSettings $indexSettings): SearchIndex
     {
         $index = $this->algoliaClient->initIndex($indexName);
         Assert::isInstanceOf($index, SearchIndex::class);
 
-        // if the index already exists we don't want to override any settings. TODO why don't we want that? Should we make a command that resets settings to application defaults?
+        // if the index already exists we don't want to override any settings. TODO why don't we want that? Should we make a command that resets settings to application defaults? We also need to take into account the forwardToReplicas option below
         if ($index->exists()) {
             return $index;
         }
 
-        $index->setSettings($indexSettings->toArray());
+        /**
+         * this first call will create the index (including any replica indexes)
+         *
+         * @psalm-suppress MixedMethodCall
+         */
+        $index->setSettings($indexSettings->toArray())->wait();
+
+        /** @psalm-suppress MixedAssignment,MixedArrayAccess */
+        $indexSettings->ranking = $index->getSettings()['ranking'];
+
+        foreach ($indexSettings->replicas as $replica) {
+            if (!$replica instanceof SortableReplica) {
+                continue;
+            }
+
+            $replicaIndex = $this->algoliaClient->initIndex($replica->name);
+            Assert::isInstanceOf($replicaIndex, SearchIndex::class);
+
+            $replicaIndexSettings = clone $indexSettings;
+            $replicaIndexSettings->replicas = [];
+            array_unshift($replicaIndexSettings->ranking, $replica->ranking());
+
+            $replicaIndex->setSettings($replicaIndexSettings->toArray());
+        }
 
         return $index;
     }
