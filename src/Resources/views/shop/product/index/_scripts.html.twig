@@ -45,6 +45,10 @@
                 container: '#price-slider',
                 attribute: 'price',
             }),
+            instantsearch.widgets.toggleRefinement({
+                'container': '#on-sale',
+                'attribute': 'onSale'
+            }),
             instantsearch.widgets.configure({
                 filters: `taxonCodes:${algoliaTaxon}`
             })
