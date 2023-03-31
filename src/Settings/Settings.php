@@ -142,6 +142,19 @@ class Settings
         return $result;
     }
 
+    public function toJson(bool $throw = true): string
+    {
+        try {
+            return json_encode($this->toArray(), \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            if ($throw) {
+                throw $e;
+            }
+
+            return '{}';
+        }
+    }
+
     /**
      * @param array<string, mixed> $settings
      *

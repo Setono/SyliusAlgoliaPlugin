@@ -15,10 +15,17 @@
             <tag name="twig.runtime"/>
         </service>
 
-        <service id="setono_sylius_algolia.twig.algolia_variable"
-                 class="Setono\SyliusAlgoliaPlugin\Twig\AlgoliaVariable">
+        <!-- Variable related services -->
+        <service id="setono_sylius_algolia.twig.variable"
+                 class="Setono\SyliusAlgoliaPlugin\Twig\Variable">
+            <argument type="service" id="setono_sylius_algolia.twig.variable.autocomplete"/>
             <argument>%setono_sylius_algolia.credentials.app_id%</argument>
             <argument>%setono_sylius_algolia.credentials.search_only_api_key%</argument>
+        </service>
+
+        <service id="setono_sylius_algolia.twig.variable.autocomplete"
+                 class="Setono\SyliusAlgoliaPlugin\Twig\Variable\Autocomplete">
+            <argument type="service" id="setono_sylius_algolia.javascript.autocomplete.sources_resolver"/>
         </service>
     </services>
 </container>

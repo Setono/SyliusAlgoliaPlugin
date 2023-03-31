@@ -1,0 +1,64 @@
+<script src="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-js@1.8.3/dist/umd/index.production.js"></script>
+<script>
+    const { autocomplete, getAlgoliaResults } = window['@algolia/autocomplete-js'];
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    function sources(searchClient, query) {
+        const sources = [];
+        {# @var source \Setono\SyliusAlgoliaPlugin\Javascript\Autocomplete\Source #}
+        {% for source in algolia.autocomplete.sources %}
+        sources.push({
+            sourceId: '{{ source.sourceId }}',
+            getItems() {
+                return getAlgoliaResults({
+                    searchClient,
+                    queries: [
+                        {
+                            indexName: '{{ source.indexName }}',
+                            query,
+                            params: {{ source.params.toJson(false) }},
+                        },
+                    ],
+                });
+            },
+            templates: {
+                noResults() {
+                    return 'No results.';
+                },
+                item({ item, html }) {
+                    return html`<div class="list-group-item-action">${item.name}</div>`;
+                },
+            },
+        });
+        {% endfor %}
+
+        return sources;
+    }
+
+    function init() {
+        const searchClient = algoliasearch('{{ algolia.appId }}', '{{ algolia.searchOnlyApiKey }}');
+
+        autocomplete({
+            container: '#autocomplete',
+            placeholder: 'Search for products',
+            getSources({ query }) {
+                return sources(searchClient, query);
+            },
+        });
+    }
+</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@algolia/autocomplete-theme-classic">
+<style>
+    .aa-Panel {
+        z-index: 999;
+    }
+</style>
+
+<div class="column">
+    <div id="autocomplete"></div>
+</div>
