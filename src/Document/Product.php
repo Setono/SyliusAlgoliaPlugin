@@ -43,9 +43,31 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
 
     public ?float $originalPrice = null;
 
+    /**
+     * This attribute will allow you to create a filter like 'Only show products on sale'
+     */
     public function onSale(): bool
     {
         return null !== $this->originalPrice && null !== $this->price && $this->price < $this->originalPrice;
+    }
+
+    /**
+     * This attribute will allow you to create a replica index sorted by biggest discount just like this:
+     *
+     * public static function getSortableAttributes(): array
+     * {
+     *     return [
+     *         'discount' => 'desc',
+     *     ];
+     * }
+     */
+    public function discount(): float
+    {
+        if (null === $this->originalPrice || null === $this->price) {
+            return 0;
+        }
+
+        return max(0, $this->originalPrice - $this->price);
     }
 
     public function setUrl(string $url): void
@@ -80,11 +102,11 @@ class Product extends Document implements UrlAwareInterface, ImageUrlsAwareInter
 
         $settings->attributesForFaceting = [
             'filterOnly(taxonCodes)', // this allows us to show products in a given taxon. This is used in product lists
-            'onSale', // this will allow users to filter for products that are on sale
+            'filterOnly(onSale)', // this will allow users to filter for products that are on sale
             'price', // this will allow you to create a price slider
         ];
 
-        $settings->customRanking = ['desc(createdAt)'];
+        $settings->customRanking = ['desc(createdAt)']; // if nothing else applies, your newest products will be at the top of the product list
         $settings->disablePrefixOnAttributes = ['code'];
         $settings->ignorePlurals = true;
         $settings->allowTyposOnNumericTokens = false;
