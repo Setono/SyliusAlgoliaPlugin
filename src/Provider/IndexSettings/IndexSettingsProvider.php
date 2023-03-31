@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexSettings;
 
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName\ReplicaIndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
 use Setono\SyliusAlgoliaPlugin\Settings\SortableReplica;

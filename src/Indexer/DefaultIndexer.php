@@ -21,7 +21,7 @@ use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
 use Setono\SyliusAlgoliaPlugin\Settings\SortableReplica;
 use Sylius\Component\Resource\Model\ResourceInterface;

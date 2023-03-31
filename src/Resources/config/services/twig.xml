@@ -10,7 +10,7 @@
         <service id="setono.sylius_algolia.twig.runtime"
                  class="Setono\SyliusAlgoliaPlugin\Twig\Runtime">
             <argument type="service" id="setono_sylius_algolia.renderer.recommendations"/>
-            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
 
             <tag name="twig.runtime"/>
         </service>

@@ -33,7 +33,7 @@
         <!-- Index settings providers -->
         <service id="setono_sylius_algolia.provider.index_settings"
                  class="Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProvider">
-            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
             <argument type="service" id="setono_sylius_algolia.resolver.replica_index_name"/>
         </service>
 

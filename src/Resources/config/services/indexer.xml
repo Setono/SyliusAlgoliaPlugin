@@ -8,7 +8,7 @@
                  class="Setono\SyliusAlgoliaPlugin\Indexer\DefaultIndexer">
             <argument type="service" id="doctrine"/>
             <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
-            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
             <argument type="service" id="setono_sylius_algolia.provider.index_settings"/>
             <argument type="service" id="setono_sylius_algolia.data_mapper.composite"/>
             <argument type="service" id="setono_sylius_algolia.command_bus"/>

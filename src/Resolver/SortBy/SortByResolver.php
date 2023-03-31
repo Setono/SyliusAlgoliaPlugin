@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Resolver\SortBy;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName\ReplicaIndexNameResolverInterface;
 
 final class SortByResolver implements SortByResolverInterface

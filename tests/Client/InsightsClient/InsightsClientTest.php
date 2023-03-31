@@ -11,7 +11,7 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Core\Model\OrderItem;
 use Sylius\Component\Core\Model\ProductVariant;

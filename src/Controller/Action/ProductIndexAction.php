@@ -7,7 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\Controller\Action;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Event\ProductIndexEvent;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortBy;
 use Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortByResolverInterface;
 use Sylius\Component\Core\Model\ProductInterface;

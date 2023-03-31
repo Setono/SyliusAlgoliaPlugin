@@ -5,7 +5,7 @@
         <service id="setono_sylius_algolia.controller.action.product_index"
                  class="Setono\SyliusAlgoliaPlugin\Controller\Action\ProductIndexAction" public="true">
             <argument type="service" id="twig"/>
-            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
             <argument type="service" id="sylius.repository.taxon"/>
             <argument type="service" id="sylius.context.locale"/>
             <argument type="service" id="event_dispatcher"/>

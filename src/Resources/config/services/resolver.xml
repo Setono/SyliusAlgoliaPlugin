@@ -2,12 +2,20 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
+        <service id="setono_sylius_algolia.resolver.index_name"
+                 class="Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolver">
+            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
+            <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
+            <argument>%kernel.environment%</argument>
+            <argument>%setono_sylius_algolia.index_name_prefix%</argument>
+        </service>
+
         <service id="setono_sylius_algolia.resolver.replica_index_name"
                  class="Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName\ReplicaIndexNameResolver"/>
 
         <service id="setono_sylius_algolia.resolver.sort_by"
                  class="Setono\SyliusAlgoliaPlugin\Resolver\SortBy\SortByResolver">
-            <argument type="service" id="setono_sylius_algolia.index_name_resolver.default"/>
+            <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
             <argument type="service" id="setono_sylius_algolia.resolver.replica_index_name"/>
         </service>
     </services>

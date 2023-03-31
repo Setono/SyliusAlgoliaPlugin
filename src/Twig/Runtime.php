@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Twig;
 
 use Setono\SyliusAlgoliaPlugin\Renderer\RecommendationsRendererInterface;
-use Setono\SyliusAlgoliaPlugin\Resolver\IndexNameResolverInterface;
+use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 

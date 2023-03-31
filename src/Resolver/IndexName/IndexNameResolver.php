@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\SyliusAlgoliaPlugin\Resolver;
+namespace Setono\SyliusAlgoliaPlugin\Resolver\IndexName;
 
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
@@ -16,7 +16,7 @@ use Symfony\Component\String\Inflector\InflectorInterface;
  * This is a default index name resolver. This will give developers a better experience for simple scenarios
  * where an index name like 'products' or 'taxons' or 'pages' will suffice
  */
-final class DefaultIndexNameResolver implements IndexNameResolverInterface
+final class IndexNameResolver implements IndexNameResolverInterface
 {
     private IndexableResourceRegistry $indexableResourceRegistry;
 
