@@ -2,17 +2,23 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono.sylius_algolia.twig.extension"
+        <service id="setono_sylius_algolia.twig.extension"
                  class="Setono\SyliusAlgoliaPlugin\Twig\Extension">
             <tag name="twig.extension"/>
         </service>
 
-        <service id="setono.sylius_algolia.twig.runtime"
+        <service id="setono_sylius_algolia.twig.runtime"
                  class="Setono\SyliusAlgoliaPlugin\Twig\Runtime">
             <argument type="service" id="setono_sylius_algolia.renderer.recommendations"/>
             <argument type="service" id="setono_sylius_algolia.resolver.index_name"/>
 
             <tag name="twig.runtime"/>
+        </service>
+
+        <service id="setono_sylius_algolia.twig.algolia_variable"
+                 class="Setono\SyliusAlgoliaPlugin\Twig\AlgoliaVariable">
+            <argument>%setono_sylius_algolia.app_id%</argument>
+            <argument>%setono_sylius_algolia.search_only_api_key%</argument>
         </service>
     </services>
 </container>

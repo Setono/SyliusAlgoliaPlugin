@@ -16,13 +16,12 @@
     }
 
     function init() {
-        const algoliaCredentials = document.getElementById('algolia-credentials');
         const algoliaIndex = document.getElementById('algolia-index').dataset.value;
         const algoliaTaxon = document.getElementById('algolia-taxon').dataset.value;
         const algoliaSortBy = document.getElementById('sort-by').dataset.value;
         const algoliaHitTemplate = document.getElementById('algolia-hit-template').innerHTML;
 
-        const searchClient = algoliasearch(algoliaCredentials.dataset.appId, algoliaCredentials.dataset.searchApiKey);
+        const searchClient = algoliasearch('{{ algolia.appId }}', '{{ algolia.searchOnlyApiKey }}');
 
         const search = instantsearch({
             indexName: algoliaIndex,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin;
 
+use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterAlgoliaTwigVariablePass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterCompositeServicesPass;
 use Setono\SyliusAlgoliaPlugin\DependencyInjection\Compiler\RegisterIndexableResourcesPass;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
@@ -19,6 +20,7 @@ final class SetonoSyliusAlgoliaPlugin extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterIndexableResourcesPass());
+        $container->addCompilerPass(new RegisterAlgoliaTwigVariablePass());
 
         // Register services in composite services
         $container->addCompilerPass(new RegisterCompositeServicesPass(

@@ -13,8 +13,6 @@
         <service id="setono_sylius_algolia.event_subscriber.inject_configuration"
                  class="Setono\SyliusAlgoliaPlugin\EventSubscriber\InjectConfigurationSubscriber">
             <argument type="service" id="twig"/>
-            <argument>%setono_sylius_algolia.app_id%</argument>
-            <argument>%setono_sylius_algolia.search_only_api_key%</argument>
 
             <tag name="kernel.event_subscriber"/>
         </service>
