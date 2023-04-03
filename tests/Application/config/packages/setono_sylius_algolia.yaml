@@ -7,6 +7,7 @@ setono_sylius_algolia:
             document: 'Tests\Setono\SyliusAlgoliaPlugin\Application\Document\Product'
         sylius.taxon:
             document: 'Setono\SyliusAlgoliaPlugin\Document\Taxon'
-    app_id: '%env(ALGOLIA_APP_ID)%'
-    search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
-    admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
+    credentials:
+        app_id: '%env(ALGOLIA_APP_ID)%'
+        search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
+        admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'

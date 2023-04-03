@@ -22,9 +22,11 @@ final class SetonoSyliusAlgoliaExtensionTest extends AbstractExtensionTestCase
     protected function getMinimalConfiguration(): array
     {
         return [
-            'app_id' => 'app_id',
-            'search_only_api_key' => 'search_only_api_key',
-            'admin_api_key' => 'admin_api_key',
+            'credentials' => [
+                'app_id' => 'app_id',
+                'search_only_api_key' => 'search_only_api_key',
+                'admin_api_key' => 'admin_api_key',
+            ],
         ];
     }
 
@@ -35,8 +37,8 @@ final class SetonoSyliusAlgoliaExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.app_id', 'app_id');
-        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.search_only_api_key', 'search_only_api_key');
-        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.admin_api_key', 'admin_api_key');
+        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.credentials.app_id', 'app_id');
+        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.credentials.search_only_api_key', 'search_only_api_key');
+        $this->assertContainerBuilderHasParameter('setono_sylius_algolia.credentials.admin_api_key', 'admin_api_key');
     }
 }

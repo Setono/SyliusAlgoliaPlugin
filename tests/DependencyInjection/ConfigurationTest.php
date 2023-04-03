@@ -23,29 +23,21 @@ final class ConfigurationTest extends TestCase
     /**
      * @test
      */
-    public function values_are_invalid_if_required_value_is_not_provided(): void
-    {
-        $this->assertConfigurationIsInvalid(
-            [
-                [], // no values at all
-            ],
-            '/The child (config|node) "app_id" (under|at path) "setono_sylius_algolia" must be configured/',
-            true
-        );
-    }
-
-    /**
-     * @test
-     */
     public function processed_value_contains_required_value(): void
     {
         $this->assertProcessedConfigurationEquals([
-            ['app_id' => 'first_app_id', 'search_only_api_key' => 'first_search_only_api_key', 'admin_api_key' => 'first_admin_api_key'],
-            ['app_id' => 'last_app_id', 'search_only_api_key' => 'last_search_only_api_key', 'admin_api_key' => 'last_admin_api_key'],
+            [
+                'credentials' => ['app_id' => 'first_app_id', 'search_only_api_key' => 'first_search_only_api_key', 'admin_api_key' => 'first_admin_api_key'],
+            ],
+            [
+                'credentials' => ['app_id' => 'last_app_id', 'search_only_api_key' => 'last_search_only_api_key', 'admin_api_key' => 'last_admin_api_key'],
+            ],
         ], [
-            'app_id' => 'last_app_id',
-            'search_only_api_key' => 'last_search_only_api_key',
-            'admin_api_key' => 'last_admin_api_key',
+            'credentials' => [
+                'app_id' => 'last_app_id',
+                'search_only_api_key' => 'last_search_only_api_key',
+                'admin_api_key' => 'last_admin_api_key',
+            ],
             'indexable_resources' => [],
             'cache' => [
                 'adapter' => 'cache.adapter.filesystem',
