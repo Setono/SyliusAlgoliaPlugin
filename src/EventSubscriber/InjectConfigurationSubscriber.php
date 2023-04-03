@@ -21,15 +21,9 @@ final class InjectConfigurationSubscriber implements EventSubscriberInterface
 
     private Environment $twig;
 
-    private string $algoliaAppId;
-
-    private string $algoliaSearchApiKey;
-
-    public function __construct(Environment $twig, string $algoliaAppId, string $algoliaSearchApiKey)
+    public function __construct(Environment $twig)
     {
         $this->twig = $twig;
-        $this->algoliaAppId = $algoliaAppId;
-        $this->algoliaSearchApiKey = $algoliaSearchApiKey;
     }
 
     public static function getSubscribedEvents(): array
@@ -75,13 +69,6 @@ final class InjectConfigurationSubscriber implements EventSubscriberInterface
         ) {
             return;
         }
-
-        // populate defaults tags
-        $this->tags[] = sprintf(
-            '<div id="algolia-credentials" data-app-id="%s" data-search-api-key="%s" style="display: none"></div>',
-            $this->algoliaAppId,
-            $this->algoliaSearchApiKey
-        );
 
         // this injection part has been copied from \Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener::injectToolbar()
         $content = $response->getContent();
