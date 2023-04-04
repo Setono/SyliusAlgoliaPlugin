@@ -7,7 +7,6 @@ namespace Setono\SyliusAlgoliaPlugin\Provider\Recommendations;
 use Doctrine\Persistence\ManagerRegistry;
 use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClientInterface;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Component\Core\Model\ProductInterface;
@@ -19,16 +18,20 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
 
     private RecommendationsClientInterface $recommendationsClient;
 
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    /** @var array<string, array{classes: array{model: class-string}}> */
+    private array $resources;
 
+    /**
+     * @param array<string, array{classes: array{model: class-string}}> $resources
+     */
     public function __construct(
         RecommendationsClientInterface $recommendationsClient,
-        IndexableResourceRegistry $indexableResourceRegistry,
-        ManagerRegistry $managerRegistry
+        ManagerRegistry $managerRegistry,
+        array $resources
     ) {
         $this->recommendationsClient = $recommendationsClient;
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
         $this->managerRegistry = $managerRegistry;
+        $this->resources = $resources;
     }
 
     public function getFrequentlyBoughtTogether(ProductInterface $product, string $index, int $max = 10): \Generator
@@ -55,9 +58,11 @@ final class RecommendationsProvider implements RecommendationsProviderInterface
         foreach ($documents as $document) {
             Assert::notNull($document->resourceName);
 
-            $indexableResource = $this->indexableResourceRegistry->getByName($document->resourceName);
+            /** @var class-string|null $resourceClass */
+            $resourceClass = $this->resources[$document->resourceName]['classes']['model'] ?? null;
+            Assert::notNull($resourceClass);
 
-            $repository = $this->getRepository($indexableResource->resourceClass);
+            $repository = $this->getRepository($resourceClass);
             $entity = $repository->findOneBy([
                 'code' => $document->code,
             ]);

@@ -6,7 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Repository;
 
 use Doctrine\ORM\QueryBuilder;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface IndexableResourceRepositoryInterface extends RepositoryInterface
@@ -14,9 +14,9 @@ interface IndexableResourceRepositoryInterface extends RepositoryInterface
     public function createIndexableCollectionQueryBuilder(): QueryBuilder;
 
     /**
-     * @param list<scalar> $ids
+     * @param list<mixed> $ids
      *
-     * @return array<array-key, ResourceInterface>
+     * @return list<IndexableInterface>
      */
     public function findFromIndexScopeAndIds(IndexScope $indexScope, array $ids): array;
 }

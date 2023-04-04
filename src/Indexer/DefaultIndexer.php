@@ -10,13 +10,14 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 use Setono\DoctrineObjectManagerTrait\ORM\ORMManagerTrait;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
 use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntities;
+use Setono\SyliusAlgoliaPlugin\Message\Command\IndexResource;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexSettings\IndexSettingsProviderInterface;
@@ -24,7 +25,6 @@ use Setono\SyliusAlgoliaPlugin\Repository\IndexableResourceRepositoryInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Settings\IndexSettings;
 use Setono\SyliusAlgoliaPlugin\Settings\SortableReplica;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Webmozart\Assert\Assert;
@@ -32,7 +32,7 @@ use Webmozart\Assert\Assert;
 /**
  * NOT final as this makes it easier to override and extend this indexer
  */
-class DefaultIndexer implements IndexerInterface
+class DefaultIndexer extends AbstractIndexer
 {
     use ORMManagerTrait;
 
@@ -50,7 +50,7 @@ class DefaultIndexer implements IndexerInterface
 
     protected SearchClient $algoliaClient;
 
-    protected IndexableResourceRegistry $indexableResourceRegistry;
+    protected IndexRegistry $indexRegistry;
 
     protected DoctrineFilterInterface $doctrineFilter;
 
@@ -64,112 +64,115 @@ class DefaultIndexer implements IndexerInterface
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        IndexScopeProviderInterface $indexScopeProviderRegistry,
+        IndexScopeProviderInterface $indexScopeProvider,
         IndexNameResolverInterface $indexNameResolver,
         IndexSettingsProviderInterface $indexSettingsProvider,
         DataMapperInterface $dataMapper,
         MessageBusInterface $commandBus,
         NormalizerInterface $normalizer,
         SearchClient $algoliaClient,
-        IndexableResourceRegistry $indexableResourceRegistry,
+        IndexRegistry $indexRegistry,
         DoctrineFilterInterface $doctrineFilter,
         ObjectFilterInterface $objectFilter,
         array $normalizationGroups = ['setono:sylius-algolia:document']
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->indexScopeProvider = $indexScopeProviderRegistry;
+        $this->indexScopeProvider = $indexScopeProvider;
         $this->indexNameResolver = $indexNameResolver;
         $this->indexSettingsProvider = $indexSettingsProvider;
         $this->dataMapper = $dataMapper;
         $this->commandBus = $commandBus;
         $this->normalizer = $normalizer;
         $this->algoliaClient = $algoliaClient;
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->indexRegistry = $indexRegistry;
         $this->doctrineFilter = $doctrineFilter;
         $this->objectFilter = $objectFilter;
         $this->normalizationGroups = $normalizationGroups;
     }
 
-    public function indexResource(IndexableResource $resource): void
+    public function index($index): void
     {
-        foreach ($this->getIdBatches($resource) as $ids) {
-            $this->commandBus->dispatch(new IndexEntities($resource, $ids));
+        if (is_string($index)) {
+            $index = $this->indexRegistry->getByName($index);
+        }
+
+        foreach ($index->resources as $resource) {
+            $this->commandBus->dispatch(new IndexResource($index, $resource));
         }
     }
 
-    public function indexEntity(ResourceInterface $entity): void
+    public function indexResource($index, string $resource): void
     {
-        $this->indexEntities([$entity]);
+        if (is_string($index)) {
+            $index = $this->indexRegistry->getByName($index);
+        }
+
+        $indexableResource = $index->getResource($resource);
+
+        foreach ($this->getIdBatches($indexableResource) as $ids) {
+            $this->commandBus->dispatch(new IndexEntities($indexableResource, $ids));
+        }
     }
 
-    public function indexEntities(array $entities, IndexableResource $indexableResource = null): void
+    public function indexEntitiesWithIds(array $ids, string $type): void
     {
-        /** @psalm-suppress TypeDoesNotContainType,DocblockTypeContradiction */
-        if ([] === $entities) {
+        if ([] === $ids) {
             return;
         }
 
-        [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
+        $index = $this->indexRegistry->getByResourceClass($type);
 
-        // process input
-        foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
-            $index = $this->prepareIndex(
+        foreach ($this->indexScopeProvider->getAll($index) as $indexScope) {
+            $algoliaIndex = $this->prepareIndex(
                 $this->indexNameResolver->resolveFromIndexScope($indexScope),
                 $this->indexSettingsProvider->getSettings($indexScope)
             );
 
-            foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
-                $doc = new $indexableResource->documentClass();
+            foreach ($this->getObjects($ids, $type, $indexScope) as $obj) {
+                $doc = new $index->document();
                 $this->dataMapper->map($obj, $doc, $indexScope);
 
                 $this->objectFilter->filter($obj, $doc, $indexScope);
 
                 $data = $this->normalize($doc);
 
-                $index->saveObject($data);
+                $algoliaIndex->saveObject($data);
             }
         }
     }
 
-    public function removeEntity(ResourceInterface $entity): void
+    public function removeEntitiesWithIds(array $ids, string $type): void
     {
-        $this->removeEntities([$entity]);
-    }
-
-    public function removeEntities(array $entities, IndexableResource $indexableResource = null): void
-    {
-        /** @psalm-suppress TypeDoesNotContainType,DocblockTypeContradiction */
-        if ([] === $entities) {
+        if ([] === $ids) {
             return;
         }
 
-        [$entities, $indexableResource] = $this->processInput($entities, $indexableResource);
+        $index = $this->indexRegistry->getByResourceClass($type);
 
-        // process input
-        foreach ($this->indexScopeProvider->getAll($indexableResource) as $indexScope) {
-            $index = $this->prepareIndex(
+        foreach ($this->indexScopeProvider->getAll($index) as $indexScope) {
+            $algoliaIndex = $this->prepareIndex(
                 $this->indexNameResolver->resolveFromIndexScope($indexScope),
                 $this->indexSettingsProvider->getSettings($indexScope)
             );
 
-            foreach ($this->getObjects($entities, $indexableResource->resourceClass, $indexScope) as $obj) {
-                $index->deleteObject($obj->getObjectId());
+            foreach ($this->getObjects($ids, $type, $indexScope) as $obj) {
+                $algoliaIndex->deleteObject($obj->getObjectId());
             }
         }
     }
 
     /**
-     * @return \Generator<int, non-empty-list<scalar>>
+     * @return \Generator<int, non-empty-list<mixed>>
      */
-    protected function getIdBatches(IndexableResource $indexableResource): \Generator
+    protected function getIdBatches(IndexableResource $resource): \Generator
     {
-        $manager = $this->getManager($indexableResource->resourceClass);
+        $manager = $this->getManager($resource->class);
 
         /** @var IndexableResourceRepositoryInterface|ObjectRepository $repository */
-        $repository = $manager->getRepository($indexableResource->resourceClass);
+        $repository = $manager->getRepository($resource->class);
         Assert::isInstanceOf($repository, IndexableResourceRepositoryInterface::class, sprintf(
             'The repository for resource "%s" must implement the interface %s',
-            $indexableResource->name,
+            $resource->name,
             IndexableResourceRepositoryInterface::class
         ));
 
@@ -180,7 +183,7 @@ class DefaultIndexer implements IndexerInterface
         $qb->select(sprintf('%s.id', $qb->getRootAliases()[0]));
         $qb->setMaxResults($maxResults);
 
-        $this->doctrineFilter->apply($qb, $indexableResource);
+        $this->doctrineFilter->apply($qb, $resource);
 
         while (true) {
             $qb->setFirstResult($firstResult);
@@ -188,9 +191,8 @@ class DefaultIndexer implements IndexerInterface
             $ids = $qb->getQuery()->getResult();
             Assert::isArray($ids);
 
-            $ids = array_values(array_map(/** @return scalar */static function (array $elm) {
+            $ids = array_values(array_map(/** @return mixed */static function (array $elm) {
                 Assert::keyExists($elm, 'id');
-                Assert::scalar($elm['id']);
 
                 return $elm['id'];
             }, $ids));
@@ -208,26 +210,24 @@ class DefaultIndexer implements IndexerInterface
     }
 
     /**
-     * @param list<scalar> $resources
-     * @param class-string<ResourceInterface> $resourceClass
-     * @psalm-suppress InvalidReturnType,MoreSpecificReturnType
+     * @param list<mixed> $ids
+     * @param class-string<IndexableInterface> $type
      *
      * @return list<IndexableInterface>
      */
-    protected function getObjects(array $resources, string $resourceClass, IndexScope $indexScope): array
+    protected function getObjects(array $ids, string $type, IndexScope $indexScope): array
     {
-        $manager = $this->getManager($resourceClass);
+        $manager = $this->getManager($type);
 
         /** @var IndexableResourceRepositoryInterface|ObjectRepository $repository */
-        $repository = $manager->getRepository($resourceClass);
+        $repository = $manager->getRepository($type);
         Assert::isInstanceOf($repository, IndexableResourceRepositoryInterface::class, sprintf(
             'The repository for resource "%s" must implement the interface %s',
-            $resourceClass,
+            $type,
             IndexableResourceRepositoryInterface::class
         ));
 
-        /** @psalm-suppress InvalidReturnStatement,LessSpecificReturnStatement */
-        return $repository->findFromIndexScopeAndIds($indexScope, $resources);
+        return $repository->findFromIndexScopeAndIds($indexScope, $ids);
     }
 
     protected function normalize(Document $document): array
@@ -278,40 +278,7 @@ class DefaultIndexer implements IndexerInterface
         return $index;
     }
 
-    /**
-     * @param non-empty-list<scalar|ResourceInterface> $resources
-     *
-     * @return array{0: non-empty-list<scalar>, 1: IndexableResource}
-     */
-    protected function processInput(array $resources, ?IndexableResource $indexableResource): array
-    {
-        $processed = [];
-        foreach ($resources as $resource) {
-            if (!is_scalar($resource) && !$resource instanceof ResourceInterface) {
-                throw new \InvalidArgumentException(sprintf(
-                    'The $resources array must be scalars or instances of %s',
-                    ResourceInterface::class
-                ));
-            }
-
-            if (null === $indexableResource) {
-                if (is_scalar($resource)) {
-                    throw new \InvalidArgumentException('When the $resources array are scalars, the $indexableResource must be set');
-                }
-
-                $indexableResource = $this->indexableResourceRegistry->getByClass($resource);
-            }
-
-            $id = $resource instanceof ResourceInterface ? $resource->getId() : $resource;
-            Assert::scalar($id);
-
-            $processed[] = $id;
-        }
-
-        return [$processed, $indexableResource];
-    }
-
-    public function supports($resource): bool
+    public function supports($value): bool
     {
         return true;
     }

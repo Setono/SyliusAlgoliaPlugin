@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Indexer;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Sylius\Component\Resource\Model\ResourceInterface;
-
-final class CompositeIndexer implements IndexerInterface
+final class CompositeIndexer extends AbstractIndexer
 {
     /** @var list<IndexerInterface> */
     private array $indexers = [];
@@ -17,77 +14,54 @@ final class CompositeIndexer implements IndexerInterface
         $this->indexers[] = $indexer;
     }
 
-    public function indexResource(IndexableResource $resource): void
+    public function index($index): void
     {
         foreach ($this->indexers as $indexer) {
-            if ($indexer->supports($resource)) {
-                $indexer->indexResource($resource);
+            if ($indexer->supports($index)) {
+                $indexer->index($index);
 
                 break;
             }
         }
     }
 
-    public function indexEntity(ResourceInterface $entity): void
+    public function indexResource($index, string $resource): void
     {
         foreach ($this->indexers as $indexer) {
-            if ($indexer->supports($entity)) {
-                $indexer->indexEntity($entity);
+            if ($indexer->supports($index)) {
+                $indexer->indexResource($index, $resource);
 
                 break;
             }
         }
     }
 
-    public function indexEntities(array $entities, IndexableResource $indexableResource = null): void
+    public function indexEntitiesWithIds(array $ids, string $type): void
     {
         foreach ($this->indexers as $indexer) {
-            /**
-             * TODO
-             * We need these suppressions until https://github.com/vimeo/psalm/issues/9581 is fixed
-             *
-             * @psalm-suppress MixedArgument,InvalidArrayAccess
-             */
-            if ($indexer->supports($indexableResource ?? $entities[0])) {
-                $indexer->indexEntities($entities, $indexableResource);
+            if ($indexer->supports($type)) {
+                $indexer->indexEntitiesWithIds($ids, $type);
 
                 break;
             }
         }
     }
 
-    public function removeEntity(ResourceInterface $entity): void
+    public function removeEntitiesWithIds(array $ids, string $type): void
     {
         foreach ($this->indexers as $indexer) {
-            if ($indexer->supports($entity)) {
-                $indexer->removeEntity($entity);
+            if ($indexer->supports($type)) {
+                $indexer->removeEntitiesWithIds($ids, $type);
 
                 break;
             }
         }
     }
 
-    public function removeEntities(array $entities, IndexableResource $indexableResource = null): void
+    public function supports($value): bool
     {
         foreach ($this->indexers as $indexer) {
-            /**
-             * TODO
-             * We need these suppressions until https://github.com/vimeo/psalm/issues/9581 is fixed
-             *
-             * @psalm-suppress MixedArgument,InvalidArrayAccess
-             */
-            if ($indexer->supports($indexableResource ?? $entities[0])) {
-                $indexer->removeEntities($entities, $indexableResource);
-
-                break;
-            }
-        }
-    }
-
-    public function supports($resource): bool
-    {
-        foreach ($this->indexers as $indexer) {
-            if ($indexer->supports($resource)) {
+            if ($indexer->supports($value)) {
                 return true;
             }
         }

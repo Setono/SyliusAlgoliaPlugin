@@ -12,7 +12,7 @@ final class EnabledFilter extends AbstractFilter
 {
     public function apply(QueryBuilder $qb, IndexableResource $indexableResource): void
     {
-        if (!is_a($indexableResource->resourceClass, ToggleableInterface::class)) {
+        if (!$indexableResource->is(ToggleableInterface::class)) {
             return;
         }
 

@@ -14,7 +14,7 @@
             <argument type="service" id="setono_sylius_algolia.command_bus"/>
             <argument type="service" id="serializer"/>
             <argument type="service" id="setono_sylius_algolia.search_client"/>
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
+            <argument type="service" id="setono_sylius_algolia.config.index_registry"/>
             <argument type="service" id="setono_sylius_algolia.filter.doctrine.composite"/>
             <argument type="service" id="setono_sylius_algolia.filter.object.composite"/>
 

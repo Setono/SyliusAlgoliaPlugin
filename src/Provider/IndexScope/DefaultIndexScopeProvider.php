@@ -4,31 +4,31 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexScope;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 
 final class DefaultIndexScopeProvider implements IndexScopeProviderInterface
 {
-    public function getAll(IndexableResource $indexableResource): iterable
+    public function getAll(Index $index): iterable
     {
-        yield new IndexScope($indexableResource);
+        yield new IndexScope($index);
     }
 
-    public function getFromContext(IndexableResource $indexableResource): IndexScope
+    public function getFromContext(Index $index): IndexScope
     {
-        return new IndexScope($indexableResource);
+        return new IndexScope($index);
     }
 
     public function getFromChannelAndLocaleAndCurrency(
-        IndexableResource $indexableResource,
+        Index $index,
         string $channelCode = null,
         string $localeCode = null,
         string $currencyCode = null
     ): IndexScope {
-        return $this->getFromContext($indexableResource);
+        return $this->getFromContext($index);
     }
 
-    public function supports(IndexableResource $indexableResource): bool
+    public function supports(Index $index): bool
     {
         return true;
     }

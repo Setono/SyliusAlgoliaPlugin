@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexScope;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Channel\Repository\ChannelRepositoryInterface;
@@ -35,7 +35,7 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
         $this->channelRepository = $channelRepository;
     }
 
-    public function getAll(IndexableResource $indexableResource): iterable
+    public function getAll(Index $index): iterable
     {
         /** @var ChannelInterface[] $channels */
         $channels = $this->channelRepository->findAll();
@@ -43,7 +43,7 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
         foreach ($channels as $channel) {
             foreach ($channel->getLocales() as $locale) {
                 foreach ($channel->getCurrencies() as $currency) {
-                    yield (new IndexScope($indexableResource))
+                    yield (new IndexScope($index))
                         ->withChannelCode($channel->getCode())
                         ->withLocaleCode($locale->getCode())
                         ->withCurrencyCode($currency->getCode())
@@ -53,10 +53,10 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
         }
     }
 
-    public function getFromContext(IndexableResource $indexableResource): IndexScope
+    public function getFromContext(Index $index): IndexScope
     {
         return $this->getFromChannelAndLocaleAndCurrency(
-            $indexableResource,
+            $index,
             $this->channelContext->getChannel()->getCode(),
             $this->localeContext->getLocaleCode(),
             $this->currencyContext->getCurrencyCode()
@@ -64,20 +64,20 @@ final class ProductIndexScopeProvider implements IndexScopeProviderInterface
     }
 
     public function getFromChannelAndLocaleAndCurrency(
-        IndexableResource $indexableResource,
+        Index $index,
         string $channelCode = null,
         string $localeCode = null,
         string $currencyCode = null
     ): IndexScope {
-        return (new IndexScope($indexableResource))
+        return (new IndexScope($index))
             ->withChannelCode($channelCode)
             ->withLocaleCode($localeCode)
             ->withCurrencyCode($currencyCode)
         ;
     }
 
-    public function supports(IndexableResource $indexableResource): bool
+    public function supports(Index $index): bool
     {
-        return is_a($indexableResource->resourceClass, ProductInterface::class, true);
+        return $index->hasResourceWithClass(ProductInterface::class);
     }
 }

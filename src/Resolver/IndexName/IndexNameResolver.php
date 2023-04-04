@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Resolver\IndexName;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
-use Symfony\Component\String\Inflector\EnglishInflector;
-use Symfony\Component\String\Inflector\InflectorInterface;
 
 /**
  * This is a default index name resolver. This will give developers a better experience for simple scenarios
@@ -18,7 +16,7 @@ use Symfony\Component\String\Inflector\InflectorInterface;
  */
 final class IndexNameResolver implements IndexNameResolverInterface
 {
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    private IndexRegistry $indexRegistry;
 
     private IndexScopeProviderInterface $indexScopeProvider;
 
@@ -27,20 +25,16 @@ final class IndexNameResolver implements IndexNameResolverInterface
     /** @var non-empty-string|null */
     private ?string $prefix;
 
-    private InflectorInterface $inflector;
-
     public function __construct(
-        IndexableResourceRegistry $indexableResourceRegistry,
+        IndexRegistry $indexRegistry,
         IndexScopeProviderInterface $indexScopeProvider,
         string $environment,
-        string $prefix = null,
-        InflectorInterface $inflector = null
+        string $prefix = null
     ) {
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->indexRegistry = $indexRegistry;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->environment = $environment;
         $this->prefix = '' === $prefix ? null : $prefix;
-        $this->inflector = $inflector ?? new EnglishInflector();
     }
 
     public function resolve($resource): string
@@ -50,16 +44,9 @@ final class IndexNameResolver implements IndexNameResolverInterface
 
     public function resolveFromIndexScope(IndexScope $indexScope): string
     {
-        $pluralName = $this->inflector->pluralize($indexScope->resource->shortName)[0];
-
-        // this is a workaround specifically for the taxon because the inflector will return 'taxa' which doesn't make sense
-        if ('taxon' === $indexScope->resource->shortName) {
-            $pluralName = 'taxons';
-        }
-
         $str = null !== $this->prefix ? ($this->prefix . '__') : '';
 
-        $str .= $this->environment . '__' . $pluralName;
+        $str .= $this->environment . '__' . $indexScope->index->name;
 
         if (null !== $indexScope->channelCode) {
             $str .= '__' . $indexScope->channelCode;
@@ -76,20 +63,20 @@ final class IndexNameResolver implements IndexNameResolverInterface
         return strtolower($str);
     }
 
-    public function supports(IndexableResource $indexableResource): bool
+    public function supports(Index $index): bool
     {
         return true;
     }
 
     /**
-     * @param class-string<ResourceInterface>|ResourceInterface|IndexableResource $resource
+     * @param class-string|ResourceInterface|Index $value
      */
-    private function resolveIndexScope($resource): IndexScope
+    private function resolveIndexScope($value): IndexScope
     {
-        if (!$resource instanceof IndexableResource) {
-            $resource = $this->indexableResourceRegistry->getByClass($resource);
+        if (!$value instanceof Index) {
+            $value = $this->indexRegistry->getByResourceClass($value);
         }
 
-        return $this->indexScopeProvider->getFromContext($resource);
+        return $this->indexScopeProvider->getFromContext($value);
     }
 }

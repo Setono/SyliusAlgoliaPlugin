@@ -2,11 +2,13 @@ imports:
     - { resource: "@SetonoSyliusAlgoliaPlugin/Resources/config/app/config.yaml" }
 
 setono_sylius_algolia:
-    indexable_resources:
-        sylius.product:
+    indexes:
+        products:
             document: 'Tests\Setono\SyliusAlgoliaPlugin\Application\Document\Product'
-        sylius.taxon:
+            resources: ['sylius.product']
+        taxons:
             document: 'Setono\SyliusAlgoliaPlugin\Document\Taxon'
+            resources: [ 'sylius.taxon' ]
     credentials:
         app_id: '%env(ALGOLIA_APP_ID)%'
         search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'

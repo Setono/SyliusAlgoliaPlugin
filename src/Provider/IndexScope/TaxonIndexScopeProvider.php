@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexScope;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Core\Model\TaxonInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
@@ -25,38 +25,38 @@ final class TaxonIndexScopeProvider implements IndexScopeProviderInterface
         $this->localeContext = $localeContext;
     }
 
-    public function getAll(IndexableResource $indexableResource): iterable
+    public function getAll(Index $index): iterable
     {
         /** @var LocaleInterface[] $locales */
         $locales = $this->localeRepository->findAll();
 
         foreach ($locales as $locale) {
-            yield (new IndexScope($indexableResource))->withLocaleCode($locale->getCode());
+            yield (new IndexScope($index))->withLocaleCode($locale->getCode());
         }
     }
 
-    public function getFromContext(IndexableResource $indexableResource): IndexScope
+    public function getFromContext(Index $index): IndexScope
     {
         return $this->getFromChannelAndLocaleAndCurrency(
-            $indexableResource,
+            $index,
             null,
             $this->localeContext->getLocaleCode(),
         );
     }
 
     public function getFromChannelAndLocaleAndCurrency(
-        IndexableResource $indexableResource,
+        Index $index,
         string $channelCode = null,
         string $localeCode = null,
         string $currencyCode = null
     ): IndexScope {
-        return (new IndexScope($indexableResource))
+        return (new IndexScope($index))
             ->withLocaleCode($localeCode)
         ;
     }
 
-    public function supports(IndexableResource $indexableResource): bool
+    public function supports(Index $index): bool
     {
-        return is_a($indexableResource->resourceClass, TaxonInterface::class, true);
+        return $index->hasResourceWithClass(TaxonInterface::class);
     }
 }

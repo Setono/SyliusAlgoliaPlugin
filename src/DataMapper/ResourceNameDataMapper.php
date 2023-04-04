@@ -4,23 +4,31 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\DataMapper;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 final class ResourceNameDataMapper implements DataMapperInterface
 {
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    private IndexRegistry $indexRegistry;
 
-    public function __construct(IndexableResourceRegistry $indexableResourceRegistry)
+    public function __construct(IndexRegistry $indexRegistry)
     {
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->indexRegistry = $indexRegistry;
     }
 
     public function map(ResourceInterface $source, Document $target, IndexScope $indexScope, array $context = []): void
     {
-        $target->resourceName = $this->indexableResourceRegistry->getByClass($source)->name;
+        foreach ($this->indexRegistry as $index) {
+            foreach ($index->resources as $resource) {
+                if ($resource->is($source)) {
+                    $target->resourceName = $resource->name;
+
+                    return;
+                }
+            }
+        }
     }
 
     public function supports(

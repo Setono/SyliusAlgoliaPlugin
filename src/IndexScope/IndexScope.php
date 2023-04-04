@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\IndexScope;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 
 /**
  * NOT final - this makes it easier for plugin users to override this class and provide their own scope for an index
@@ -12,9 +12,9 @@ use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 class IndexScope
 {
     /**
-     * The resource that this scope applies to
+     * The index that this scope applies to
      */
-    public IndexableResource $resource;
+    public Index $index;
 
     public ?string $channelCode = null;
 
@@ -22,9 +22,9 @@ class IndexScope
 
     public ?string $currencyCode = null;
 
-    public function __construct(IndexableResource $resource)
+    public function __construct(Index $index)
     {
-        $this->resource = $resource;
+        $this->index = $index;
     }
 
     /**

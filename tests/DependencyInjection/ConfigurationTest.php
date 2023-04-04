@@ -33,12 +33,12 @@ final class ConfigurationTest extends TestCase
                 'credentials' => ['app_id' => 'last_app_id', 'search_only_api_key' => 'last_search_only_api_key', 'admin_api_key' => 'last_admin_api_key'],
             ],
         ], [
+            'indexes' => [],
             'credentials' => [
                 'app_id' => 'last_app_id',
                 'search_only_api_key' => 'last_search_only_api_key',
                 'admin_api_key' => 'last_admin_api_key',
             ],
-            'indexable_resources' => [],
             'cache' => [
                 'adapter' => 'cache.adapter.filesystem',
                 'enabled' => true,

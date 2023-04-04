@@ -9,7 +9,7 @@
             <argument type="service" id="sylius.repository.taxon"/>
             <argument type="service" id="sylius.context.locale"/>
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
+            <argument type="service" id="setono_sylius_algolia.config.index_registry"/>
             <argument type="service" id="setono_sylius_algolia.resolver.sort_by"/>
         </service>
     </services>

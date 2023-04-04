@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 
 use Algolia\AlgoliaSearch\InsightsClient as AlgoliaInsightsClient;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
@@ -19,7 +19,7 @@ final class InsightsClient implements InsightsClientInterface
 {
     private AlgoliaInsightsClient $algoliaInsightsClient;
 
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    private IndexRegistry $indexRegistry;
 
     private IndexScopeProviderInterface $indexScopeProvider;
 
@@ -29,13 +29,13 @@ final class InsightsClient implements InsightsClientInterface
 
     public function __construct(
         AlgoliaInsightsClient $algoliaInsightsClient,
-        IndexableResourceRegistry $indexableResourceRegistry,
+        IndexRegistry $indexRegistry,
         IndexScopeProviderInterface $indexScopeProvider,
         IndexNameResolverInterface $indexNameResolver,
         NormalizerInterface $normalizer
     ) {
         $this->algoliaInsightsClient = $algoliaInsightsClient;
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->indexRegistry = $indexRegistry;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->indexNameResolver = $indexNameResolver;
         $this->normalizer = $normalizer;
@@ -63,10 +63,10 @@ final class InsightsClient implements InsightsClientInterface
 
         Assert::isInstanceOf($product, ResourceInterface::class);
 
-        $indexableResource = $this->indexableResourceRegistry->getByClass($product);
+        $index = $this->indexRegistry->getByResourceClass($product);
 
         $indexScope = $this->indexScopeProvider->getFromChannelAndLocaleAndCurrency(
-            $indexableResource,
+            $index,
             $eventContext->channelCode,
             $eventContext->localeCode,
             $eventContext->currencyCode
@@ -93,10 +93,10 @@ final class InsightsClient implements InsightsClientInterface
     ): void {
         Assert::isInstanceOf($product, IndexableInterface::class);
 
-        $indexableResource = $this->indexableResourceRegistry->getByClass($product);
+        $index = $this->indexRegistry->getByResourceClass($product);
 
         $indexScope = $this->indexScopeProvider->getFromChannelAndLocaleAndCurrency(
-            $indexableResource,
+            $index,
             $eventContext->channelCode,
             $eventContext->localeCode,
             $eventContext->currencyCode

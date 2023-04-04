@@ -27,7 +27,7 @@ final class IndexSettingsProvider implements IndexSettingsProviderInterface
     // todo implement an easier way to set settings decoupled from the document. This could be by dispatching an IndexSettingsEvent
     public function getSettings(IndexScope $indexScope): IndexSettings
     {
-        $settings = $indexScope->resource->documentClass::getDefaultSettings($indexScope);
+        $settings = $indexScope->index->document::getDefaultSettings($indexScope);
         $indexName = $this->indexNameResolver->resolveFromIndexScope($indexScope);
 
         foreach ($settings->replicas as &$replica) {
@@ -35,7 +35,7 @@ final class IndexSettingsProvider implements IndexSettingsProviderInterface
         }
         unset($replica);
 
-        foreach ($indexScope->resource->documentClass::getSortableAttributes() as $attribute => $order) {
+        foreach ($indexScope->index->document::getSortableAttributes() as $attribute => $order) {
             $settings->replicas[] = new SortableReplica(
                 $this->replicaIndexNameResolver->resolveFromIndexNameAndSortableAttribute($indexName, $attribute, $order),
                 $attribute,
