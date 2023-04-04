@@ -6,6 +6,7 @@ namespace Setono\SyliusAlgoliaPlugin\Config;
 
 use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Exception\NonExistingResourceException;
+use Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface;
 use Webmozart\Assert\Assert;
 
 final class Index
@@ -24,6 +25,8 @@ final class Index
      */
     public string $document;
 
+    public IndexerInterface $indexer;
+
     /**
      * An array of resources, indexed by the resource name
      *
@@ -35,7 +38,7 @@ final class Index
      * @param class-string<Document> $document
      * @param array<string, IndexableResource> $resources
      */
-    public function __construct(string $name, string $document, array $resources)
+    public function __construct(string $name, string $document, IndexerInterface $indexer, array $resources)
     {
         Assert::stringNotEmpty($name);
 
@@ -49,6 +52,7 @@ final class Index
 
         $this->name = $name;
         $this->document = $document;
+        $this->indexer = $indexer;
         $this->resources = $resources;
     }
 

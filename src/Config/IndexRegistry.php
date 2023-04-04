@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
-use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Exception\NonExistingIndexException;
-use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 
 /**
  * @implements \IteratorAggregate<string, Index>
@@ -19,42 +17,6 @@ final class IndexRegistry implements \IteratorAggregate
      * @var array<string, Index>
      */
     private array $indexes = [];
-
-    /**
-     * This method creates the index registry based on the configuration of the plugin
-     *
-     * @internal
-     *
-     * @param array<string, array{document: class-string<Document>, resources: list<string>}> $indexes
-     * @param array<string, array{classes: array{model: class-string<IndexableInterface>}}> $resources This is the array of defined Sylius resources
-     */
-    public static function fromConfiguration(array $indexes, array $resources): self
-    {
-        $registry = new self();
-
-        foreach ($indexes as $indexName => $index) {
-            $configuredResources = [];
-
-            foreach ($index['resources'] as $configuredResource) {
-                if (!isset($resources[$configuredResource])) {
-                    throw new \InvalidArgumentException(sprintf(
-                        'The resource %s is not a valid Sylius resource. Valid resources are [%s]',
-                        $configuredResource,
-                        implode(', ', array_keys($resources))
-                    ));
-                }
-
-                $configuredResources[$configuredResource] = new IndexableResource(
-                    $configuredResource,
-                    $resources[$configuredResource]['classes']['model']
-                );
-            }
-
-            $registry->add(new Index($indexName, $index['document'], $configuredResources));
-        }
-
-        return $registry;
-    }
 
     /**
      * @throws \InvalidArgumentException if one of the resources on the $index has already been configured on another index

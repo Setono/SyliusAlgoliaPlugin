@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 
+use Prophecy\PhpUnit\ProphecyTrait;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\EventContext;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient;
 use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
 use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
+use Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
@@ -25,6 +27,8 @@ use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
  */
 final class InsightsClientTest extends AbstractClientTestCase
 {
+    use ProphecyTrait;
+
     /**
      * @test
      */
@@ -48,7 +52,9 @@ final class InsightsClientTest extends AbstractClientTestCase
         $order = new Order();
         $order->addItem($item);
 
-        $index = new Index('products', ProductDocument::class, [
+        $indexer = $this->prophesize(IndexerInterface::class);
+
+        $index = new Index('products', ProductDocument::class, $indexer->reveal(), [
             'sylius.product' => new IndexableResource('sylius.product', Product::class),
         ]);
         $indexRegistry = new IndexRegistry();
