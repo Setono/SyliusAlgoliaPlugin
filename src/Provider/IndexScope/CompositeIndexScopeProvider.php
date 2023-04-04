@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Provider\IndexScope;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 
 final class CompositeIndexScopeProvider implements IndexScopeProviderInterface
@@ -17,11 +17,11 @@ final class CompositeIndexScopeProvider implements IndexScopeProviderInterface
         $this->providers[] = $indexScopeProvider;
     }
 
-    public function getAll(IndexableResource $indexableResource): iterable
+    public function getAll(Index $index): iterable
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($indexableResource)) {
-                yield from $provider->getAll($indexableResource);
+            if ($provider->supports($index)) {
+                yield from $provider->getAll($index);
 
                 return;
             }
@@ -30,11 +30,11 @@ final class CompositeIndexScopeProvider implements IndexScopeProviderInterface
         throw new \RuntimeException('Unsupported resource'); // todo better exception
     }
 
-    public function getFromContext(IndexableResource $indexableResource): IndexScope
+    public function getFromContext(Index $index): IndexScope
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($indexableResource)) {
-                return $provider->getFromContext($indexableResource);
+            if ($provider->supports($index)) {
+                return $provider->getFromContext($index);
             }
         }
 
@@ -42,24 +42,24 @@ final class CompositeIndexScopeProvider implements IndexScopeProviderInterface
     }
 
     public function getFromChannelAndLocaleAndCurrency(
-        IndexableResource $indexableResource,
+        Index $index,
         string $channelCode = null,
         string $localeCode = null,
         string $currencyCode = null
     ): IndexScope {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($indexableResource)) {
-                return $provider->getFromChannelAndLocaleAndCurrency($indexableResource, $channelCode, $localeCode, $currencyCode);
+            if ($provider->supports($index)) {
+                return $provider->getFromChannelAndLocaleAndCurrency($index, $channelCode, $localeCode, $currencyCode);
             }
         }
 
-        throw new \RuntimeException('Unsupported resource'); // todo better exception
+        throw new \RuntimeException('Unsupported index'); // todo better exception
     }
 
-    public function supports(IndexableResource $indexableResource): bool
+    public function supports(Index $index): bool
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($indexableResource)) {
+            if ($provider->supports($index)) {
                 return true;
             }
         }

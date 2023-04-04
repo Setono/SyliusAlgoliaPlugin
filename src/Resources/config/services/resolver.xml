@@ -4,7 +4,7 @@
     <services>
         <service id="setono_sylius_algolia.resolver.index_name"
                  class="Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolver">
-            <argument type="service" id="setono_sylius_algolia.config.indexable_resource_registry"/>
+            <argument type="service" id="setono_sylius_algolia.config.index_registry"/>
             <argument type="service" id="setono_sylius_algolia.provider.index_scope.composite"/>
             <argument>%kernel.environment%</argument>
             <argument>%setono_sylius_algolia.index_name_prefix%</argument>

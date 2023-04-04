@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Resolver\SortBy;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 
 interface SortByResolverInterface
 {
@@ -13,5 +13,5 @@ interface SortByResolverInterface
      *
      * @return list<SortBy>
      */
-    public function resolveFromIndexableResource(IndexableResource $indexableResource, string $locale = null): array;
+    public function resolveFromIndexableResource(Index $index, string $locale = null): array;
 }

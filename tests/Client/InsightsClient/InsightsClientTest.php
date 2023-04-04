@@ -6,8 +6,9 @@ namespace Tests\Setono\SyliusAlgoliaPlugin\Client\InsightsClient;
 
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\EventContext;
 use Setono\SyliusAlgoliaPlugin\Client\InsightsClient\InsightsClient;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
@@ -47,9 +48,11 @@ final class InsightsClientTest extends AbstractClientTestCase
         $order = new Order();
         $order->addItem($item);
 
-        $indexableResource = new IndexableResource('sylius.product', Product::class, ProductDocument::class);
-        $indexableResourceRegistry = new IndexableResourceRegistry();
-        $indexableResourceRegistry->add($indexableResource);
+        $index = new Index('products', ProductDocument::class, [
+            'sylius.product' => new IndexableResource('sylius.product', Product::class),
+        ]);
+        $indexRegistry = new IndexRegistry();
+        $indexRegistry->add($index);
 
         $indexNameResolver = new class() implements IndexNameResolverInterface {
             public function resolve($resource): string
@@ -62,21 +65,21 @@ final class InsightsClientTest extends AbstractClientTestCase
                 return 'products__fashion_web__en_us__usd';
             }
 
-            public function supports(IndexableResource $indexableResource): bool
+            public function supports(Index $index): bool
             {
                 return true;
             }
         };
 
         $indexScopeProvider = new class() implements IndexScopeProviderInterface {
-            public function getAll(IndexableResource $indexableResource): iterable
+            public function getAll(Index $index): iterable
             {
-                return [$this->getFromContext($indexableResource)];
+                return [$this->getFromContext($index)];
             }
 
-            public function getFromContext(IndexableResource $indexableResource): IndexScope
+            public function getFromContext(Index $index): IndexScope
             {
-                return (new IndexScope($indexableResource))
+                return (new IndexScope($index))
                     ->withChannelCode('FASHION_WEB')
                     ->withLocaleCode('en_US')
                     ->withCurrencyCode('USD')
@@ -84,15 +87,15 @@ final class InsightsClientTest extends AbstractClientTestCase
             }
 
             public function getFromChannelAndLocaleAndCurrency(
-                IndexableResource $indexableResource,
+                Index $index,
                 string $channelCode = null,
                 string $localeCode = null,
                 string $currencyCode = null
             ): IndexScope {
-                return $this->getFromContext($indexableResource);
+                return $this->getFromContext($index);
             }
 
-            public function supports(IndexableResource $indexableResource): bool
+            public function supports(Index $index): bool
             {
                 return true;
             }
@@ -113,7 +116,7 @@ final class InsightsClientTest extends AbstractClientTestCase
 
         $client = new InsightsClient(
             $this->algoliaInsightsClient,
-            $indexableResourceRegistry,
+            $indexRegistry,
             $indexScopeProvider,
             $indexNameResolver,
             $normalizer

@@ -7,24 +7,18 @@ namespace Setono\SyliusAlgoliaPlugin\EventSubscriber\Doctrine;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Message\Command\IndexEntity;
 use Setono\SyliusAlgoliaPlugin\Message\Command\RemoveEntity;
-use Sylius\Component\Resource\Model\ResourceInterface;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final class EntityChangeSubscriber implements EventSubscriber
 {
     private MessageBusInterface $commandBus;
 
-    private IndexableResourceRegistry $indexableResourceRegistry;
-
-    public function __construct(
-        MessageBusInterface $commandBus,
-        IndexableResourceRegistry $indexableResourceRegistry
-    ) {
+    public function __construct(MessageBusInterface $commandBus)
+    {
         $this->commandBus = $commandBus;
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
     }
 
     public function getSubscribedEvents(): array
@@ -38,29 +32,24 @@ final class EntityChangeSubscriber implements EventSubscriber
 
     public function update(LifecycleEventArgs $eventArgs): void
     {
-        $obj = $eventArgs->getObject();
-        if (!$obj instanceof ResourceInterface) {
-            return;
-        }
-
-        if (!$this->indexableResourceRegistry->hasWithClass($obj)) {
-            return;
-        }
-
-        $this->commandBus->dispatch(new IndexEntity($obj));
+        $this->dispatch($eventArgs, static fn (IndexableInterface $entity) => new IndexEntity($entity));
     }
 
     public function remove(LifecycleEventArgs $eventArgs): void
     {
+        $this->dispatch($eventArgs, static fn (IndexableInterface $entity) => new RemoveEntity($entity));
+    }
+
+    /**
+     * @param callable(IndexableInterface):object $message
+     */
+    private function dispatch(LifecycleEventArgs $eventArgs, callable $message): void
+    {
         $obj = $eventArgs->getObject();
-        if (!$obj instanceof ResourceInterface) {
+        if (!$obj instanceof IndexableInterface) {
             return;
         }
 
-        if (!$this->indexableResourceRegistry->hasWithClass($obj)) {
-            return;
-        }
-
-        $this->commandBus->dispatch(new RemoveEntity($obj));
+        $this->commandBus->dispatch($message($obj));
     }
 }

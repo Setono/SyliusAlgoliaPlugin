@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Resolver\SortBy;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
+use Setono\SyliusAlgoliaPlugin\Config\Index;
 use Setono\SyliusAlgoliaPlugin\Resolver\IndexName\IndexNameResolverInterface;
 use Setono\SyliusAlgoliaPlugin\Resolver\ReplicaIndexName\ReplicaIndexNameResolverInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
@@ -32,11 +32,11 @@ final class SortByResolver implements SortByResolverInterface
         $this->localeContext = $localeContext;
     }
 
-    public function resolveFromIndexableResource(IndexableResource $indexableResource, string $locale = null): array
+    public function resolveFromIndexableResource(Index $index, string $locale = null): array
     {
         $locale = $locale ?? $this->localeContext->getLocaleCode();
 
-        $indexName = $this->indexNameResolver->resolve($indexableResource);
+        $indexName = $this->indexNameResolver->resolve($index);
 
         $sortBys = [
             new SortBy(
@@ -45,7 +45,7 @@ final class SortByResolver implements SortByResolverInterface
             ),
         ];
 
-        foreach ($indexableResource->documentClass::getSortableAttributes() as $attribute => $order) {
+        foreach ($index->document::getSortableAttributes() as $attribute => $order) {
             $sortBys[] = new SortBy(
                 $this->translator->trans(sprintf('setono_sylius_algolia.ui.sort_by.%s_%s', $attribute, $order), [], null, $locale),
                 $this->replicaIndexNameResolver->resolveFromIndexNameAndSortableAttribute(

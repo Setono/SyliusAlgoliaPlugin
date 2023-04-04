@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Command;
 
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
-use Setono\SyliusAlgoliaPlugin\Message\Command\IndexResource;
+use Setono\SyliusAlgoliaPlugin\Config\IndexRegistry;
+use Setono\SyliusAlgoliaPlugin\Message\Command\Index;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,26 +16,26 @@ final class IndexCommand extends Command
     protected static $defaultName = 'setono:sylius-algolia:index';
 
     /** @var string|null */
-    protected static $defaultDescription = 'Will index all (indexable) resources';
+    protected static $defaultDescription = 'Will index all configured indexes';
 
     private MessageBusInterface $commandBus;
 
-    private IndexableResourceRegistry $indexableResourceRegistry;
+    private IndexRegistry $indexRegistry;
 
     public function __construct(
         MessageBusInterface $messageBus,
-        IndexableResourceRegistry $indexableResourceRegistry
+        IndexRegistry $indexRegistry
     ) {
         parent::__construct();
 
         $this->commandBus = $messageBus;
-        $this->indexableResourceRegistry = $indexableResourceRegistry;
+        $this->indexRegistry = $indexRegistry;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        foreach ($this->indexableResourceRegistry as $indexableResource) {
-            $this->commandBus->dispatch(new IndexResource($indexableResource));
+        foreach ($this->indexRegistry as $index) {
+            $this->commandBus->dispatch(new Index($index));
         }
 
         return 0;

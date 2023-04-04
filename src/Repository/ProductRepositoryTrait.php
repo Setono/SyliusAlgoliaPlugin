@@ -7,8 +7,8 @@ namespace Setono\SyliusAlgoliaPlugin\Repository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Setono\SyliusAlgoliaPlugin\IndexScope\IndexScope;
+use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
 /**
  * @mixin EntityRepository
@@ -21,9 +21,9 @@ trait ProductRepositoryTrait
     }
 
     /**
-     * @param list<scalar> $ids
+     * @param list<mixed> $ids
      *
-     * @return array<array-key, ResourceInterface>
+     * @return list<IndexableInterface>
      */
     public function findFromIndexScopeAndIds(IndexScope $indexScope, array $ids): array
     {

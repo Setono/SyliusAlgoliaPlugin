@@ -10,8 +10,6 @@ use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Setono\SyliusAlgoliaPlugin\Client\RecommendationsClient\RecommendationsClientInterface;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResource;
-use Setono\SyliusAlgoliaPlugin\Config\IndexableResourceRegistry;
 use Setono\SyliusAlgoliaPlugin\Document\Product as ProductDocument;
 use Setono\SyliusAlgoliaPlugin\Provider\Recommendations\RecommendationsProvider;
 use Tests\Setono\SyliusAlgoliaPlugin\Stubs\Entity\Product;
@@ -32,9 +30,6 @@ final class RecommendationsProviderTest extends TestCase
         $recommendedProduct = new Product();
         $recommendedProduct->setCode('product1');
 
-        $indexableResourceRegistry = new IndexableResourceRegistry();
-        $indexableResourceRegistry->add(new IndexableResource('sylius.product', Product::class, ProductDocument::class));
-
         $repository = $this->prophesize(ObjectRepository::class);
         $repository->findOneBy([
             'code' => 'product1',
@@ -46,7 +41,13 @@ final class RecommendationsProviderTest extends TestCase
         $managerRegistry = $this->prophesize(ManagerRegistry::class);
         $managerRegistry->getManagerForClass(Product::class)->willReturn($entityManager);
 
-        $provider = new RecommendationsProvider(new RecommendationsClient(), $indexableResourceRegistry, $managerRegistry->reveal());
+        $provider = new RecommendationsProvider(new RecommendationsClient(), $managerRegistry->reveal(), [
+            'sylius.product' => [
+                'classes' => [
+                    'model' => Product::class,
+                ],
+            ],
+        ]);
 
         $recommendedProducts = iterator_to_array($provider->getFrequentlyBoughtTogether($product, 'index'));
         self::assertCount(1, $recommendedProducts);

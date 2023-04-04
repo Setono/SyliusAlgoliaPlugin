@@ -22,7 +22,7 @@ final class SetonoSyliusAlgoliaExtension extends Extension
          * @psalm-suppress PossiblyNullArgument
          *
          * @var array{
-         *      indexable_resources: list<string>,
+         *      indexes: array,
          *      credentials: array{
          *          app_id: string,
          *          search_only_api_key: string,
@@ -36,7 +36,7 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
-        $container->setParameter('setono_sylius_algolia.indexable_resources', $config['indexable_resources']);
+        $container->setParameter('setono_sylius_algolia.indexes', $config['indexes']);
         $container->setParameter('setono_sylius_algolia.credentials.app_id', $config['credentials']['app_id']);
         $container->setParameter('setono_sylius_algolia.credentials.search_only_api_key', $config['credentials']['search_only_api_key']);
         $container->setParameter('setono_sylius_algolia.credentials.admin_api_key', $config['credentials']['admin_api_key']);

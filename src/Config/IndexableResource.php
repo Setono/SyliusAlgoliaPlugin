@@ -4,75 +4,61 @@ declare(strict_types=1);
 
 namespace Setono\SyliusAlgoliaPlugin\Config;
 
-use Setono\SyliusAlgoliaPlugin\Document\Document;
 use Setono\SyliusAlgoliaPlugin\Model\IndexableInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * This class represents a Sylius resource that is indexable
+ */
 final class IndexableResource
 {
     /**
-     * This is the name of the resource, i.e. sylius.product
+     * This is the name of the Sylius resource, e.g. 'sylius.product'
      */
     public string $name;
 
     /**
-     * This is the short name of the resource, i.e. the part that comes after the last . (dot) in the name.
-     * For sylius.product, this would be 'product'
-     */
-    public string $shortName;
-
-    /**
-     * This is the FQCN for the Sylius resource, i.e. for sylius.product this could be App\Entity\Product\Product
+     * This is the FQCN for the resource
      *
      * @var class-string<IndexableInterface>
      */
-    public string $resourceClass;
+    public string $class;
 
     /**
-     * This is the FQCN for the document that the above resource will be mapped to in Algolia.
-     * If you are indexing products this could be Setono\SyliusAlgoliaPlugin\Document\Product
-     *
-     * @var class-string<Document>
+     * @param class-string<IndexableInterface> $class
      */
-    public string $documentClass;
-
-    /**
-     * @param class-string<IndexableInterface> $resourceClass
-     * @param class-string<Document> $documentClass
-     */
-    public function __construct(string $name, string $resourceClass, string $documentClass)
+    public function __construct(string $name, string $class)
     {
         Assert::stringNotEmpty($name);
-        if (!is_a($resourceClass, IndexableInterface::class, true)) {
+
+        if (!is_a($class, IndexableInterface::class, true)) {
             throw new \InvalidArgumentException(sprintf(
-                'The resource class %s MUST be an instance of %s',
-                $resourceClass,
+                'The document class %s MUST be an instance of %s',
+                $class,
                 IndexableInterface::class
             ));
         }
 
-        if (!is_a($documentClass, Document::class, true)) {
-            throw new \InvalidArgumentException(sprintf(
-                'The document class %s MUST be an instance of %s',
-                $documentClass,
-                Document::class
-            ));
-        }
-
         $this->name = $name;
-        $this->shortName = $name;
+        $this->class = $class;
+    }
 
-        $pos = strrpos($name, '.');
-        if (is_int($pos)) {
-            $this->shortName = substr($name, $pos + 1);
+    /**
+     * Returns true if the resource's class is an instance of $class
+     *
+     * @param object|class-string $class
+     */
+    public function is($class): bool
+    {
+        if (is_object($class)) {
+            $class = get_class($class);
         }
 
-        $this->resourceClass = $resourceClass;
-        $this->documentClass = $documentClass;
+        return is_a($this->class, $class, true);
     }
 
     public function __toString(): string
     {
-        return sprintf('%s (%s)', $this->name, $this->resourceClass);
+        return $this->name;
     }
 }
