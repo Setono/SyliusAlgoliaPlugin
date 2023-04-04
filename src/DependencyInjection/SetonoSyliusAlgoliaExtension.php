@@ -7,6 +7,7 @@ namespace Setono\SyliusAlgoliaPlugin\DependencyInjection;
 use Setono\SyliusAlgoliaPlugin\DataMapper\DataMapperInterface;
 use Setono\SyliusAlgoliaPlugin\Filter\Doctrine\FilterInterface as DoctrineFilterInterface;
 use Setono\SyliusAlgoliaPlugin\Filter\Object\FilterInterface as ObjectFilterInterface;
+use Setono\SyliusAlgoliaPlugin\Indexer\IndexerInterface;
 use Setono\SyliusAlgoliaPlugin\Provider\IndexScope\IndexScopeProviderInterface;
 use Setono\SyliusAlgoliaPlugin\UrlGenerator\ResourceUrlGeneratorInterface;
 use Symfony\Component\Config\FileLocator;
@@ -67,5 +68,8 @@ final class SetonoSyliusAlgoliaExtension extends Extension
 
         $container->registerForAutoconfiguration(ResourceUrlGeneratorInterface::class)
             ->addTag('setono_sylius_algolia.url_generator');
+
+        $container->registerForAutoconfiguration(IndexerInterface::class)
+            ->addTag('setono_sylius_algolia.indexer');
     }
 }

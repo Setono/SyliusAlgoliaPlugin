@@ -2,8 +2,6 @@
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="setono_sylius_algolia.indexer.composite" class="Setono\SyliusAlgoliaPlugin\Indexer\CompositeIndexer"/>
-
         <service id="setono_sylius_algolia.indexer.default"
                  class="Setono\SyliusAlgoliaPlugin\Indexer\DefaultIndexer">
             <argument type="service" id="doctrine"/>
@@ -18,7 +16,7 @@
             <argument type="service" id="setono_sylius_algolia.filter.doctrine.composite"/>
             <argument type="service" id="setono_sylius_algolia.filter.object.composite"/>
 
-            <tag name="setono_sylius_algolia.indexer" priority="-100"/>
+            <tag name="setono_sylius_algolia.indexer"/>
         </service>
     </services>
 </container>
