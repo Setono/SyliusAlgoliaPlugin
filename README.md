@@ -27,7 +27,7 @@ setono_sylius_algolia:
         admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
     indexes:
         products:
-            document: 'Tests\Setono\SyliusAlgoliaPlugin\Application\Document\Product'
+            document: 'Setono\SyliusAlgoliaPlugin\Document\Product'
             resources: [ 'sylius.product' ]
         taxons:
             document: 'Setono\SyliusAlgoliaPlugin\Document\Taxon'
