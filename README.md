@@ -21,12 +21,20 @@ imports:
     - { resource: "@SetonoSyliusAlgoliaPlugin/Resources/config/app/config.yaml" }
 
 setono_sylius_algolia:
-    indexable_resources:
-        sylius.product:
-            document: 'Setono\SyliusAlgoliaPlugin\Document\Product'
-    app_id: '%env(ALGOLIA_APP_ID)%'
-    search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
-    admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
+    credentials:
+        app_id: '%env(ALGOLIA_APP_ID)%'
+        search_only_api_key: '%env(ALGOLIA_SEARCH_ONLY_API_KEY)%'
+        admin_api_key: '%env(ALGOLIA_ADMIN_API_KEY)%'
+    indexes:
+        products:
+            document: 'Tests\Setono\SyliusAlgoliaPlugin\Application\Document\Product'
+            resources: [ 'sylius.product' ]
+        taxons:
+            document: 'Setono\SyliusAlgoliaPlugin\Document\Taxon'
+            resources: [ 'sylius.taxon' ]
+    search:
+        indexes:
+            - 'products'
 ```
 
 In your `.env.local` add your parameters: 
