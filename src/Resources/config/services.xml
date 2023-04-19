@@ -10,6 +10,7 @@
         <import resource="services/event_subscriber.xml"/>
         <import resource="services/filter.xml"/>
         <import resource="services/indexer.xml"/>
+        <import resource="services/javascript.xml"/>
         <import resource="services/message.xml"/>
         <import resource="services/provider.xml"/>
         <import resource="services/renderer.xml"/>

@@ -48,6 +48,10 @@ final class ConfigurationTest extends TestCase
             'routes' => [
                 'product_index' => 'taxons/{slug}',
             ],
+            'search' => [
+                'enabled' => false,
+                'indexes' => [],
+            ],
         ]);
     }
 }
