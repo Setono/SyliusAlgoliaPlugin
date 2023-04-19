@@ -34,12 +34,20 @@ final class Index
      */
     public array $resources;
 
+    /** @var non-empty-string|null */
+    public ?string $prefix;
+
     /**
      * @param class-string<Document> $document
      * @param array<string, IndexableResource> $resources
      */
-    public function __construct(string $name, string $document, IndexerInterface $indexer, array $resources)
-    {
+    public function __construct(
+        string $name,
+        string $document,
+        IndexerInterface $indexer,
+        array $resources,
+        string $prefix = null
+    ) {
         Assert::stringNotEmpty($name);
 
         if (!is_a($document, Document::class, true)) {
@@ -54,6 +62,7 @@ final class Index
         $this->document = $document;
         $this->indexer = $indexer;
         $this->resources = $resources;
+        $this->prefix = '' === $prefix ? null : $prefix;
     }
 
     /**

@@ -22,19 +22,14 @@ final class IndexNameResolver implements IndexNameResolverInterface
 
     private string $environment;
 
-    /** @var non-empty-string|null */
-    private ?string $prefix;
-
     public function __construct(
         IndexRegistry $indexRegistry,
         IndexScopeProviderInterface $indexScopeProvider,
-        string $environment,
-        string $prefix = null
+        string $environment
     ) {
         $this->indexRegistry = $indexRegistry;
         $this->indexScopeProvider = $indexScopeProvider;
         $this->environment = $environment;
-        $this->prefix = '' === $prefix ? null : $prefix;
     }
 
     public function resolve($resource): string
@@ -44,23 +39,14 @@ final class IndexNameResolver implements IndexNameResolverInterface
 
     public function resolveFromIndexScope(IndexScope $indexScope): string
     {
-        $str = null !== $this->prefix ? ($this->prefix . '__') : '';
-
-        $str .= $this->environment . '__' . $indexScope->index->name;
-
-        if (null !== $indexScope->channelCode) {
-            $str .= '__' . $indexScope->channelCode;
-        }
-
-        if (null !== $indexScope->localeCode) {
-            $str .= '__' . $indexScope->localeCode;
-        }
-
-        if (null !== $indexScope->currencyCode) {
-            $str .= '__' . $indexScope->currencyCode;
-        }
-
-        return strtolower($str);
+        return strtolower(implode('__', array_filter([
+            $indexScope->index->prefix,
+            $this->environment,
+            $indexScope->index->name,
+            $indexScope->channelCode,
+            $indexScope->localeCode,
+            $indexScope->currencyCode,
+        ])));
     }
 
     public function supports(Index $index): bool

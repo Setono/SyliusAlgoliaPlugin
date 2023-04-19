@@ -56,7 +56,7 @@ final class InsightsClientTest extends AbstractClientTestCase
 
         $index = new Index('products', ProductDocument::class, $indexer->reveal(), [
             'sylius.product' => new IndexableResource('sylius.product', Product::class),
-        ]);
+        ], null);
         $indexRegistry = new IndexRegistry();
         $indexRegistry->add($index);
 
