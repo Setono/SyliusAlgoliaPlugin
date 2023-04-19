@@ -61,9 +61,6 @@ final class SetonoSyliusAlgoliaExtension extends Extension
         // routes
         $container->setParameter('setono_sylius_algolia.routes.product_index', $config['routes']['product_index']);
 
-        // misc
-        $container->setParameter('setono_sylius_algolia.index_name_prefix', $config['index_name_prefix']);
-
         $loader->load('services.xml');
 
         if (true === $config['cache']['enabled']) {

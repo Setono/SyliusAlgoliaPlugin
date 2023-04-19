@@ -44,7 +44,6 @@ final class ConfigurationTest extends TestCase
                 'enabled' => true,
                 'ttl' => 604800,
             ],
-            'index_name_prefix' => null,
             'routes' => [
                 'product_index' => 'taxons/{slug}',
             ],

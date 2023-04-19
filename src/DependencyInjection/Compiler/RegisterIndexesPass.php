@@ -29,7 +29,7 @@ final class RegisterIndexesPass implements CompilerPassInterface
         $indexers = array_keys($container->findTaggedServiceIds('setono_sylius_algolia.indexer'));
         $indexRegistry = $container->getDefinition('setono_sylius_algolia.config.index_registry');
 
-        /** @var array<string, array{document: class-string<Document>, indexer: string, resources: list<string>}> $indexes */
+        /** @var array<string, array{document: class-string<Document>, indexer: string, resources: list<string>, prefix: string}> $indexes */
         $indexes = $container->getParameter('setono_sylius_algolia.indexes');
 
         /** @var array<string, array{classes: array{model: class-string<IndexableInterface>}}> $syliusResources */
@@ -61,6 +61,7 @@ final class RegisterIndexesPass implements CompilerPassInterface
                 $index['document'],
                 new Reference($index['indexer']),
                 $configuredResources,
+                $index['prefix'],
             ]));
 
             $indexRegistry->addMethodCall('add', [new Reference($indexDefinitionName)]);

@@ -7,6 +7,8 @@ namespace Setono\SyliusAlgoliaPlugin\Config;
 use Setono\SyliusAlgoliaPlugin\Exception\NonExistingIndexException;
 
 /**
+ * todo introduce interface
+ *
  * @implements \IteratorAggregate<string, Index>
  */
 final class IndexRegistry implements \IteratorAggregate
